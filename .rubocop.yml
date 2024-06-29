@@ -1,0 +1,32 @@
+require:
+  - rubocop-rails
+
+AllCops:
+  NewCops: disable
+  TargetRubyVersion: 3.3.1
+  Exclude:
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'spec/rails_helper.rb'
+  SuggestExtensions: false
+
+  Style/Documentation:
+    Enabled: false
+
+  Rails/I18nLocaleTexts:
+    Enabled: true
+
+  Style/FrozenStringLiteralComment:
+    Enabled: false
+
+  Metrics/MethodLength:
+    Max: 12
+  Metrics/BlockLength:
+    AllowedMethods: ['describe', 'context', 'feature', 'scenario', 'let', 'it', 'within', 'permissions']
+    Exclude:
+
+    Naming/RescuedExceptionsVariableName:
+    Enabled: false
+
