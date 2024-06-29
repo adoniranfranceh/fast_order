@@ -19,4 +19,3 @@ production:
   database: fast_order_production
   username: fast_order
   password: <%= ENV["FAST_ORDER_DATABASE_PASSWORD"] %>
-
