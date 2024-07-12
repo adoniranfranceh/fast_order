@@ -1,0 +1,16 @@
+pt-BR:
+  activerecord:
+    models:
+      order: 
+        one: Pedido
+        other: Pedidos
+    attributes:
+      status:
+        doing: Aguardando
+        delivered: Entregue
+        paid: Pago
+        canceled: Cancelado
+      delivery_type:
+        pickup: "Para ser retirado - %{time}"
+        delivery: "Entrega - %{address}"
+        local: "Mesa: %{table_info}"
