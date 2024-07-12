@@ -106,3 +106,12 @@ h1, h2, h3, h4, h5 {
   display: inline-block;
   margin-top: 20px;
 }
+
+.nav-link.active, .nav-item, .nav-item:hover {
+  color:  #fff !important;
+}
+
+hr {
+  color: #fff;
+  opacity: .70;
+}

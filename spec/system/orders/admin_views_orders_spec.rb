@@ -13,9 +13,11 @@ describe 'Admin vê pedidos' do
     user.orders.create delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris'
     user.orders.create delivery_type: :local, table_info: '6', status: :canceled, customer: 'Michael'
 
+
     login_as user, scope: :user
     visit root_path
 
+    expect(page).to have_content 'Pedidos em espera'
     expect(page).not_to have_content 'Não há pedidos'
     within 'div.waiting-orders' do
       within "div##{ernesto_order.id}" do
@@ -67,11 +69,14 @@ describe 'Admin vê pedidos' do
     chris_order = user.orders.create  delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris'
     michael_order = user.orders.create delivery_type: :local, table_info: '6', status: :canceled, customer: 'Michael'
 
+
     login_as user, scope: :user
     visit root_path
     click_on 'Todos'
 
+    expect(page).to have_content 'Pedidos em espera'
     expect(page).not_to have_content 'Não há pedidos'
+
     within 'div.waiting-orders' do
       within "div##{ernesto_order.id}" do
         expect(page).to have_content 'Mesa: 4'
@@ -123,12 +128,33 @@ describe 'Admin vê pedidos' do
     end
   end
 
+  it 'e não há pedidos aguardando' do
+    user = create :user, role: :collaborator
+
+    roger_order = user.orders.create  delivery_type: :local, table_info: '3', status: :delivered, customer: 'Roger'
+
+    login_as user, scope: :user
+    visit root_path
+    click_on 'Todos'
+
+    expect(page).not_to have_content 'Não há pedidos'
+    expect(page).not_to have_content 'Pedidos em espera'
+
+    within "div##{roger_order.id}" do
+      expect(page).to have_content 'Mesa: 3'
+      expect(page).to have_content 'Cliente: Roger'
+      expect(page).to have_content 'Status: Entregue'
+      expect(page).to have_link 'Itens', href: root_path
+      expect(page).to have_link 'Ver detalhes', href: root_path
+    end
+  end
+
   it 'e não há pedidos' do
     user = create :user, role: :collaborator
 
+    login_as user, scope: :user
     visit root_path
 
-    save_and_open_page
     expect(page).to have_content 'Não há pedidos'
   end
 end

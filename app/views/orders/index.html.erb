@@ -1,0 +1,36 @@
+<h1 class="mb-4">Pedidos</h1>
+
+<div class="nav-scroller border-bottom mb-4">
+  <nav class="d-flex nav nav-underline">
+    <%= link_to t('on_hold', model: '').lstrip.capitalize, root_path, class: "nav-item nav-link link-body-emphasis #{'active' if params[:filter].blank? }" %>
+    <%= link_to t('all'), root_path(params: { filter: 'all' }), class: "nav-item nav-link link-body-emphasis #{'active' if params[:filter] == 'all' }" %>
+  </nav>
+</div>
+
+<div class="align-center">
+  <%= link_to 'Novo Pedido', root_path, class: 'btn btn-success btn-lg mt-3 mb-4' %>
+</div>
+
+
+<% if @orders.any? %>
+  <% if @orders_in_hold.any? %>
+    <h3 class="mb-3"><%= t :on_hold, model: Order.model_name.human(count: 2) %></h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4 waiting-orders">
+      <% @orders_in_hold.each do |order| %>
+        <%= render partial: order %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <hr class="my-4 white">
+
+  <div class="row row-cols-1 row-cols-md-3 g-4 other-orders">
+    <% @other_orders&.each do |order| %>
+      <%= render partial: order %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="text-center mt-5">
+    <h3 class="mb-0">Não há pedidos</h3>
+  </div>
+<% end %>

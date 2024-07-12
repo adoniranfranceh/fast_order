@@ -14,3 +14,4 @@ pt-BR:
         pickup: "Para ser retirado - %{time}"
         delivery: "Entrega - %{address}"
         local: "Mesa: %{table_info}"
+  on_hold: "%{model} em espera"
