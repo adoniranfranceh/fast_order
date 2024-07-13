@@ -4,5 +4,7 @@ Rails.application.routes.draw do
   resources :orders, only: %i[index]
 
   devise_for :users
-  root to: 'orders#index'
+  root 'orders#index'
+
+  get '/*path' => 'orders#index'
 end
