@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 ruby '3.3.1'
 
 gem 'devise'
-gem 'importmap-rails'
+gem 'jsbundling-rails'
 gem 'jbuilder'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'
