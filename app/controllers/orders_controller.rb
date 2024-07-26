@@ -4,19 +4,4 @@ class OrdersController < ApplicationController
     @orders_in_hold = Order.doing
     @other_orders = @orders - @orders.doing if params[:filter] == 'all'
   end
-
-  def show
-  end
-
-  def new
-  end
-
-  def create
-  end
-
-  def edit
-  end
-
-  def update
-  end
 end
