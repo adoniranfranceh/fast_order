@@ -1,8 +1,11 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import api from "../services/api"
 
 const Home = () => {
-    async function handleSearch(){
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    async function fetchData(){
 
       try{
         const response = await api.get('/');
@@ -12,9 +15,11 @@ const Home = () => {
       }
     }
 
+    fetchData();
+  })
+
     return (
       <>
-        <button onClick={handleSearch}>Carregar content</button>
         <h1>Home</h1>
       </>
     );

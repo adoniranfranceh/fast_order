@@ -36,6 +36,7 @@
 
 /coverage
 /app/assets/builds/*
+/app/assets/builds/*map
 !/app/assets/builds/.keep
 
 /node_modules
