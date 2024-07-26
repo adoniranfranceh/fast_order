@@ -1,12 +1,14 @@
 FROM ruby:3.3.1 AS base
-
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y wget gnupg unzip && \
-    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable
+RUN apt-get update
+
+ARG NODE_VERSION=22.4.1
+ARG YARN_VERSION=1.22.22
+ENV PATH=/usr/local/node/bin:$PATH
+RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
+  /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
+  npm install -g yarn@$YARN_VERSION && \
+  rm -rf /tmp/node-build-master
 
 FROM base AS dev
