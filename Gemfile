@@ -5,11 +5,12 @@ source 'https://rubygems.org'
 ruby '3.3.1'
 
 gem 'devise'
-gem 'jsbundling-rails'
 gem 'jbuilder'
+gem 'jsbundling-rails'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'
 gem 'rails', '~> 7.1.3', '>= 7.1.3.2'
+gem 'redis', '~> 4.0'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'turbo-rails'
@@ -33,6 +34,6 @@ end
 
 group :test do
   gem 'cuprite', '~> 0.15'
-  gem 'simplecov', require: false
   gem 'launchy'
+  gem 'simplecov', require: false
 end

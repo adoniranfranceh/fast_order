@@ -1,28 +1,46 @@
-import React, {useState, useEffect} from "react";
-import api from "../services/api"
+import React, { useState, useEffect } from 'react';
+import consumer from '../services/cable';
 
-const Home = () => {
-  const [data, setData] = useState(null);
+// const ws = new WebSocket("ws://localhost:3000/cable");
+
+const Orders = () => {
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    async function fetchData(){
+    console.log("Iniciando a inscrição no OrdersChannel...");
 
-      try{
-        const response = await api.get('/');
-        console.log(response.data)
-      }catch{
-        alert('Ops! Erro ao buscar')
+    const subscription = consumer.subscriptions.create({ channel: "OrdersChannel" }, {
+      connected() {
+        console.log("Conectado ao OrdersChannel com sucesso!");
+      },
+      disconnected() {
+        console.log("Desconectado do OrdersChannel.");
+      },
+      received(data) {
+        console.log("Nova mensagem recebida do servidor:", data);
+        setOrders(prevOrders => [...prevOrders, data]);
       }
-    }
+    });
 
-    fetchData();
-  })
+    console.log("Inscrição criada:", subscription);
 
-    return (
-      <>
-        <h1>Home</h1>
-      </>
-    );
+    // Cleanup da inscrição quando o componente é desmontado
+    return () => {
+      console.log("Cancelando a inscrição no OrdersChannel...");
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  return (
+    <div>
+      <h2>Ordens Recebidas:</h2>
+      <ul>
+        {orders.map((order, index) => (
+          <li key={index}>{order.costumer}</li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
-export default Home;
+export default Orders;
