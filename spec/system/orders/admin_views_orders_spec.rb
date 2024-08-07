@@ -8,11 +8,10 @@ describe 'Admin vê pedidos' do
 
     ernesto_order = user.orders.create delivery_type: :local, table_info: '4', status: :doing, customer: 'Ernesto'
     carlos_order = user.orders.create  delivery_type: :pickup, pick_up_time: '19:30', status: :doing,
-                                      customer: 'Carlos'
+                                       customer: 'Carlos'
     user.orders.create delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
     user.orders.create delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris'
     user.orders.create delivery_type: :local, table_info: '6', status: :canceled, customer: 'Michael'
-
 
     login_as user, scope: :user
     visit root_path
@@ -62,13 +61,12 @@ describe 'Admin vê pedidos' do
     user = create :user, role: :collaborator
     ernesto_order = user.orders.create  delivery_type: :local, table_info: '4', status: :doing, customer: 'Ernesto'
     gabriel_order = user.orders.create  delivery_type: :delivery, address: 'Rua das Palmeiras', status: :doing,
-    customer: 'Gabriel'
+                                        customer: 'Gabriel'
     carlos_order = user.orders.create delivery_type: :pickup, pick_up_time: '19:30', status: :doing,
-    customer: 'Carlos'
+                                      customer: 'Carlos'
     roger_order = user.orders.create  delivery_type: :local, table_info: '3', status: :delivered, customer: 'Roger'
     chris_order = user.orders.create  delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris'
     michael_order = user.orders.create delivery_type: :local, table_info: '6', status: :canceled, customer: 'Michael'
-
 
     login_as user, scope: :user
     visit root_path
@@ -131,7 +129,7 @@ describe 'Admin vê pedidos' do
   it 'e não há pedidos aguardando' do
     user = create :user, role: :collaborator
 
-    roger_order = user.orders.create  delivery_type: :local, table_info: '3', status: :delivered, customer: 'Roger'
+    roger_order = user.orders.create delivery_type: :local, table_info: '3', status: :delivered, customer: 'Roger'
 
     login_as user, scope: :user
     visit root_path
