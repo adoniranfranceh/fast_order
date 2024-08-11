@@ -15,40 +15,17 @@
   </head>
 
   <body>
-    <div class="container-fluid">
-      <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-custom">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">FastOrder</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Pedidos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Clientes</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" aria-disabled="true">Relatórios</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
-
-      <div class="container-xxl">
-        <%= yield %>
-      </div>
-    </div>
+    <% if signed_in? %>
+    <main id="root">
+    </main>
+    <% else %>
+      <% if notice || alert %>
+        <p class="notice"><%= notice %></p>
+        <p class="alert"><%= alert %></p>
+      <% end %>
+      <%= yield %>
+    <% end %>
   </body>
-  <main id="root"></main>
 
 
 </html>

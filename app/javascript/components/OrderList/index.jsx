@@ -66,6 +66,15 @@ const OrderList = () => {
     canceled: []
   };
 
+  const getSectionTitle = (status) => {
+    return {
+      doing: 'Novos Pedidos',
+      delivered: 'Entregues',
+      paid: 'Pagos',
+      canceled: 'Cancelados'
+    }[status] || 'Desconhecido';
+  };
+
   orders.forEach(order => {
     if (groupedOrders[order.status]) {
       groupedOrders[order.status].push(order);
@@ -78,8 +87,8 @@ const OrderList = () => {
     <OrderListContainer>
       {Object.keys(groupedOrders).map(status => (
         <Section key={status} status={status}>
-            <SectionTitle>{status.charAt(0).toUpperCase() + status.slice(1)}</SectionTitle>
-            <OrderGrid>
+        <SectionTitle>{getSectionTitle(status)}</SectionTitle>
+        <OrderGrid>
               {groupedOrders[status].map(order => (
                 <OrderCard key={order.id} order={order} />
               ))}

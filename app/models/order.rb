@@ -15,28 +15,15 @@ class Order < ApplicationRecord
   private
 
   def broadcast_order
-    Rails.logger.debug "Broadcasting order with ID: #{self.id} ----------------"
     ActionCable.server.broadcast 'orders_channel', {
       id:,
       user_id:,
-      address:,
       delivery_type:,
       status:,
-      customer:
+      customer:,
+      table_info:,
+      address:,
+      pick_up_time:
     }
   end
-
-  # def broadcast_order
-  #   message = {
-  #     id:,
-  #     user_id:,
-  #     customer:,
-  #     address:,
-  #     status:,
-  #     delivery_type:
-  #   }
-
-  #   Rails.logger.info("Broadcasting message: #{message.inspect}")
-  #   ActionCable.server.broadcast 'OrdersChannel', message
-  # end
 end

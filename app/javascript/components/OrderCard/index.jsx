@@ -2,17 +2,26 @@ import React from 'react';
 import { OrderCardContainer, OrderInfo, CustomerName, OrderDetails, OrderStatus } from './style.js';
 
 const OrderCard = ({ order }) => {
+  const getOrderStatus = (status) => {
+    return {
+      doing: 'Aguardando...',
+      delivered: 'Entregue',
+      paid: 'Pago',
+      canceled: 'Cancelado'
+    }[status] || 'Desconhecido';
+  };
+
   return (
-    <OrderCardContainer status={order.status}>
+    <OrderCardContainer data-testid={order.id} >
       <OrderInfo>
         <CustomerName>{order.customer}</CustomerName>
         <OrderDetails>
-          {order.table_info && 'Mesa: '}{order.table_info || 'N/A'}<br />
-          {order.address && 'Endereço: '}{order.address || 'N/A'}<br />
-          {order.pick_up_time && 'Horário de retirada: '}{order.pick_up_time || 'N/A'}
+          {order.table_info && `Mesa: ${order.table_info}`}<br />
+          {order.pick_up_time && `Horário de retirada: ${order.pick_up_time}`}<br />
+          {order.address && `Entrega - ${order.address}`}<br />
         </OrderDetails>
       </OrderInfo>
-      <OrderStatus>{order.status.charAt(0).toUpperCase() + order.status.slice(1)}</OrderStatus>
+      <OrderStatus>Status: {getOrderStatus(order.status)}</OrderStatus>
     </OrderCardContainer>
   );
 };
