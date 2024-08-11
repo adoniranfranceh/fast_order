@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import consumer from '../services/cable';
+import { OrderCard } from '../index.js'
 import axios from 'axios';
 import {
   OrderListContainer,
   Section,
   SectionTitle,
   OrderGrid,
-  OrderCard,
-  OrderInfo,
-  CustomerName,
-  OrderDetails,
-  OrderStatus,
 } from './style';
 
 const OrderList = () => {
@@ -80,65 +76,16 @@ const OrderList = () => {
 
   return (
     <OrderListContainer>
-      <Section>
-        <SectionTitle>Novos Pedidos</SectionTitle>
-        <OrderGrid>
-          {groupedOrders.doing.map(order => (
-            <OrderCard key={order.id} status="doing">
-              <OrderInfo>
-                <CustomerName>{order.customer}</CustomerName>
-                <OrderDetails>Mesa: {order.table || 'N/A'}</OrderDetails>
-              </OrderInfo>
-              <OrderStatus>Fazendo</OrderStatus>
-            </OrderCard>
-          ))}
-        </OrderGrid>
-      </Section>
-      
-      <Section>
-        <SectionTitle>Entregues</SectionTitle>
-        <OrderGrid>
-          {groupedOrders.delivered.map(order => (
-            <OrderCard key={order.id} status="delivered">
-              <OrderInfo>
-                <CustomerName>{order.customer}</CustomerName>
-                <OrderDetails>Mesa: {order.table || 'N/A'}</OrderDetails>
-              </OrderInfo>
-              <OrderStatus>Entregue</OrderStatus>
-            </OrderCard>
-          ))}
-        </OrderGrid>
-      </Section>
-      
-      <Section>
-        <SectionTitle>Pagos</SectionTitle>
-        <OrderGrid>
-          {groupedOrders.paid.map(order => (
-            <OrderCard key={order.id} status="paid">
-              <OrderInfo>
-                <CustomerName>{order.customer}</CustomerName>
-                <OrderDetails>Mesa: {order.table || 'N/A'}</OrderDetails>
-              </OrderInfo>
-              <OrderStatus>Pago</OrderStatus>
-            </OrderCard>
-          ))}
-        </OrderGrid>
-      </Section>
-      
-      <Section>
-        <SectionTitle>Cancelados</SectionTitle>
-        <OrderGrid>
-          {groupedOrders.canceled.map(order => (
-            <OrderCard key={order.id} status="canceled">
-              <OrderInfo>
-                <CustomerName>{order.customer}</CustomerName>
-                <OrderDetails>Mesa: {order.table || 'N/A'}</OrderDetails>
-              </OrderInfo>
-              <OrderStatus>Cancelado</OrderStatus>
-            </OrderCard>
-          ))}
-        </OrderGrid>
-      </Section>
+      {Object.keys(groupedOrders).map(status => (
+        <Section key={status} status={status}>
+            <SectionTitle>{status.charAt(0).toUpperCase() + status.slice(1)}</SectionTitle>
+            <OrderGrid>
+              {groupedOrders[status].map(order => (
+                <OrderCard key={order.id} order={order} />
+              ))}
+            </OrderGrid>
+          </Section>
+      ))}
     </OrderListContainer>
   );
 };

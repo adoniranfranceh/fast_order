@@ -1,58 +1,50 @@
 import styled from 'styled-components';
+import theme from '../theme';
 
 export const OrderListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 20px;
+
+  @media(min-width: 768px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 `;
 
 export const Section = styled.div`
-  margin-bottom: 40px;
+  background-color: ${({ status }) => theme.colors[status].background};
+  border-left: 5px solid ${({ status }) => theme.colors[status].border};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: ${({ theme }) => theme.boxShadow};
+  
+  @media(min-width: 768px) {
+    flex: 1;
+    margin: 0 10px 20px 10px;
+    max-width: calc(50% - 20px);
+  }
+  
+  @media(min-width: 1024px) {
+    max-width: calc(33.33% - 20px);
+  }
 `;
 
 export const SectionTitle = styled.h2`
-  margin-bottom: 10px;
-  color: #333;
+  color: ${({ status }) => theme.colors[status]};
   font-size: 24px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
 `;
 
 export const OrderGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-`;
+  grid-template-columns: 1fr;
+  gap: 15px;
 
-export const OrderCard = styled.div`
-  background: ${({ status }) =>
-    status === 'doing' ? '#ffeb3b' :
-    status === 'delivered' ? '#4caf50' :
-    status === 'paid' ? '#2196f3' :
-    '#f44336'};
-  padding: 20px;
-  border-radius: 10px;
-  color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-export const OrderInfo = styled.div`
-  margin-bottom: 10px;
-`;
-
-export const CustomerName = styled.h3`
-  font-size: 20px;
-  margin: 0;
-`;
-
-export const OrderDetails = styled.p`
-  margin: 0;
-  font-size: 16px;
-`;
-
-export const OrderStatus = styled.span`
-  align-self: flex-end;
-  font-size: 14px;
+  @media(min-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
 `;
