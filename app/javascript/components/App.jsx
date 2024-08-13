@@ -9,7 +9,6 @@ const App = () => {
     <div style={{ minHeight: '100vh', paddingBottom: '4rem' }}>
       {AppRoutes()}
     </div>
-    <Footer />
   </>
   )
 }

@@ -20,6 +20,7 @@ export const Section = styled.div`
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: ${({ theme }) => theme.boxShadow};
+  height: 50vh;
   
   @media(min-width: 768px) {
     flex: 1;

@@ -13,21 +13,12 @@ const OrderList = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    console.log("Iniciando a inscrição no OrdersChannel...");
 
     const subscription = consumer.subscriptions.create({ channel: "OrdersChannel" }, {
-      connected() {
-        console.log("Conectado ao OrdersChannel com sucesso!");
-      },
-      disconnected() {
-        console.log("Desconectado do OrdersChannel.");
-      },
       received(data) {
-        console.log("Nova mensagem recebida do servidor:", data);
         setOrders(prevOrders => {
           const existingOrder = prevOrders.findIndex(order => order.id === data.id);
   
-          console.log('---------' + existingOrder)
           if(existingOrder !== -1) {
             const updateOrders = [...prevOrders];
             updateOrders[existingOrder] = data;
@@ -39,11 +30,9 @@ const OrderList = () => {
       }
     });
 
-    console.log("Inscrição criada:", subscription);
     fetchOrders()
 
     return () => {
-      console.log("Cancelando a inscrição no OrdersChannel...");
       subscription.unsubscribe();
     }; 
 
@@ -55,7 +44,6 @@ const OrderList = () => {
         setOrders(response.data)
       })
       .catch(function (error) {
-        console.log(error);
       })
   }
 
@@ -79,7 +67,6 @@ const OrderList = () => {
     if (groupedOrders[order.status]) {
       groupedOrders[order.status].push(order);
     } else {
-      console.error(`Status desconhecido: ${order.status}`);
     }
   });
 
