@@ -1,15 +1,11 @@
+// src/components/MyNavbar.js
 import React, { useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Drawer from '@mui/material/Drawer';
+import { StyledAppBar, StyledToolbar, StyledButton, StyledIconButton, StyledDrawer, StyledMenuIcon } from './style';
+import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 const MyNavbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -46,41 +42,38 @@ const MyNavbar = () => {
   );
 
   return (
-    <AppBar position="static">
-      <Toolbar>
+    <StyledAppBar position="static">
+      <StyledToolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Meu Projeto
         </Typography>
         
-        {/* Menu para Desktop */}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '1rem' }}>
-          <Button color="inherit">Pedidos</Button>
-          <Button color="inherit">Clientes</Button>
-          <Button color="inherit">Promoções</Button>
-          <Button color="inherit">Relatórios</Button>
+          <StyledButton>Pedidos</StyledButton>
+          <StyledButton>Clientes</StyledButton>
+          <StyledButton>Promoções</StyledButton>
+          <StyledButton>Relatórios</StyledButton>
         </Box>
 
-        {/* Menu Responsivo (Mobile) */}
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-          <IconButton
+          <StyledIconButton
             size="large"
             edge="start"
-            color="inherit"
             aria-label="menu"
             onClick={toggleDrawer(true)}
           >
-            <MenuIcon />
-          </IconButton>
-          <Drawer
+            <StyledMenuIcon />
+          </StyledIconButton>
+          <StyledDrawer
             anchor="left"
             open={drawerOpen}
             onClose={toggleDrawer(false)}
           >
             {list()}
-          </Drawer>
+          </StyledDrawer>
         </Box>
-      </Toolbar>
-    </AppBar>
+      </StyledToolbar>
+    </StyledAppBar>
   );
 };
 

@@ -1,75 +1,35 @@
+// src/components/style.js
 import styled from 'styled-components';
+import { AppBar as MuiAppBar, Toolbar as MuiToolbar, Button as MuiButton, Drawer as MuiDrawer, IconButton as MuiIconButton } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import theme from '../theme';
 
-export const StyledNavbar = styled.nav`
-  background-color: #4b0082;
-  padding: 1rem;
+export const StyledAppBar = styled(MuiAppBar)`
+  background-color: ${theme.colors.primary} !important;
+`;
+
+export const StyledToolbar = styled(MuiToolbar)`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  color: #fff;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
-  }
 `;
 
-export const NavLogo = styled.div`
-  font-size: 1.5rem;
-  font-weight: bold;
-
-  @media (max-width: 768px) {
-    font-size: 1.2rem;
-  }
-`;
-
-export const NavLinks = styled.div`
-  display: flex;
-  gap: 2rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
-    background-color: #4b0082;
-    position: absolute;
-    top: 94px;
-    left: 0;
-    right: 0;
-    gap: 1rem;
-    padding: 1rem;
-    display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
-    z-index: 1;
-  }
-`;
-
-export const NavLink = styled.a`
-  color: #fff;
-  text-decoration: none;
-  font-size: 1rem;
-
+export const StyledButton = styled(MuiButton)`
+  color: ${theme.colors.white} !important;
   &:hover {
-    text-decoration: underline;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
+    background-color: ${theme.colors.secondary};
   }
 `;
 
-export const Hamburger = styled.div`
-  display: none;
-  flex-direction: column;
-  gap: 0.3rem;
-  cursor: pointer;
+export const StyledIconButton = styled(MuiIconButton)`
+  color: ${theme.colors.text} !important;
+`;
 
-  span {
-    width: 25px;
-    height: 3px;
-    background-color: #fff;
-    border-radius: 2px;
+export const StyledDrawer = styled(MuiDrawer)`
+  .MuiDrawer-paper {
+    background-color: ${theme.colors.primary};
   }
+`;
 
-  @media (max-width: 768px) {
-    display: flex;
-  }
+export const StyledMenuIcon = styled(MenuIcon)`
+  color: ${theme.colors.text} !important;
 `;

@@ -1,10 +1,13 @@
 const theme = {
   colors: {
+    white: '#fff',
     primary: '#7B4397',
     secondary: '#D25E96',
     danger: '#D32F2F',
     background: '#F4F4F4',
     text: '#333',
+    primaryHover: '#6a2a7e',
+    secondaryHover: '#b74e81',
 
     doing: {
       background: '#EDE7F6',
