@@ -1,12 +1,12 @@
 const theme = {
   colors: {
     white: '#fff',
-    primary: '#7B4397',
-    secondary: '#D25E96',
+    primary: '#6d00a1',
+    secondary: '#00a166',
     danger: '#D32F2F',
     background: '#F4F4F4',
     text: '#333',
-    primaryHover: '#6a2a7e',
+    primaryHover: '#46295a',
     secondaryHover: '#b74e81',
 
     doing: {

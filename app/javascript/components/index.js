@@ -3,4 +3,5 @@ export { default as Navbar } from './Navbar'
 export { default as Footer } from './Footer'
 export { default as OrderCard } from './OrderCard'
 export { default as OrderList } from './OrderList'
-
+export { default as OrderModal } from './OrderModal'
+export { default as InputFormatMoney } from './InputFormatMoney'

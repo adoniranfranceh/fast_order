@@ -1,22 +1,23 @@
-import React from "react"
-import { Button, OrderList } from "../index.js"
-import { StyledHome, StyledButton } from './style'
-
-const handleNewOrderClick = () => {
-  console.log('clicou')
-}
+// src/pages/Home.js
+import React, { useState } from 'react';
+import { Button , OrderModal, OrderList} from '../index.js';
 
 const Home = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
-    <StyledHome>
-      <StyledButton> 
-        <Button primary onClick={handleNewOrderClick}>
+    <div>
+      <Button primary onClick={openModal}>
           Novo pedido
         </Button>
-      </StyledButton>
+
+      <OrderModal open={isModalOpen} onClose={closeModal} />
       <OrderList></OrderList>
-    </StyledHome>
-  )
-}
+    </div>
+  );
+};
 
 export default Home;
