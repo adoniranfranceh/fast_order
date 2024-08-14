@@ -5,13 +5,13 @@ pt-BR:
         one: Pedido
         other: Pedidos
     attributes:
-      status:
-        doing: Aguardando
-        delivered: Entregue
-        paid: Pago
-        canceled: Cancelado
-      delivery_type:
-        pickup: "Para ser retirado - %{time}"
-        delivery: "Entrega - %{address}"
-        local: "Mesa: %{table_info}"
-  on_hold: "%{model} em espera"
+      order:
+        delivery_type: Tipo de entrega
+        table_info: Info da mesa
+        address: Endereço
+        pick_up_time: Hora de retirada
+        status:
+          doing: Aguardando
+          delivered: Entregue
+          paid: Pago
+          canceled: Cancelado
