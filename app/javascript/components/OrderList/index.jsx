@@ -38,6 +38,8 @@ const OrderList = () => {
 
   }, []);
 
+  console.log(orders)
+
   const fetchOrders = () => {
     axios.get('api/v1/orders')
       .then(function (response) {

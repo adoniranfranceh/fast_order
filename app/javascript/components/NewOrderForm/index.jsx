@@ -1,8 +1,8 @@
 // src/components/NewOrderForm.js
 import React, { useState } from 'react';
-import { TextField, MenuItem, InputLabel, Select, Box, IconButton } from '@mui/material';
-import { Add as AddIcon, AddCircle as AddCircleIcon } from '@mui/icons-material';
-import { InputFormatMoney, Button } from '../index.js'
+import { Box, Button } from '@mui/material';
+import { SelectInput, PriceInput, PlusInput, TextInput } from '../index.js';
+import { createOrder } from '../services/post.js';
 
 const deliveryTypes = [
   { value: 'local', label: 'Local' },
@@ -12,136 +12,114 @@ const deliveryTypes = [
 
 const NewOrderForm = () => {
   const [deliveryType, setDeliveryType] = useState('');
+  const [customer, setCustomer] = useState('');
   const [items, setItems] = useState([{ id: Date.now(), name: '', additionalFields: [] }]);
 
   const handleAddItem = () => {
     setItems([...items, { id: Date.now(), name: '', additionalFields: [] }]);
   };
 
-  const handleRemoveItem = (id) => {
-    setItems(items.filter(item => item.id !== id));
-  };
-
   const handleChange = (index, field, value) => {
-    const newItems = [...items];
-    newItems[index][field] = value;
-    setItems(newItems);
+    const updatedItems = [...items];
+    updatedItems[index][field] = value;
+    setItems(updatedItems);
   };
 
   const handleAddAdditionalField = (index) => {
-    const newItems = [...items];
-    newItems[index].additionalFields.push({ id: Date.now(), additional: '', additionalValue: '' });
-    setItems(newItems);
+    const updatedItems = [...items];
+    updatedItems[index].additionalFields.push({ id: Date.now(), additional: '', additionalValue: '' });
+    setItems(updatedItems);
   };
 
   const handleRemoveAdditionalField = (itemIndex, fieldIndex) => {
-    const newItems = [...items];
-    newItems[itemIndex].additionalFields = newItems[itemIndex].additionalFields.filter((_, i) => i !== fieldIndex);
-    setItems(newItems);
+    const updatedItems = [...items];
+    updatedItems[itemIndex].additionalFields.splice(fieldIndex, 1);
+    setItems(updatedItems);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    
+    const orderData = {
+      order: {
+        user_id: 1,
+        customer: customer,
+        delivery_type: deliveryType,
+        items_attributes: items.map(item => ({
+          name: item.name,
+          additional_fields_attributes: item.additionalFields.map(field => ({
+            additional: field.additional,
+            additional_value: field.additionalValue,
+          })),
+        })),
+      },
+    };
+
+    try {
+      const result = await createOrder(orderData);
+      if (result.error) {
+        console.error(result.error);
+        // Handle error
+      } else {
+        // Handle success
+      }
+    } catch (error) {
+      console.error('Failed to create order:', error);
+      // Handle error
+    }
   };
 
   return (
-    <Box component="form" noValidate autoComplete="off">
-      <TextField
-        fullWidth
+    <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
+      <TextInput 
         label="Nome do Cliente (opcional)"
-        variant="outlined"
-        margin="normal"
+        value={customer}
+        onChange={(e) => setCustomer(e.target.value)}
       />
-      <InputLabel id="delivery-type-label">Tipo de Entrega</InputLabel>
-      <Select
-        fullWidth
-        labelId="delivery-type-label"
+
+      <SelectInput
+        label="Tipo de Entrega"
         value={deliveryType}
         onChange={(e) => setDeliveryType(e.target.value)}
-        displayEmpty
-        inputProps={{ 'aria-label': 'Tipo de entrega' }}
-        style={{ marginBottom: '1rem' }}
-      >
-        {deliveryTypes.map((type) => (
-          <MenuItem key={type.value} value={type.value}>
-            {type.label}
-          </MenuItem>
-        ))}
-      </Select>
+        options={deliveryTypes}
+      />
 
       {deliveryType === 'local' && (
-        <TextField
-          fullWidth
-          label="Info da Mesa"
-          variant="outlined"
-          margin="normal"
-        />
+        <TextInput label="Info da Mesa" />
       )}
 
       {deliveryType === 'retirada' && (
-        <TextField
-          fullWidth
-          label="Hora de Retirada (opcional)"
-          type="time"
-          variant="outlined"
-          margin="normal"
-        />
+        <TextInput label="Hora de Retirada (opcional)" type="time" />
       )}
 
       {deliveryType === 'delivery' && (
-        <>
-          <TextField
-            fullWidth
-            label="Endereço"
-            variant="outlined"
-            margin="normal"
-          />
-        </>
+        <TextInput label="Endereço" />
       )}
 
-      {items.map((item, itemIndex) => (
+      {items.map((item, index) => (
         <Box key={item.id} display="flex" flexDirection="column" mb={2}>
-          <Box display="flex" alignItems="center">
-            <TextField
-              fullWidth
-              label="Item"
-              variant="outlined"
-              margin="normal"
-              value={item.name}
-              onChange={(e) => handleChange(itemIndex, 'name', e.target.value)}
-            />
-            <IconButton
-              onClick={() => handleAddAdditionalField(itemIndex)}
-              color="primary"
-              style={{ marginLeft: '1rem' }}
-            >
-              <AddCircleIcon />
-            </IconButton>
-            <Button
-              onClick={() => handleRemoveItem(item.id)}
-              variant="outlined"
-              color="error"
-              style={{ marginLeft: '1rem' }}
-            >
-              Remover
-            </Button>
-          </Box>
-
+          <PlusInput
+            label="Item"
+            value={item.name}
+            onChange={(e) => handleChange(index, 'name', e.target.value)}
+            onAdd={() => handleAddAdditionalField(index)}
+          />
           {item.additionalFields.map((field, fieldIndex) => (
             <Box key={field.id} display="flex" alignItems="center" ml={2} mb={1}>
-              <TextField
+              <TextInput
                 label="Adicional"
-                variant="outlined"
-                margin="normal"
                 value={field.additional}
-                onChange={(e) => handleChange(itemIndex, 'additionalFields', item.additionalFields.map((f, i) => i === fieldIndex ? { ...f, additional: e.target.value } : f))}
+                onChange={(e) => handleChange(index, 'additionalFields', item.additionalFields.map((f, i) => i === fieldIndex ? { ...f, additional: e.target.value } : f))}
                 style={{ marginRight: '0.5rem' }}
               />
-              <InputFormatMoney
+              <PriceInput
                 label="Valor do Adicional"
-                value={item.additionalValue}
-                onChange={(value) => handleChange(index, 'additionalValue', value)}
-                style={{ marginLeft: '1rem' }}
-                variant="outlined"
+                value={field.additionalValue}
+                onChange={(e) => handleChange(index, 'additionalFields', item.additionalFields.map((f, i) => i === fieldIndex ? { ...f, additionalValue: e.target.value } : f))}
+                style={{ marginRight: '0.5rem' }}
               />
               <Button
-                onClick={() => handleRemoveAdditionalField(itemIndex, fieldIndex)}
+                onClick={() => handleRemoveAdditionalField(index, fieldIndex)}
                 variant="outlined"
                 color="error"
               >
@@ -152,23 +130,11 @@ const NewOrderForm = () => {
         </Box>
       ))}
 
-      <Button
-        onClick={handleAddItem}
-        startIcon={<AddIcon />}
-        variant="outlined"
-        color="primary"
-        style={{ marginTop: '1rem' }}
-      >
+      <Button type="button" onClick={handleAddItem} variant="outlined" color="primary">
         Adicionar Item
       </Button>
 
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        style={{ marginTop: '1rem' }}
-        primary
-      >
+      <Button type="submit" variant="contained" color="primary">
         Finalizar Pedido
       </Button>
     </Box>

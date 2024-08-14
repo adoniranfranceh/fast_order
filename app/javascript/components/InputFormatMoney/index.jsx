@@ -26,7 +26,6 @@ const InputFormatMoney = () => {
       value={amount}
       onChange={setAmount}
       variant="outlined"
-      fullWidth
     />
   );
 };

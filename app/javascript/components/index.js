@@ -5,3 +5,8 @@ export { default as OrderCard } from './OrderCard'
 export { default as OrderList } from './OrderList'
 export { default as OrderModal } from './OrderModal'
 export { default as InputFormatMoney } from './InputFormatMoney'
+
+export { default as TextInput } from './TextInput'
+export { default as SelectInput } from './SelectInput'
+export { default as PriceInput } from './PriceInput'
+export { default as PlusInput } from './PlusInput'

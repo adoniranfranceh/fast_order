@@ -11,7 +11,7 @@ describe 'Admin vê pedidos' do
     visit root_path
 
     user.orders.create delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris'
-    user.orders.create  delivery_type: :pickup, pick_up_time: '19:30', status: :doing, customer: 'Carlos'
+    user.orders.create delivery_type: :pickup, pick_up_time: '19:30', status: :doing, customer: 'Carlos'
     user.orders.create delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
 
     within("div[status='delivered']") do
@@ -24,10 +24,10 @@ describe 'Admin vê pedidos' do
 
     within("div[status='doing']") do
       # expect(page).to have_content 'Para ser retirado - 19:30'
-        expect(page).to have_content 'Carlos'
-        expect(page).to have_content "\nStatus: Aguardando"
-        # expect(page).to have_link 'Itens'
-        # expect(page).to have_link 'Ver detalhes', href: root_path
+      expect(page).to have_content 'Carlos'
+      expect(page).to have_content "\nStatus: Aguardando"
+      # expect(page).to have_link 'Itens'
+      # expect(page).to have_link 'Ver detalhes', href: root_path
     end
 
     within("div[status='paid']") do

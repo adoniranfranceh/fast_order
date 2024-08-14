@@ -7,5 +7,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   enum role: { collaborator: 1, admin: 5 }
 
-  has_many :orders
+  has_many :orders, dependent: :destroy
 end
