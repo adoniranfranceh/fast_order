@@ -21,12 +21,14 @@ describe 'Vê pedidos' do
       expect(json_response.length).to eq 2
 
       first_order = json_response.find { |order| order['customer'] == 'Roger' }
+      expect(first_order['status']).to eq 'doing'
       expect(first_order['customer']).to eq 'Roger'
       expect(first_order['items'].length).to eq 1
       expect(first_order['items'].first['name']).to eq 'Item 1'
       expect(first_order['additional_fields']).to eq nil
 
       second_order = json_response.find { |order| order['customer'] == 'Ernesto' }
+      expect(second_order['status']).to eq 'doing'
       expect(second_order['customer']).to eq 'Ernesto'
       expect(second_order['items'].length).to eq 2
       expect(second_order['items'].first['name']).to eq 'Item 1'

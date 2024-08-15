@@ -11,6 +11,7 @@ export const StyledButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin: 10px 0 0 30px;
+  width: 180px;
 
   &:hover {
     background-color: ${props => props.primary ? theme.colors.primaryHover : theme.colors.secondaryHover};

@@ -1,17 +1,17 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 
-const TextInput = ({ label, value, onChange, type = 'text', ...props }) => (
-  <TextField
-    fullWidth
-    label={label}
-    variant="outlined"
-    margin="normal"
-    value={value}
-    onChange={onChange}
-    type={type}
-    {...props}
-  />
-);
+const TextInput = ({ label, value, onChange, error, helperText, ...props }) => {
+  return (
+    <TextField
+      label={label}
+      value={value}
+      onChange={onChange}
+      error={error}
+      helperText={helperText}
+      {...props}
+    />
+  );
+};
 
 export default TextInput;

@@ -14,8 +14,8 @@ export const OrderListContainer = styled.div`
 `;
 
 export const Section = styled.div`
-  background-color: ${({ status }) => theme.colors[status].background};
-  border-left: 5px solid ${({ status }) => theme.colors[status].border};
+  background-color: ${({ $status }) => theme.colors[$status].background};
+  border-left: 5px solid ${({ $status }) => theme.colors[$status].border};
   border-radius: ${({ theme }) => theme.borderRadius};
   padding: 20px;
   margin-bottom: 20px;
@@ -33,7 +33,7 @@ export const Section = styled.div`
 `;
 
 export const SectionTitle = styled.h2`
-  color: ${({ status }) => theme.colors[status]};
+  color: ${({ $status }) => theme.colors[$status]};
   font-size: 24px;
   margin-bottom: 15px;
   text-transform: uppercase;

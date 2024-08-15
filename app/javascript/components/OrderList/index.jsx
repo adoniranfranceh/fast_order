@@ -13,41 +13,38 @@ const OrderList = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-
     const subscription = consumer.subscriptions.create({ channel: "OrdersChannel" }, {
       received(data) {
         setOrders(prevOrders => {
-          const existingOrder = prevOrders.findIndex(order => order.id === data.id);
+          const existingOrderIndex = prevOrders.findIndex(order => order.id === data.id);
   
-          if(existingOrder !== -1) {
-            const updateOrders = [...prevOrders];
-            updateOrders[existingOrder] = data;
-            return updateOrders
+          if (existingOrderIndex !== -1) {
+            const updatedOrders = [...prevOrders];
+            updatedOrders[existingOrderIndex] = data;
+            return updatedOrders;
           } else {
             return [...prevOrders, data];
           }
-        })
+        });
       }
     });
 
-    fetchOrders()
+    fetchOrders();
 
     return () => {
       subscription.unsubscribe();
     }; 
-
   }, []);
-
-  console.log(orders)
 
   const fetchOrders = () => {
     axios.get('api/v1/orders')
-      .then(function (response) {
-        setOrders(response.data)
+      .then(response => {
+        setOrders(response.data);
       })
-      .catch(function (error) {
-      })
-  }
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
   const groupedOrders = {
     doing: [],
@@ -66,6 +63,7 @@ const OrderList = () => {
   };
 
   orders.forEach(order => {
+    console.log(order);
     if (groupedOrders[order.status]) {
       groupedOrders[order.status].push(order);
     } else {
@@ -75,14 +73,14 @@ const OrderList = () => {
   return (
     <OrderListContainer>
       {Object.keys(groupedOrders).map(status => (
-        <Section key={status} status={status}>
-        <SectionTitle>{getSectionTitle(status)}</SectionTitle>
-        <OrderGrid>
-              {groupedOrders[status].map(order => (
-                <OrderCard key={order.id} order={order} />
-              ))}
-            </OrderGrid>
-          </Section>
+        <Section key={status} $status={status}>
+          <SectionTitle $status={status}>{getSectionTitle(status)}</SectionTitle>
+          <OrderGrid>
+            {groupedOrders[status].map(order => (
+              <OrderCard key={order.id} order={order} />
+            ))}
+          </OrderGrid>
+        </Section>
       ))}
     </OrderListContainer>
   );
