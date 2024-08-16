@@ -28,4 +28,26 @@ describe 'Cria cliente' do
     expect(customer.favorite_order).to eq 'Xícara de chá'
     expect(customer.user_id).to eq user.id
   end
+
+  it 'com sucesso' do
+    user = create(:user)
+    params = {
+      customer: {
+        name: '',
+        email: 'michael@email.com',
+        birthdate: '',
+        phone: '525252525',
+        favorite_order: 'Xícara de chá',
+        user_id: user.id
+      }
+    }
+
+    post('/api/v1/customers', params:)
+
+    expect(response).to have_http_status :unprocessable_entity
+    expect(Customer.count).to eq 0
+    json_response = JSON.parse(response.body)
+    expect(json_response['errors']).to eq ['Nome não pode ficar em branco',
+                                           'Data de nascimento não pode ficar em branco']
+  end
 end

@@ -6,7 +6,7 @@ module Api
       def create
         customer = Customer.new(customer_params)
 
-        if customer.save!
+        if customer.save
           render json: { message: 'Cliente salvo com sucesso', customer: }, status: :created
         else
           render json: { errors: customer.errors.full_messages }, status: :unprocessable_entity

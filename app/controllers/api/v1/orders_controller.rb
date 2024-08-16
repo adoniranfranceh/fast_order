@@ -3,7 +3,7 @@ module Api
     class OrdersController < ApplicationController
       def index
         @orders = Order.includes(items: :additional_fields).all
-        render json: @orders.as_json( include: {
+        render json: @orders.as_json(include: {
                                        items: {
                                          include: {
                                            additional_fields: { only: %i[id additional additional_value] }
