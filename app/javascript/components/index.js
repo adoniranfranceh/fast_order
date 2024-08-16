@@ -13,6 +13,7 @@ export { default as PlusInput } from './PlusInput'
 export { default as CustomerForm } from './CustomerForm'
 
 export { default as MyNavbar } from './Navbar'
+export { default as ObjectList } from './ObjectList'
 
 // pages
 export { default as CustomersPage } from './pages/CustomersPage'

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :orders, only: %i[index create]
-      resources :customers, only: %i[index create]
+      resources :customers, only: %i[index create update show]
     end
   end
   get '*path', to: 'orders#index', constraints: ->(request) do

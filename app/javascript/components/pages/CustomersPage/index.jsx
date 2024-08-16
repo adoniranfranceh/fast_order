@@ -1,54 +1,48 @@
 import React, { useState } from 'react';
-import { Button, Modal, Box, Typography } from '@mui/material';
-import { CustomerForm } from '../../index.js';
+import { ObjectList, CustomerForm } from '../../index.js';
+import { Button, Box } from '@mui/material';
 
 const CustomersPage = () => {
-  const [open, setOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleEdit = (customer) => {
+    setSelectedCustomer(customer);
+    setIsFormOpen(true);
+  };
 
-  const handleSubmit = (customerData) => {
-    console.log('Dados do cliente:', customerData);
+  const handleNewCustomer = () => {
+    setSelectedCustomer(null);
+    setIsFormOpen(true);
+  };
 
-    handleClose();
+  const handleFormClose = () => {
+    setIsFormOpen(false);
+    setSelectedCustomer(null);
+  };
+
+  const handleFormSubmit = (updatedCustomer) => {
+    console.log('Cliente atualizado/registrado:', updatedCustomer);
+    setIsFormOpen(false);
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Registrar Novo Cliente
-      </Typography>
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-        Abrir Formulário
-      </Button>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
+    <Box sx={{ p: 2 }}>
+      <Button 
+        variant="contained" 
+        color="primary" 
+        onClick={handleNewCustomer} 
+        sx={{ mb: 2 }}
       >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: { xs: '90%', sm: '70%', md: '50%', lg: '40%' },
-            maxWidth: '700px',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            overflowY: 'auto',
-          }}
-        >
-          <Typography id="modal-title" variant="h6" component="h2">
-            Registrar Cliente
-          </Typography>
-          <CustomerForm onSubmit={handleSubmit} />
-        </Box>
-      </Modal>
+        Novo Cliente
+      </Button>
+      <ObjectList onEdit={handleEdit} />
+      <CustomerForm
+        open={isFormOpen}
+        onClose={handleFormClose}
+        onSubmit={handleFormSubmit}
+        customerData={selectedCustomer}
+      />
     </Box>
   );
 };
