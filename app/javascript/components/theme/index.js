@@ -1,13 +1,13 @@
 const theme = {
   colors: {
-    white: '#fff',
-    primary: '#6d00a1',
-    secondary: '#00a166',
+    white: '#FFFFFF',
+    primary: '#7052F2',
+    primaryHover: '#46295A',
+    secondary: '#00A166',
+    secondaryHover: '#B74E81',
     danger: '#D32F2F',
     background: '#F4F4F4',
-    text: '#333',
-    primaryHover: '#46295a',
-    secondaryHover: '#b74e81',
+    text: '#011056',
 
     doing: {
       background: '#EDE7F6',
@@ -32,11 +32,11 @@ const theme = {
   },
 
   fonts: {
-    primary: 'Arial,-serif',
+    primary: 'Arial, sans-serif',
   },
 
   borderRadius: '8px',
-  boxShadow: '0 4px 8px rgba(0,,,.1)',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
 };
 
 export default theme;

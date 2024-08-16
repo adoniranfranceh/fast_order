@@ -14,7 +14,7 @@ describe 'Admin vê pedidos' do
     user.orders.create delivery_type: :pickup, pick_up_time: '19:30', status: :doing, customer: 'Carlos'
     user.orders.create delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
 
-    within("div[status='delivered']") do
+    within("div[status-type='delivered']") do
       expect(page).to have_content 'Entrega - Rua: Cardoso, 100'
       expect(page).to have_content 'Roger'
       expect(page).to have_content "\nStatus: Entregue"
@@ -22,7 +22,7 @@ describe 'Admin vê pedidos' do
       # expect(page).to have_link 'Ver detalhes', href: root_path
     end
 
-    within("div[status='doing']") do
+    within("div[status-type='doing']") do
       # expect(page).to have_content 'Para ser retirado - 19:30'
       expect(page).to have_content 'Carlos'
       expect(page).to have_content "\nStatus: Aguardando"
@@ -30,7 +30,7 @@ describe 'Admin vê pedidos' do
       # expect(page).to have_link 'Ver detalhes', href: root_path
     end
 
-    within("div[status='paid']") do
+    within("div[status-type='paid']") do
       expect(page).to have_content 'Mesa: 7'
       expect(page).to have_content 'Chris'
       expect(page).to have_content 'Status: Pago'
@@ -53,8 +53,8 @@ describe 'Admin vê pedidos' do
     visit root_path
 
     expect(page).not_to have_content 'Não há pedidos'
-    within "div[status='doing']" do
-      expect(page).to have_content 'NOVOS PEDIDOS'
+    within "div[status-type='doing']" do
+      expect(page).to have_content 'Novos Pedidos'
       within "[data-testid='#{ernesto_order.id}']" do
         expect(page).to have_content "\nMesa: 4"
         expect(page).to have_content 'Ernesto'
@@ -71,7 +71,7 @@ describe 'Admin vê pedidos' do
       end
     end
 
-    within("div[status='delivered']") do
+    within("div[status-type='delivered']") do
       expect(page).to have_content 'Entrega - Rua: Cardoso, 100'
       expect(page).to have_content 'Roger'
       expect(page).to have_content "\nStatus: Entregue"
@@ -79,7 +79,7 @@ describe 'Admin vê pedidos' do
       # expect(page).to have_link 'Ver detalhes', href: root_path
     end
 
-    within("div[status='paid']") do
+    within("div[status-type='paid']") do
       expect(page).to have_content 'Mesa: 7'
       expect(page).to have_content 'Chris'
       expect(page).to have_content 'Status: Pago'
@@ -87,7 +87,7 @@ describe 'Admin vê pedidos' do
       # expect(page).to have_link 'Ver detalhes', href: root_path
     end
 
-    within("div[status='canceled']") do
+    within("div[status-type='canceled']") do
       expect(page).to have_content 'Mesa: 6'
       expect(page).to have_content 'Michael'
       expect(page).to have_content 'Status: Cancelado'

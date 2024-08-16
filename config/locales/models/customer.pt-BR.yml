@@ -1,0 +1,14 @@
+pt-BR:
+  activerecord:
+    models:
+      customer: 
+        one: Cliente
+        other: Clientes
+    attributes:
+      customer:
+        name: Nome
+        email: E-mail
+        birthdate: Data de nascimento
+        order_favorite: Pedido favorito
+        description: Descrição
+        user_id: Usuário

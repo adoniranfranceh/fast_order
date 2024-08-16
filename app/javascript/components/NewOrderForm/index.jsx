@@ -140,16 +140,12 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
           onOrderSuccess();
         }
         setOrderData(initialOrderData);
+        localStorage.removeItem('orderFormData');
         onClose();
       }
     } catch (error) {
       console.error('Failed to create order:', error);
     }
-  };
-
-  const handleClose = () => {
-    localStorage.removeItem('orderFormData');
-    onClose();
   };
 
   return (
@@ -279,7 +275,7 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
         <AddIcon /> Adicionar Item
       </IconButton>
 
-      <Button onClick={handleClose} type="submit" variant="contained" color="primary">
+      <Button type="submit" variant="contained" color="primary">
         Criar Pedido
       </Button>
     </Box>

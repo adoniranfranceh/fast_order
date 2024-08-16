@@ -115,3 +115,7 @@ hr {
   color: #fff;
   opacity: .70;
 } */
+
+body {
+  font-family: 'Inter', sans-serif !important;
+}

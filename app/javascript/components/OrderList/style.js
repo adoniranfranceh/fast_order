@@ -33,10 +33,11 @@ export const Section = styled.div`
 `;
 
 export const SectionTitle = styled.h2`
-  color: ${({ $status }) => theme.colors[$status]};
+  color: ${({ $status }) => theme.colors.text};
+  font-weight: 700;
+  font-size: 16;
   font-size: 24px;
   margin-bottom: 15px;
-  text-transform: uppercase;
 `;
 
 export const OrderGrid = styled.div`

@@ -73,8 +73,8 @@ const OrderList = () => {
   return (
     <OrderListContainer>
       {Object.keys(groupedOrders).map(status => (
-        <Section key={status} $status={status}>
-          <SectionTitle $status={status}>{getSectionTitle(status)}</SectionTitle>
+        <Section key={status} $status={status} status-type={status}>
+          <SectionTitle>{getSectionTitle(status)}</SectionTitle>
           <OrderGrid>
             {groupedOrders[status].map(order => (
               <OrderCard key={order.id} order={order} />

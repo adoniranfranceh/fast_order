@@ -14,6 +14,7 @@ const OrderCard = ({ order }) => {
   return (
     <OrderCardContainer data-testid={order.id} >
       <OrderInfo>
+        #{order.id}
         <CustomerName>{order.customer}</CustomerName>
         <OrderDetails>
           {order.table_info && `Mesa: ${order.table_info}`}<br />
