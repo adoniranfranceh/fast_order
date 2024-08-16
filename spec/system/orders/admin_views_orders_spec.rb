@@ -10,9 +10,9 @@ describe 'Admin vê pedidos' do
     login_as admin, scope: :user
     visit root_path
 
-    user.orders.create delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris'
-    user.orders.create delivery_type: :pickup, pick_up_time: '19:30', status: :doing, customer: 'Carlos'
-    user.orders.create delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
+    create :order, user:, delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris'
+    create :order, user:, delivery_type: :pickup, pick_up_time: '19:30', status: :doing, customer: 'Carlos'
+    create :order, user:, delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
 
     within("div[status-type='delivered']") do
       expect(page).to have_content 'Entrega - Rua: Cardoso, 100'
@@ -42,12 +42,12 @@ describe 'Admin vê pedidos' do
   it 'a partir da tela inicial', js: true do
     user = create :user, role: :collaborator
 
-    ernesto_order = user.orders.create delivery_type: :local, table_info: '4', status: :doing, customer: 'Ernesto'
-    carlos_order = user.orders.create  delivery_type: :pickup, pick_up_time: '19:30', status: :doing,
+    ernesto_order = create :order, user:, delivery_type: :local, table_info: '4', status: :doing, customer: 'Ernesto'
+    carlos_order = create :order, user:,  delivery_type: :pickup, pick_up_time: '19:30', status: :doing,
                                        customer: 'Carlos'
-    user.orders.create delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
-    user.orders.create delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris'
-    user.orders.create delivery_type: :local, table_info: '6', status: :canceled, customer: 'Michael'
+    create :order, user:, delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
+    create :order, user:, delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris'
+    create :order, user:, delivery_type: :local, table_info: '6', status: :canceled, customer: 'Michael'
 
     login_as user, scope: :user
     visit root_path

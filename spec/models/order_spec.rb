@@ -27,7 +27,7 @@ RSpec.describe Order, type: :model do
     end
 
     it 'é inválido sem items' do
-      order = build(:order, items: [])
+      order = build(:order, create_items: false)
       expect(order).to_not be_valid
       expect(order.errors[:items]).to include('não pode ficar em branco')
     end
@@ -48,6 +48,29 @@ RSpec.describe Order, type: :model do
       user = create :user
       order = build(:order, delivery_type: :pickup, pick_up_time: '12:00', items_attributes: [name: 'item 1'], user:)
       expect(order).to be_valid
+    end
+  end
+
+  context '.content' do
+    it 'tipo de entrega local' do
+      user = create :user
+      order = create :order, user:, delivery_type: :local, table_info: 'M7'
+
+     expect(order.content).to eq 'M7'
+    end
+
+    it 'tipo de entrega delivery' do
+      user = create :user
+      order = create :order, user:, delivery_type: :delivery, address: 'Rua das Palmeiras, 100'
+
+      expect(order.content).to eq 'Rua das Palmeiras, 100'
+    end
+
+    it 'tipo de entrega para retirar' do
+      user = create :user
+      order = create :order, user:, delivery_type: :pickup, pick_up_time: '18:00'
+
+      expect(order.content.strftime('%H:%M')).to eq '18:00'
     end
   end
 end

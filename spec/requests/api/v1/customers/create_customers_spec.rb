@@ -29,7 +29,7 @@ describe 'Cria cliente' do
     expect(customer.user_id).to eq user.id
   end
 
-  it 'com sucesso' do
+  it 'sem sucesso' do
     user = create(:user)
     params = {
       customer: {
