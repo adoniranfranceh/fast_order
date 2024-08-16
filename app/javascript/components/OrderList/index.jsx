@@ -63,7 +63,6 @@ const OrderList = () => {
   };
 
   orders.forEach(order => {
-    console.log(order);
     if (groupedOrders[order.status]) {
       groupedOrders[order.status].push(order);
     } else {

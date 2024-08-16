@@ -1,5 +1,5 @@
-// src/components/MyNavbar.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StyledAppBar, StyledToolbar, StyledButton, StyledIconButton, StyledDrawer, StyledMenuIcon } from './style';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -41,16 +41,24 @@ const MyNavbar = () => {
     </Box>
   );
 
+  const navigate = useNavigate()
+
   return (
     <StyledAppBar position="static">
       <StyledToolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1 }}
+          onClick={() => navigate('/')}>
           Meu Projeto
         </Typography>
         
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '1rem' }}>
           <StyledButton>Pedidos</StyledButton>
-          <StyledButton>Clientes</StyledButton>
+          <StyledButton onClick={() => navigate('/clientes')}>
+          Clientes
+          </StyledButton>
           <StyledButton>Promoções</StyledButton>
           <StyledButton>Relatórios</StyledButton>
         </Box>

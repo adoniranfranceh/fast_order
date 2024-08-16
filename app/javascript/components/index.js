@@ -10,3 +10,9 @@ export { default as TextInput } from './TextInput'
 export { default as SelectInput } from './SelectInput'
 export { default as PriceInput } from './PriceInput'
 export { default as PlusInput } from './PlusInput'
+export { default as CustomerForm } from './CustomerForm'
+
+export { default as MyNavbar } from './Navbar'
+
+// pages
+export { default as CustomersPage } from './pages/CustomersPage'

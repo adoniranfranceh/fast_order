@@ -11,4 +11,7 @@ Rails.application.routes.draw do
       resources :customers, only: %i[index create]
     end
   end
+  get '*path', to: 'orders#index', constraints: ->(request) do
+    !request.xhr? && request.format.html?
+  end
 end

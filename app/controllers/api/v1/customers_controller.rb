@@ -24,7 +24,7 @@ module Api
           :description,
           :favorite_order,
           :user_id
-        )
+        ).merge(user_id: current_user.id)
       end
     end
   end
