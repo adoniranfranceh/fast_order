@@ -5,6 +5,11 @@ import { Button, Box } from '@mui/material';
 const CustomersPage = () => {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [refreshList, setRefreshList] = useState(false);
+
+  const handleRefresh = () => {
+    setRefreshList(prev => !prev);
+  };
 
   const handleEdit = (customer) => {
     setSelectedCustomer(customer);
@@ -22,7 +27,7 @@ const CustomersPage = () => {
   };
 
   const handleFormSubmit = (updatedCustomer) => {
-    console.log('Cliente atualizado/registrado:', updatedCustomer);
+    handleRefresh();
     setIsFormOpen(false);
   };
 
@@ -36,7 +41,11 @@ const CustomersPage = () => {
       >
         Novo Cliente
       </Button>
-      <ObjectList onEdit={handleEdit} />
+      <ObjectList
+        url='/api/v1/customers'
+        onEdit={handleEdit}
+        refresh={refreshList}
+      />
       <CustomerForm
         open={isFormOpen}
         onClose={handleFormClose}

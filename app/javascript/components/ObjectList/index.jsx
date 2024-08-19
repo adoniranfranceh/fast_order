@@ -1,38 +1,66 @@
 import React, { useEffect, useState } from 'react';
 import { List, ListItem, ListItemText, Button, Box, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-const ObjectList = ({ onEdit }) => {
-  const [customers, setCustomers] = useState([]);
+const ObjectList = ({ url, onEdit, refresh }) => {
+  const [items, setItems] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCustomers = async () => {
+    const fetchItems = async () => {
       try {
-        const response = await fetch('/api/v1/customers');
+        const response = await fetch(url);
         if (!response.ok) {
-          throw new Error('Erro ao carregar clientes');
+          throw new Error('Erro ao carregar dados');
         }
         const data = await response.json();
-        setCustomers(data);
+        setItems(data);
       } catch (error) {
         console.error('Erro:', error);
       }
     };
 
-    fetchCustomers();
-  }, []);
+    fetchItems();
+  }, [url, refresh]);
+
+  const handleItemClick = (item) => {
+    navigate(`/cliente/${item.id}`);
+  };
 
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h6" gutterBottom>
-        Lista de Clientes
+        Lista de Itens
       </Typography>
       <List>
-        {customers.map((customer) => (
-          <ListItem key={customer.id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <ListItemText primary={customer.name} secondary={customer.email} />
-            <Button variant="contained" color="primary" onClick={() => onEdit(customer)}>
-              Editar
-            </Button>
+        {items.map((item) => (
+          <ListItem
+            key={item.id}
+            sx={{ 
+              display: 'flex',
+              justifyContent: 'space-between',
+              background: '#f4f4f4',
+              borderRadius: '6px',
+              marginBottom: '10px',
+              height: '80px',
+              cursor: 'pointer'
+            }}
+            onClick={() => handleItemClick(item)}
+          >
+            <ListItemText primary={item.name} secondary={item.email} />
+            <Box>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(item);
+                }}
+                sx={{ mr: 1 }}
+              >
+                Editar
+              </Button>
+            </Box>
           </ListItem>
         ))}
       </List>

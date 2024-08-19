@@ -2,7 +2,7 @@ module Api
   module V1
     class OrdersController < ApplicationController
       def index
-        @orders = Order.includes(items: :additional_fields).all
+        @orders = Order.includes(items: :additional_fields).all.order(:created_at)
         render json: @orders.as_json(include: {
                                        items: {
                                          include: {

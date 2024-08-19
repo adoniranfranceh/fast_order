@@ -1,6 +1,6 @@
-export const createOrder = async (url, orderData) => {
+export const updateOrder = async (url, orderData) => {
   const response = await fetch(url, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -10,7 +10,7 @@ export const createOrder = async (url, orderData) => {
   if (!response.ok) {
     const errorText = await response.text();
     console.error('Error response:', errorText);
-    return { error: 'Failed to create order' };
+    return { error: 'Failed to update order' };
   }
 
   return response.json();

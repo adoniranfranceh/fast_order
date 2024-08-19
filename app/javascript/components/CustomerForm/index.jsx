@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, Dialog, DialogContent, DialogActions } from '@mui/material';
+import { createOrder } from '../services/post.js';
+import { updateOrder } from '../services/put.js';
 
 const CustomerForm = ({ open, onClose, onSubmit, customerData }) => {
   const [customer, setCustomer] = useState({
@@ -14,6 +16,15 @@ const CustomerForm = ({ open, onClose, onSubmit, customerData }) => {
   useEffect(() => {
     if (customerData) {
       setCustomer(customerData);
+    } else {
+      setCustomer({
+        name: '',
+        email: '',
+        phone: '',
+        birthdate: '',
+        description: '',
+        favorite_order: '',
+      });
     }
   }, [customerData]);
 
@@ -28,23 +39,15 @@ const CustomerForm = ({ open, onClose, onSubmit, customerData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const method = customerData ? 'PUT' : 'POST';
-      const url = customerData ? `/api/v1/customers/${customer.id}` : '/api/v1/customers';
+      const result = customerData 
+        ? await updateOrder(`/api/v1/customers/${customer.id}`, customer) 
+        : await createOrder('/api/v1/customers', customer);
 
-      const response = await fetch(url, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ customer }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao registrar cliente');
+      if (result.error) {
+        throw new Error(result.error);
       }
 
-      const data = await response.json();
-      onSubmit(data);
+      onSubmit(result);
       onClose();
     } catch (error) {
       console.error('Erro:', error);

@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../components/Home";
-import { CustomersPage } from "../components/index.js"
+import { CustomersPage, CustomerDetailsPage } from "../components/index.js"
 import MyNavbar from "../components/Navbar";
 
 const AppRoutes = () => (
@@ -10,6 +10,7 @@ const AppRoutes = () => (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/clientes" element={<CustomersPage />} />
+      <Route path="/cliente/:id" element={<CustomerDetailsPage />} />
     </Routes>
   </Router>
 );

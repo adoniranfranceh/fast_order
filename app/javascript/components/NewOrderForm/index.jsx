@@ -132,7 +132,7 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
     };
 
     try {
-      const result = await createOrder(orderPayload);
+      const result = await createOrder('/api/v1/orders', orderPayload);
       if (result.error) {
         console.error(result.error);
       } else {
@@ -149,7 +149,12 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
   };
 
   return (
-    <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} p={3} maxWidth="600px" mx="auto">
+    <Box
+      component="form"
+      noValidate autoComplete="off"
+      onSubmit={handleSubmit}
+      p={3}
+      maxWidth="600px"mx="auto">
       <Typography variant="h6" gutterBottom>
         Criar Novo Pedido
       </Typography>
