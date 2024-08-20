@@ -56,7 +56,7 @@ RSpec.describe Order, type: :model do
       user = create :user
       order = create :order, user:, delivery_type: :local, table_info: 'M7'
 
-     expect(order.content).to eq 'M7'
+      expect(order.content).to eq 'M7'
     end
 
     it 'tipo de entrega delivery' do

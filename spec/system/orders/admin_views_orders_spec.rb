@@ -44,7 +44,7 @@ describe 'Admin vê pedidos' do
 
     ernesto_order = create :order, user:, delivery_type: :local, table_info: '4', status: :doing, customer: 'Ernesto'
     carlos_order = create :order, user:,  delivery_type: :pickup, pick_up_time: '19:30', status: :doing,
-                                       customer: 'Carlos'
+                                  customer: 'Carlos'
     create :order, user:, delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
     create :order, user:, delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris'
     create :order, user:, delivery_type: :local, table_info: '6', status: :canceled, customer: 'Michael'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_16_150656) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_20_223000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,10 +38,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_16_150656) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
+    t.bigint "order_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "order_id", null: false
     t.index ["order_id"], name: "index_items_on_order_id"
+  end
+
+  create_table "loyalty_cards", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["customer_id"], name: "index_loyalty_cards_on_customer_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -55,6 +64,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_16_150656) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "stamps", force: :cascade do |t|
+    t.bigint "loyalty_card_id", null: false
+    t.string "item"
+    t.bigint "user_id", null: false
+    t.datetime "signed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["loyalty_card_id"], name: "index_stamps_on_loyalty_card_id"
+    t.index ["user_id"], name: "index_stamps_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -73,5 +93,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_16_150656) do
   add_foreign_key "additional_fields", "items"
   add_foreign_key "customers", "users"
   add_foreign_key "items", "orders"
+  add_foreign_key "loyalty_cards", "customers"
   add_foreign_key "orders", "users"
+  add_foreign_key "stamps", "loyalty_cards"
+  add_foreign_key "stamps", "users"
 end

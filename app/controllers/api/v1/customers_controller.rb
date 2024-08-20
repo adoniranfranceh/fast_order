@@ -9,7 +9,18 @@ module Api
       end
 
       def show
-        render json: @customer
+        render json: @customer.as_json(
+          include: {
+            loyalty_cards: {
+              include: {
+                stamps: {
+                  only: %i[item date time]
+                }
+              },
+              only: %i[id status]
+            }
+          }
+        )
       end
 
       def create
@@ -45,8 +56,8 @@ module Api
           :description,
           :favorite_order,
           :user_id
-          ).merge(user_id: current_user.id)
-        end
+        ).merge(user_id: current_user.id)
+      end
     end
   end
 end

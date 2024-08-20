@@ -13,9 +13,7 @@ FactoryBot.define do
     end
 
     after(:build) do |order, evaluator|
-      if evaluator.create_items
-        order.items << build(:item, order: order)
-      end
+      order.items << build(:item, order:) if evaluator.create_items
     end
   end
 end

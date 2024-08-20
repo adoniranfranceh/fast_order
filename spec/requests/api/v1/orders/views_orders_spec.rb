@@ -8,7 +8,7 @@ describe 'Vê pedidos' do
         customer: 'Roger',
         delivery_type: :local,
         table_info: '3',
-        user: user,
+        user:,
         items_attributes: [
           { name: 'Item 1' }
         ]
@@ -16,15 +16,14 @@ describe 'Vê pedidos' do
 
       Order.create!(
         customer: 'Ernesto',
-        user: user,
+        user:,
         delivery_type: :local,
         table_info: '5',
         items_attributes: [
           { name: 'Item 1',
             additional_fields_attributes: [
               { additional: 'Adicional 1', additional_value: 20 }
-            ]
-          }
+            ] }
         ]
       )
 
