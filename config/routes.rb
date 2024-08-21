@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :orders, only: %i[index create]
+      resources :orders, only: %i[index create update]
       resources :customers, only: %i[index create update show] do
         resource :loyalty_card, only: [:create, :show, :update]
       end

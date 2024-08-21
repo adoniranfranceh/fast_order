@@ -1,18 +1,27 @@
 import React from 'react';
-import { OrderCardContainer, OrderInfo, CustomerName, OrderDetails, OrderStatus } from './style.js';
+import { FaHourglassHalf, FaTruck, FaCheck, FaBan } from 'react-icons/fa';
+import {
+  OrderCardContainer,
+  OrderInfo,
+  CustomerName,
+  OrderDetails,
+  OrderStatus,
+  IconButtonContainer
+} from './style';
 
-const OrderCard = ({ order }) => {
+const OrderCard = ({ order, onStatusChange }) => {
   const getOrderStatus = (status) => {
-    return {
+    const statusMap = {
       doing: 'Aguardando...',
       delivered: 'Entregue',
       paid: 'Pago',
-      canceled: 'Cancelado'
-    }[status] || 'Desconhecido';
+      canceled: 'Cancelado',
+    };
+    return statusMap[status] || 'Desconhecido';
   };
 
   return (
-    <OrderCardContainer data-testid={order.id} >
+    <OrderCardContainer>
       <OrderInfo>
         #{order.id}
         <CustomerName>{order.customer}</CustomerName>
@@ -23,6 +32,32 @@ const OrderCard = ({ order }) => {
         </OrderDetails>
       </OrderInfo>
       <OrderStatus>Status: {getOrderStatus(order.status)}</OrderStatus>
+      <IconButtonContainer>
+        {order.status !== 'doing' && (
+          <FaHourglassHalf
+            onClick={() => onStatusChange(order.id, 'doing')}
+            title="Em andamento"
+          />
+        )}
+        {order.status !== 'delivered' && (
+          <FaTruck
+            onClick={() => onStatusChange(order.id, 'delivered')}
+            title="Marcar como Entregue"
+          />
+        )}
+        {order.status !== 'paid' && (
+          <FaCheck
+            onClick={() => onStatusChange(order.id, 'paid')}
+            title="Marcar como Pago"
+          />
+        )}
+        {order.status !== 'canceled' && (
+        <FaBan
+          onClick={() => onStatusChange(order.id, 'canceled')}
+          title="Marcar como Cancelado"
+        />
+        )}
+      </IconButtonContainer>
     </OrderCardContainer>
   );
 };

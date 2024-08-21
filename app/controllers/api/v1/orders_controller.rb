@@ -10,7 +10,8 @@ module Api
                                          },
                                          only: %i[id name]
                                        }
-                                     }, only: %i[id customer status delivery_type table_info address pick_up_time user_id])
+                                     }, only: %i[id customer status delivery_type
+                                                 table_info address pick_up_time user_id])
       end
 
       def create
@@ -23,11 +24,21 @@ module Api
         end
       end
 
+      def update
+        order = Order.find(params[:id])
+        if order.update(order_params)
+          render json: { message: 'Order updated successfully' }, status: :ok
+        else
+          render json: { errors: order.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def order_params
         params.require(:order).permit(
           :customer,
+          :status,
           :delivery_type,
           :table_info,
           :address,

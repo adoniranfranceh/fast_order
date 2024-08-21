@@ -1,4 +1,3 @@
-// style.js
 import styled from 'styled-components';
 
 export const OrderCardContainer = styled.div`
@@ -30,4 +29,20 @@ export const OrderStatus = styled.span`
   align-self: flex-end;
   font-size: 14px;
   font-weight: bold;
+`;
+
+export const IconButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+
+  svg {
+    cursor: pointer;
+    color: #333;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #007bff;
+    }
+  }
 `;
