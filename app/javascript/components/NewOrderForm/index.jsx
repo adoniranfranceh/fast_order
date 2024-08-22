@@ -14,7 +14,7 @@ const initialOrderData = {
   deliveryType: '',
   customer: '',
   pickUpTime: '',
-  items: [{ id: Date.now(), name: '', additionalFields: [] }],
+  items: [{ id: Date.now(), name: '', price: '', additionalFields: [] }],
   address: '',
   tableInfo: '',
 };
@@ -30,6 +30,14 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
   useEffect(() => {
     localStorage.setItem('orderFormData', JSON.stringify(orderData));
   }, [orderData]);
+
+  const calculateTotalPrice = () => {
+    return orderData.items.reduce((total, item) => {
+      const itemTotal = parseFloat(item.price) || 0;
+      const additionalTotal = item.additionalFields.reduce((acc, field) => acc + (parseFloat(field.additionalValue) || 0), 0);
+      return total + itemTotal + additionalTotal;
+    }, 0);
+  };
 
   const handleInputChange = (field, value) => {
     setOrderData(prev => ({ ...prev, [field]: value }));
@@ -51,7 +59,7 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
   const handleAddItem = () => {
     setOrderData(prev => ({
       ...prev,
-      items: [...prev.items, { id: Date.now(), name: '', additionalFields: [] }]
+      items: [...prev.items, { id: Date.now(), name: '', price: '', additionalFields: [] }]
     }));
   };
 
@@ -88,8 +96,8 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
       hasErrors = true;
     }
 
-    if (orderData.items.length === 0 || orderData.items.every(item => item.name === '')) {
-      validationErrors.items = 'Adicione pelo menos um item ao pedido.';
+    if (orderData.items.length === 0 || orderData.items.every(item => item.name === '' || item.price === '')) {
+      validationErrors.items = 'Adicione pelo menos um item ao pedido e defina o preço.';
       hasErrors = true;
     }
 
@@ -123,6 +131,7 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
         pick_up_time: orderData.deliveryType === 'pickup' ? orderData.pickUpTime : '',
         items_attributes: orderData.items.map(item => ({
           name: item.name,
+          price: item.price,
           additional_fields_attributes: item.additionalFields.map(field => ({
             additional: field.additional,
             additional_value: field.additionalValue,
@@ -154,7 +163,9 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
       noValidate autoComplete="off"
       onSubmit={handleSubmit}
       p={3}
-      maxWidth="600px"mx="auto">
+      maxWidth="600px"
+      mx="auto"
+    >
       <Typography variant="h6" gutterBottom>
         Criar Novo Pedido
       </Typography>
@@ -179,7 +190,6 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
         onChange={(e) => handleInputChange('deliveryType', e.target.value)}
         fullWidth
         error={!!errors.deliveryType}
-        helperText={errors.deliveryType}
         displayEmpty
       >
         <MenuItem value="">
@@ -244,8 +254,17 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
               onChange={(e) => handleItemChange(itemIndex, 'name', e.target.value)}
               fullWidth
               margin="normal"
+              style={{ marginRight: '0.5rem' }}
             />
-            <IconButton onClick={() => handleRemoveItem(itemIndex)} color="error" style={{ marginLeft: '16px' }}>
+            <TextField
+              label="Preço"
+              type="number"
+              value={item.price}
+              onChange={(e) => handleItemChange(itemIndex, 'price', e.target.value)}
+              fullWidth
+              margin="normal"
+            />
+            <IconButton onClick={() => handleRemoveItem(itemIndex)} aria-label="remove item">
               <RemoveIcon />
             </IconButton>
           </Box>
@@ -253,35 +272,62 @@ const NewOrderForm = ({ onClose, onOrderSuccess }) => {
           {item.additionalFields.map((field, fieldIndex) => (
             <Box key={field.id} display="flex" alignItems="center" mb={1}>
               <TextField
-                label="Adicional"
+                label="Campo Adicional"
                 value={field.additional}
-                onChange={(e) => handleItemChange(itemIndex, 'additionalFields', item.additionalFields.map((f, i) => i === fieldIndex ? { ...f, additional: e.target.value } : f))}
-                style={{ marginRight: '0.5rem', flex: 1, minWidth: '90px' }}
+                onChange={(e) => {
+                  const newFields = [...item.additionalFields];
+                  newFields[fieldIndex].additional = e.target.value;
+                  handleItemChange(itemIndex, 'additionalFields', newFields);
+                }}
+                fullWidth
+                margin="normal"
+                style={{ marginRight: '0.5rem' }}
               />
               <TextField
-                label="Valor do Adicional"
+                label="Valor Adicional"
+                type="number"
                 value={field.additionalValue}
-                onChange={(e) => handleItemChange(itemIndex, 'additionalFields', item.additionalFields.map((f, i) => i === fieldIndex ? { ...f, additionalValue: e.target.value } : f))}
-                style={{ marginRight: '0.5rem', width: '100px' }}
+                onChange={(e) => {
+                  const newFields = [...item.additionalFields];
+                  newFields[fieldIndex].additionalValue = e.target.value;
+                  handleItemChange(itemIndex, 'additionalFields', newFields);
+                }}
+                fullWidth
+                margin="normal"
               />
-              <IconButton onClick={() => handleRemoveAdditionalField(itemIndex, fieldIndex)} color="error">
+              <IconButton onClick={() => handleRemoveAdditionalField(itemIndex, fieldIndex)} aria-label="remove field">
                 <RemoveIcon />
               </IconButton>
             </Box>
           ))}
-
-          <IconButton onClick={() => handleAddAdditionalField(itemIndex)} color="primary" style={{ marginTop: '8px' }}>
-            <AddIcon />
-          </IconButton>
+          <Button
+            variant="outlined"
+            onClick={() => handleAddAdditionalField(itemIndex)}
+            startIcon={<AddIcon />}
+          >
+            Adicionar Campo Adicional
+          </Button>
         </Box>
       ))}
 
-      <IconButton onClick={handleAddItem} color="primary" style={{ marginBottom: '16px' }}>
-        <AddIcon /> Adicionar Item
-      </IconButton>
+      <Button
+        variant="outlined"
+        onClick={handleAddItem}
+        startIcon={<AddIcon />}
+        style={{ marginBottom: '1rem' }}
+      >
+        Adicionar Item
+      </Button>
+
+      <Typography variant="h6" gutterBottom>
+        Preço Total: R$ {calculateTotalPrice().toFixed(2)}
+      </Typography>
 
       <Button type="submit" variant="contained" color="primary">
         Criar Pedido
+      </Button>
+      <Button variant="text" color="secondary" onClick={onClose} style={{ marginLeft: '1rem' }}>
+        Cancelar
       </Button>
     </Box>
   );

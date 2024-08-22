@@ -3,16 +3,19 @@ import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import consumer from '../services/cable';
 import OrderCard from '../OrderCard';
-import axios from 'axios';
+import putStatus from '../services/putStatus'; // Corrigido
 import {
   OrderListContainer,
   Section,
   SectionTitle,
   OrderGrid,
 } from './style';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const subscription = consumer.subscriptions.create(
@@ -55,18 +58,7 @@ const OrderList = () => {
   };
 
   const updateOrderStatus = (id, newStatus) => {
-    axios
-      .put(`/api/v1/orders/${id}`, { status: newStatus })
-      .then((response) => {
-        setOrders((prevOrders) =>
-          prevOrders.map((order) =>
-            order.id === id ? { ...order, status: newStatus } : order
-          )
-        );
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    putStatus('/api/v1/orders', id, { status: newStatus }, setOrders);
   };
 
   const groupedOrders = {
@@ -91,6 +83,10 @@ const OrderList = () => {
     }[status] || 'Desconhecido';
   };
 
+  const handleCardClick = (id) => {
+    navigate(`/pedido/${id}`);
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <OrderListContainer>
@@ -102,14 +98,15 @@ const OrderList = () => {
             orders={groupedOrders[status]}
             onDrop={(orderId) => updateOrderStatus(orderId, status)}
             onStatusChange={updateOrderStatus}
+            onCardClick={handleCardClick}
           />
         ))}
       </OrderListContainer>
     </DndProvider>
-  );  
+  );
 };
 
-const DroppableSection = ({ status, title, orders, onDrop, onStatusChange }) => {
+const DroppableSection = ({ status, title, orders, onDrop, onStatusChange, onCardClick }) => {
   const [{ isOver }, drop] = useDrop({
     accept: 'ORDER',
     drop: (item) => {
@@ -129,10 +126,11 @@ const DroppableSection = ({ status, title, orders, onDrop, onStatusChange }) => 
       <SectionTitle>{title}</SectionTitle>
       <OrderGrid>
         {orders.map((order) => (
-          <DraggableOrderCard
+          <OrderCard
             key={order.id}
             order={order}
             onStatusChange={onStatusChange}
+            onClick={() => onCardClick(order.id)}
           />
         ))}
       </OrderGrid>

@@ -1,15 +1,25 @@
 import React from 'react';
 import { FaHourglassHalf, FaTruck, FaCheck, FaBan } from 'react-icons/fa';
+import { useDrag } from 'react-dnd';
 import {
   OrderCardContainer,
   OrderInfo,
   CustomerName,
   OrderDetails,
   OrderStatus,
-  IconButtonContainer
+  IconButtonContainer,
+  DetailsButton
 } from './style';
 
-const OrderCard = ({ order, onStatusChange }) => {
+const OrderCard = ({ order, onStatusChange, onClick }) => {
+  const [{ isDragging }, drag] = useDrag({
+    type: 'ORDER',
+    item: { id: order.id },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
+
   const getOrderStatus = (status) => {
     const statusMap = {
       doing: 'Aguardando...',
@@ -21,7 +31,10 @@ const OrderCard = ({ order, onStatusChange }) => {
   };
 
   return (
-    <OrderCardContainer>
+    <OrderCardContainer
+      ref={drag}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+    >
       <OrderInfo>
         #{order.id}
         <CustomerName>{order.customer}</CustomerName>
@@ -35,29 +48,42 @@ const OrderCard = ({ order, onStatusChange }) => {
       <IconButtonContainer>
         {order.status !== 'doing' && (
           <FaHourglassHalf
-            onClick={() => onStatusChange(order.id, 'doing')}
+            onClick={(e) => {
+              e.stopPropagation();
+              onStatusChange(order.id, 'doing');
+            }}
             title="Em andamento"
           />
         )}
         {order.status !== 'delivered' && (
           <FaTruck
-            onClick={() => onStatusChange(order.id, 'delivered')}
+            onClick={(e) => {
+              e.stopPropagation();
+              onStatusChange(order.id, 'delivered');
+            }}
             title="Marcar como Entregue"
           />
         )}
         {order.status !== 'paid' && (
           <FaCheck
-            onClick={() => onStatusChange(order.id, 'paid')}
+            onClick={(e) => {
+              e.stopPropagation();
+              onStatusChange(order.id, 'paid');
+            }}
             title="Marcar como Pago"
           />
         )}
         {order.status !== 'canceled' && (
-        <FaBan
-          onClick={() => onStatusChange(order.id, 'canceled')}
-          title="Marcar como Cancelado"
-        />
+          <FaBan
+            onClick={(e) => {
+              e.stopPropagation();
+              onStatusChange(order.id, 'canceled');
+            }}
+            title="Marcar como Cancelado"
+          />
         )}
       </IconButtonContainer>
+      <DetailsButton onClick={onClick}>Ver Detalhes</DetailsButton>
     </OrderCardContainer>
   );
 };
