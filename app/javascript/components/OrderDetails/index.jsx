@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Button, Typography, Box, Divider } from '@mui/material';
 import styled from 'styled-components';
 import putStatus from '../services/putStatus';
+import theme from '../theme';
 
 const Container = styled.div`
   padding: 20px;
@@ -28,17 +29,6 @@ const ItemDetails = styled.div`
   margin-right: 10px;
 `;
 
-const ItemPrice = styled.div`
-  font-weight: bold;
-  margin-top: 5px;
-`;
-
-const ItemAdditionals = styled.div`
-  font-size: 0.85rem;
-  color: gray;
-  margin-top: 5px;
-`;
-
 const Actions = styled.div`
   display: flex;
   gap: 10px;
@@ -53,7 +43,7 @@ const TotalContainer = styled.div`
 
 const ConfirmButton = styled(Button)`
   margin-top: 20px;
-  width: 100%;
+  width: calc(50% + 8vh);
 `;
 
 const OrderDetails = () => {
@@ -63,138 +53,129 @@ const OrderDetails = () => {
   const { id } = useParams();
 
   const calculateRemainingTotal = useCallback((items) => {
-    const total = items
-      .filter((item) => item.status === "pendent")
-      .reduce((acc, item) => acc + (parseFloat(item.price) || 0), 0);
+    const total = items.reduce((acc, item) => {
+      if (item.status === "pendent") {
+        const additionalsSum = item.additional_fields?.reduce((sum, additional) => sum + parseFloat(additional.additional_value || 0), 0) || 0;
+        return acc + (parseFloat(item.price) || 0) + additionalsSum;
+      }
+      return acc;
+    }, 0);
     setRemainingTotal(total);
   }, []);
 
   const fetchOrderDetails = useCallback(() => {
-    axios
-      .get(`/api/v1/orders/${id}`)
-      .then((response) => {
-        const orderData = response.data;
-        setOrder(orderData);
-
-        const initialStatuses = orderData.items?.reduce((acc, item) => ({
-          ...acc,
-          [item.id]: item.status || "pendent",
-        }), {}) || {};
-
+    axios.get(`/api/v1/orders/${id}`)
+      .then(({ data }) => {
+        setOrder(data);
+        const initialStatuses = data.items?.reduce((acc, item) => ({ ...acc, [item.id]: item.status || "pendent" }), {}) || {};
         setItemStatuses(initialStatuses);
-        calculateRemainingTotal(orderData.items || []);
+        calculateRemainingTotal(data.items || []);
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .catch(console.error);
   }, [id, calculateRemainingTotal]);
 
   useEffect(() => {
     fetchOrderDetails();
   }, [fetchOrderDetails]);
 
-  const handleItemStatusChange = useCallback((itemId, newStatus) => {
-    if (!order || !order.items) return;
-
-    const updatedItems = order.items.map((item) =>
-      item.id === itemId ? { ...item, status: newStatus } : item
-    );
-
-    putStatus('/api/v1/orders', id, {
-      items_attributes: [{ id: itemId, status: newStatus }]
-    }, setOrder, 'order').then(() => {
-      setOrder((prevOrder) => ({
-        ...prevOrder,
-        items: updatedItems
-      }));
-
-      setItemStatuses((prevStatuses) => ({
-        ...prevStatuses,
-        [itemId]: newStatus
-      }));
-
-      calculateRemainingTotal(updatedItems);
-    });
+  const handleItemStatusChange = useCallback(async (itemId, newStatus) => {
+    const updatedItems = order.items.map((item) => item.id === itemId ? { ...item, status: newStatus } : item);
+    await putStatus('/api/v1/orders', id, { items_attributes: [{ id: itemId, status: newStatus }] }, setOrder, 'order');
+    setOrder((prev) => ({ ...prev, items: updatedItems }));
+    setItemStatuses((prev) => ({ ...prev, [itemId]: newStatus }));
+    calculateRemainingTotal(updatedItems);
   }, [id, order, calculateRemainingTotal]);
 
   const handleItemPayment = useCallback((itemId) => {
-    if (itemStatuses[itemId] === "paid") return;
-    handleItemStatusChange(itemId, "paid");
+    if (itemStatuses[itemId] !== "paid") handleItemStatusChange(itemId, "paid");
   }, [itemStatuses, handleItemStatusChange]);
 
   const handleItemUndoPayment = useCallback((itemId) => {
-    if (itemStatuses[itemId] === "pendent") return;
-    handleItemStatusChange(itemId, "pendent");
+    if (itemStatuses[itemId] !== "pendent") handleItemStatusChange(itemId, "pendent");
   }, [itemStatuses, handleItemStatusChange]);
 
-  const handleConfirmPayment = useCallback(() => {
+  const handleConfirmPayment = useCallback(async () => {
     if (remainingTotal > 0) return;
-    putStatus('/api/v1/orders', id, { status: 'paid' }, setOrder, 'order').then(() => {
-      fetchOrderDetails();
-    });
+    await putStatus('/api/v1/orders', id, { status: 'paid' }, setOrder, 'order');
+    fetchOrderDetails();
   }, [remainingTotal, id, fetchOrderDetails]);
 
-  if (!order) {
-    return <Typography>Carregando...</Typography>;
-  }
+  const handlePayAll = useCallback(async () => {
+    const updatedItems = order.items.map((item) => ({ ...item, status: 'paid' }));
+    await putStatus('/api/v1/orders', id, { items_attributes: updatedItems.map(({ id }) => ({ id, status: 'paid' })) }, setOrder, 'order');
+    setOrder((prev) => ({ ...prev, items: updatedItems }));
+    setItemStatuses((prev) => updatedItems.reduce((acc, { id }) => ({ ...acc, [id]: 'paid' }), prev));
+    calculateRemainingTotal(updatedItems);
+  }, [order, id, calculateRemainingTotal]);
+
+  const getStatus = useCallback((status) => ({
+    doing: 'Aguardando',
+    delivered: 'Entregue',
+    paid: 'Pago',
+    canceled: 'Cancelado',
+  }[status] || 'Desconhecido'), []);
+
+  const getStatusStyles = useCallback((status) => ({
+    doing: { backgroundColor: theme.colors.doing.background, borderColor: theme.colors.doing.border, color: theme.colors.doing.text },
+    delivered: { backgroundColor: theme.colors.delivered.background, borderColor: theme.colors.delivered.border, color: theme.colors.delivered.text },
+    paid: { backgroundColor: theme.colors.paid.background, borderColor: theme.colors.paid.border, color: theme.colors.paid.text },
+    canceled: { backgroundColor: theme.colors.canceled.background, borderColor: theme.colors.canceled.border, color: theme.colors.canceled.text },
+  }[status] || { backgroundColor: theme.colors.background, borderColor: '#000', color: theme.colors.text }), []);
+
+  if (!order) return <Typography>Carregando...</Typography>;
 
   return (
     <Container>
-      <OrderHeader>
-        <Typography variant="h4" gutterBottom>
-          Pedido #{order.id}
-        </Typography>
-        <Typography><strong>Cliente:</strong> {order.customer}</Typography>
-        <Typography><strong>Tipo de Entrega:</strong> {order.delivery_type}</Typography>
-      </OrderHeader>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <OrderHeader>
+          <Typography variant="h4" gutterBottom>Pedido #{order.id}</Typography>
+          <Typography><strong>Cliente:</strong> {order.customer}</Typography>
+          <Typography><strong>Tipo de Entrega:</strong> {order.delivery_type}</Typography>
+        </OrderHeader>
+        <Box sx={{ py: 0.5, px: 1, borderRadius: theme.borderRadius, display: 'flex', alignItems: 'center', gap: 0.5, border: '1px solid', fontSize: '0.9rem', fontWeight: 'bold', letterSpacing: '.05rem', textTransform: 'uppercase', height: '50px', width: '120px', justifyContent: 'center', ...getStatusStyles(order.status) }}>
+          {getStatus(order.status)}
+        </Box>
+      </div>
 
-      {order.items?.map((item) => (
-        <React.Fragment key={item.id}>
-          <ItemRow>
-            <ItemDetails>
-              <Typography variant="body1"><strong>{item.name}</strong></Typography>
-              <ItemPrice>R$ {(parseFloat(item.price) || 0).toFixed(2)}</ItemPrice>
-              {item.additional_fields && item.additional_fields.length > 0 && (
-                <ItemAdditionals>
-                  Adicionais: {item.additional_fields.map((additional) => (
-                    <span key={additional.id}>
-                      {additional.additional}
-                      {additional.additional_value && (
-                        <span> (R$ {parseFloat(additional.additional_value).toFixed(2)})</span>
-                      )}
-                      {", "}
-                    </span>
-                  ))}
-                </ItemAdditionals>
-              )}
-            </ItemDetails>
-            <Actions>
-              {itemStatuses[item.id] === 'paid' ? (
-                <Button variant="contained" color="warning" onClick={() => handleItemUndoPayment(item.id)}>
-                  Reverter
-                </Button>
-              ) : (
-                <Button variant="contained" color="primary" onClick={() => handleItemPayment(item.id)}>
-                  Pago
-                </Button>
-              )}
-            </Actions>
-          </ItemRow>
-          <Divider />
-        </React.Fragment>
-      ))}
+      {order.items?.map((item) => {
+        const additionalsSum = item.additional_fields?.reduce((acc, additional) => acc + parseFloat(additional.additional_value || 0), 0) || 0;
+        const totalItemPrice = (parseFloat(item.price) || 0) + additionalsSum;
+
+        return (
+          <React.Fragment key={item.id}>
+            <ItemRow>
+              <ItemDetails>
+                <Typography variant="body1"><strong>{item.name}</strong> - R$ {totalItemPrice.toFixed(2)}</Typography>
+                <Typography variant="caption" color="gray">Adicionais: {item.additional_fields?.map((add) => `${add.additional} (R$ ${add.additional_value})`).join(', ')}</Typography>
+              </ItemDetails>
+              <Actions>
+                {itemStatuses[item.id] === 'paid' ? (
+                  <Button variant="contained" color="warning" onClick={() => handleItemUndoPayment(item.id)}>Reverter</Button>
+                ) : (
+                  <Button variant="contained" color="primary" onClick={() => handleItemPayment(item.id)}>Pagar</Button>
+                )}
+              </Actions>
+            </ItemRow>
+            <Divider />
+          </React.Fragment>
+        );
+      })}
 
       <TotalContainer>
-        Total Restante: R$ {remainingTotal.toFixed(2)}
+        {order.status === 'paid'
+          ? `Total Pago: R$ ${order.total_price}`
+          : `Total Restante: R$ ${remainingTotal.toFixed(2)}`}
       </TotalContainer>
 
-      {remainingTotal <= 0 && (
-        <ConfirmButton variant="contained" color="success" onClick={handleConfirmPayment}>
-          Confirmar Pagamento
-        </ConfirmButton>
+      {remainingTotal === 0 && order.status !== 'paid' && (
+        <ConfirmButton variant="contained" color="success" onClick={handleConfirmPayment}>Confirmar Pagamento</ConfirmButton>
+      )}
+
+      {remainingTotal !== 0 && (
+        <Button variant="contained" color="primary" onClick={handlePayAll}>Pagar todos</Button>
       )}
     </Container>
   );
 };
 
-export default OrderDetails;
+export default React.memo(OrderDetails);

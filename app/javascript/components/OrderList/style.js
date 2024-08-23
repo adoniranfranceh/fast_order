@@ -14,7 +14,6 @@ export const OrderListContainer = styled.div`
 `;
 
 export const Section = styled.div`
-  height: auto;
   background-color: ${({ $status }) => theme.colors[$status].background};
   border-left: 5px solid ${({ $status }) => theme.colors[$status].border};
   border-radius: ${({ theme }) => theme.borderRadius};
@@ -23,7 +22,6 @@ export const Section = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadow};
   
   @media(min-width: 768px) {
-    height: 90vh;
     flex: 1;
     margin: 0 10px 20px 10px;
     max-width: calc(50% - 20px);

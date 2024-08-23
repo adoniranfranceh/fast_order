@@ -3,7 +3,7 @@ import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import consumer from '../services/cable';
 import OrderCard from '../OrderCard';
-import putStatus from '../services/putStatus'; // Corrigido
+import putStatus from '../services/putStatus';
 import {
   OrderListContainer,
   Section,
@@ -57,9 +57,9 @@ const OrderList = () => {
       });
   };
 
-  const updateOrderStatus = (id, newStatus) => {
+  const updateOrderStatus = async (id, newStatus) => {
     putStatus('/api/v1/orders', id, { status: newStatus }, setOrders);
-  };
+  };  
 
   const groupedOrders = {
     doing: [],
@@ -126,7 +126,7 @@ const DroppableSection = ({ status, title, orders, onDrop, onStatusChange, onCar
       <SectionTitle>{title}</SectionTitle>
       <OrderGrid>
         {orders.map((order) => (
-          <OrderCard
+          <DraggableOrderCard
             key={order.id}
             order={order}
             onStatusChange={onStatusChange}
@@ -138,7 +138,7 @@ const DroppableSection = ({ status, title, orders, onDrop, onStatusChange, onCar
   );
 };
 
-const DraggableOrderCard = ({ order, onStatusChange }) => {
+const DraggableOrderCard = ({ order, onStatusChange, onClick }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'ORDER',
     item: { id: order.id },
@@ -148,7 +148,11 @@ const DraggableOrderCard = ({ order, onStatusChange }) => {
   });
 
   return (
-    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <div
+      ref={drag}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+      onClick={onClick}
+    >
       <OrderCard order={order} onStatusChange={onStatusChange} />
     </div>
   );
