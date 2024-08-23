@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :additional_field do
-    item { nil }
-    additional { 'MyString' }
-    additional_value { '9.99' }
+    additional { 'Additional 1' }
+    additional_value { '5' }
+    association :item
   end
 end

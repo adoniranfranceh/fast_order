@@ -4,14 +4,17 @@ class Item < ApplicationRecord
   enum status: { pendent: 0, paid: 5 }
   accepts_nested_attributes_for :additional_fields, allow_destroy: true
 
-  after_commit :sum_additionals, on: [:create, :update]
+  after_update :update_order_total, :check_order_status
 
-  def sum_additionals
-    additional_total = additional_fields.sum { |af| af.additional_value.to_f }
-    new_price = (price || 0) + additional_total
+  private
 
-    if price != new_price
-      update_column(:price, new_price)
-    end
+  def check_order_status
+    return unless status == 'pendent' && order.status == 'paid'
+
+    order.update status: 'delivered' if order.status == 'paid'
+  end
+
+  def update_order_total
+    order.sum_total
   end
 end

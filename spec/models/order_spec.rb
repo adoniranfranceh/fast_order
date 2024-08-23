@@ -73,4 +73,55 @@ RSpec.describe Order, type: :model do
       expect(order.content.strftime('%H:%M')).to eq '18:00'
     end
   end
+
+  context '.sum_total' do
+    it 'ao criar pedido' do
+      user = create :user
+      order = create(:order, items_count: 3, items_price: 15, additional_count: 1, additional_price: 0.5, user:)
+      expect(order.total_price).to eq 3 *(15 + 0.5)
+    end
+
+    it 'ao atualizar o preço do item' do
+      user = create :user
+      order = create(:order, items_count: 2, items_price: 15, additional_count: 1, additional_price: 0.5, user:)
+
+      order.items.first.update!(price: 30)
+
+      expect(order.reload.total_price).to eq 30 + 15 + 2 * 0.5
+    end
+
+    it 'ao atualizar o preço do adicional' do
+      user = create :user
+      order = create(:order, items_count: 2, items_price: 15, additional_count: 1, additional_price: 0.5, user:)
+
+      order.additional_fields.first.update!(additional_value: 1.0)
+      order.reload
+
+      expect(order.reload.total_price).to eq 2 * 15 + 1 + 0.5
+    end
+  end
+
+  context '.valid?' do
+    context 'check_all_items_paid' do
+      it 'é inválido se todos os itens não forem pagos' do
+        user = create :user
+        order = create(:order, user:)
+
+        order.update(status: 'paid')
+
+        expect(order.reload.status).to eq 'doing'
+        expect(order.errors[:base]).to include('Só é possível pagar se todos os itens forem pagos')
+      end
+
+      it 'é válido se todos os itens forem pagos' do
+        user = create :user
+        order = create(:order, user:, status: :delivered)
+
+        order.items.first.paid!
+        order.update(status: 'paid')
+
+        expect(order.reload.status).to eq 'paid'
+      end
+    end
+  end
 end
