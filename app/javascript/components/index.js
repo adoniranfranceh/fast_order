@@ -18,4 +18,5 @@ export { default as ObjectList } from './ObjectList'
 // pages
 export { default as CustomersPage } from './pages/CustomersPage'
 export { default as CustomerDetailsPage } from './pages/CustomerDetailsPage'
+export { default as OrdersPage } from './pages/OrdersPage'
 export { default as OrderDetails } from './OrderDetails'

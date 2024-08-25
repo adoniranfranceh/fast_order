@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ObjectList, CustomerForm } from '../../index.js';
-import { Button, Box } from '@mui/material';
+import { Button, Box, ListItemText } from '@mui/material';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
 const CustomersPage = () => {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -31,6 +33,13 @@ const CustomersPage = () => {
     setIsFormOpen(false);
   };
 
+  const renderOrderItem = (customer) => [
+    <span key="id">{customer.id}</span>,
+    <span key="name">{customer.name}</span>,
+    <span key="email">{customer.email}</span>,
+    <span key="birthdate" >{ moment(customer.birthdate).format('DD [de] MMMM [de] YYYY')}</span>
+  ];
+
   return (
     <Box sx={{ p: 2 }}>
       <Button 
@@ -45,6 +54,9 @@ const CustomersPage = () => {
         url='/api/v1/customers'
         onEdit={handleEdit}
         refresh={refreshList}
+        renderItem={renderOrderItem}
+        detailName='cliente'
+        columns={['Id', 'Nome', 'E-mail', 'Data de aniversário', 'Ações']}
       />
       <CustomerForm
         open={isFormOpen}

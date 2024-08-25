@@ -55,9 +55,11 @@ const MyNavbar = () => {
         </Typography>
         
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '1rem' }}>
-          <StyledButton>Pedidos</StyledButton>
+          <StyledButton  onClick={() => navigate('/pedidos')}>
+            Pedidos
+          </StyledButton>
           <StyledButton onClick={() => navigate('/clientes')}>
-          Clientes
+            Clientes
           </StyledButton>
           <StyledButton>Promoções</StyledButton>
           <StyledButton>Relatórios</StyledButton>

@@ -48,7 +48,7 @@ const OrderList = () => {
 
   const fetchOrders = () => {
     axios
-      .get('/api/v1/orders')
+      .get('/api/v1/orders?query=today')
       .then((response) => {
         setOrders(response.data);
       })
@@ -151,9 +151,8 @@ const DraggableOrderCard = ({ order, onStatusChange, onClick }) => {
     <div
       ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1 }}
-      onClick={onClick}
     >
-      <OrderCard order={order} onStatusChange={onStatusChange} />
+      <OrderCard order={order} onStatusChange={onStatusChange} onClick={onClick} />
     </div>
   );
 };

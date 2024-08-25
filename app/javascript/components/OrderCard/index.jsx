@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaHourglassHalf, FaTruck, FaCheck, FaBan } from 'react-icons/fa';
 import { useDrag } from 'react-dnd';
 import {
@@ -10,6 +10,7 @@ import {
   IconButtonContainer,
   DetailsButton
 } from './style';
+import { all } from 'axios';
 
 const OrderCard = ({ order, onStatusChange, onClick }) => {
   const [{ isDragging }, drag] = useDrag({
@@ -29,6 +30,15 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
     };
     return statusMap[status] || 'Desconhecido';
   };
+
+  const [showPaidIcon, setShowPaidIcon] = useState(false);
+
+  useEffect(() => {
+    if (order && order.items) {
+      const allPaid = order.items.every(item => item.status === 'paid');
+      setShowPaidIcon(allPaid);
+    }
+  }, [order]);  
 
   return (
     <OrderCardContainer
@@ -64,22 +74,24 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
             title="Marcar como Entregue"
           />
         )}
-        {order.status !== 'paid' && (
+        {showPaidIcon && order.status !== 'paid' && (
           <FaCheck
             onClick={(e) => {
               e.stopPropagation();
               onStatusChange(order.id, 'paid');
             }}
+            color='green'
             title="Marcar como Pago"
           />
         )}
-        {order.status !== 'canceled' && (
+        {order.status !== 'canceled' && order.status !== 'paid' && (
           <FaBan
             onClick={(e) => {
               e.stopPropagation();
               onStatusChange(order.id, 'canceled');
             }}
             title="Marcar como Cancelado"
+            color='red'
           />
         )}
       </IconButtonContainer>

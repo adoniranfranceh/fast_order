@@ -58,7 +58,8 @@ class Order < ApplicationRecord
       customer:,
       table_info:,
       address:,
-      pick_up_time:
+      pick_up_time:,
+      items:
     }
   end
 end

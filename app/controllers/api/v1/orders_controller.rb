@@ -2,13 +2,15 @@ module Api
   module V1
     class OrdersController < ApplicationController
       def index
-        @orders = Order.includes(items: :additional_fields).all.order(:created_at)
+        @orders = Order.includes(items: :additional_fields).order(:created_at)
+        @orders = @orders.where('DATE(created_at) = ?', 12.hours.ago) if params[:query] == 'today'
+
         render json: @orders.as_json(include: {
                                        items: {
                                          include: {
                                            additional_fields: { only: %i[id additional additional_value] }
                                          },
-                                         only: %i[id name price]
+                                         only: %i[id name price status]
                                        }
                                      }, only: %i[id customer status delivery_type total_price
                                                  table_info address pick_up_time user_id])
