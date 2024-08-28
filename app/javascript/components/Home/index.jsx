@@ -1,4 +1,3 @@
-// src/pages/Home.js
 import React, { useState } from 'react';
 import { Button, OrderModal, OrderList } from '../index.js';
 

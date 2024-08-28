@@ -2,8 +2,8 @@ module Api
   module V1
     class OrdersController < ApplicationController
       def index
-        @orders = Order.includes(items: :additional_fields).order(:created_at)
-        @orders = @orders.where('DATE(created_at) = ?', 12.hours.ago) if params[:query] == 'today'
+        @orders = Order.includes(items: :additional_fields).order(created_at: :desc)
+        @orders = @orders = @orders.where('created_at >= ?', 12.hours.ago) if params[:query] == 'today'
 
         render json: @orders.as_json(include: {
                                        items: {
@@ -42,9 +42,9 @@ module Api
       def update
         @order = Order.find(params[:id])
         if @order.update(order_params)
-          render json: { message: 'Order updated successfully', order: @order }, status: :ok
+          render json: @order
         else
-          render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
+          render json: @order.errors, status: :unprocessable_entity
         end
       end
 
@@ -64,9 +64,10 @@ module Api
             :name,
             :price,
             :status,
-            additional_fields_attributes: %i[id additional additional_value]
+            :_destroy,
+            additional_fields_attributes: %i[id additional additional_value _destroy]
           ]
-        )
+        ).merge(user_id: current_user.id)
       end
     end
   end

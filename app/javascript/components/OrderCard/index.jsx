@@ -10,7 +10,9 @@ import {
   IconButtonContainer,
   DetailsButton
 } from './style';
-import { all } from 'axios';
+import OrderModal from '../OrderModal';
+import EditIcon from '@mui/icons-material/Edit';
+import { IconButton } from '@mui/material';
 
 const OrderCard = ({ order, onStatusChange, onClick }) => {
   const [{ isDragging }, drag] = useDrag({
@@ -32,6 +34,14 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
   };
 
   const [showPaidIcon, setShowPaidIcon] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const openModal = () => setIsEditing(true);
+  const closeModal = () => setIsEditing(false);
+
+  const handleOrderSuccess = () => {
+    closeModal();
+  };
 
   useEffect(() => {
     if (order && order.items) {
@@ -47,6 +57,12 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
     >
       <OrderInfo>
         #{order.id}
+        <IconButton
+          color="primary"
+          onClick={() => {setIsEditing(true)}}
+        >
+          <EditIcon/>
+        </IconButton>
         <CustomerName>{order.customer}</CustomerName>
         <OrderDetails>
           {order.table_info && `Mesa: ${order.table_info}`}<br />
@@ -95,7 +111,13 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
           />
         )}
       </IconButtonContainer>
-      <DetailsButton onClick={onClick}>Ver Detalhes</DetailsButton>
+      <DetailsButton onClick={onClick}>Ver Detalhes</DetailsButton> 
+      <OrderModal
+        open={isEditing} 
+        onClose={closeModal} 
+        onOrderSuccess={handleOrderSuccess}
+        order={order}
+      ></OrderModal>
     </OrderCardContainer>
   );
 };

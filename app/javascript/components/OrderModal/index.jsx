@@ -1,9 +1,9 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import NewOrderForm from '../NewOrderForm';
+import OrderForm from '../OrderForm';
 
-const OrderModal = ({ open, onClose, onOrderSuccess }) => {
+const OrderModal = ({ open, onClose, onOrderSuccess, order }) => {
   const handleOrderSuccess = () => {
     if (onOrderSuccess) {
       onOrderSuccess();
@@ -14,7 +14,7 @@ const OrderModal = ({ open, onClose, onOrderSuccess }) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>
-        Novo Pedido
+        {order ? 'Editar Pedido' : 'Novo Pedido'}
         <IconButton
           edge="end"
           color="inherit"
@@ -26,7 +26,11 @@ const OrderModal = ({ open, onClose, onOrderSuccess }) => {
         </IconButton>
       </DialogTitle>
       <DialogContent>
-        <NewOrderForm onClose={onClose} onOrderSuccess={handleOrderSuccess} />
+        <OrderForm
+          onClose={onClose}
+          onOrderSuccess={handleOrderSuccess}
+          initialOrderData={order}
+          />
       </DialogContent>
     </Dialog>
   );
