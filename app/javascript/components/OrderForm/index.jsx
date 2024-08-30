@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, TextField, Select, MenuItem, Alert } from '@mui/material';
+import { Box, Typography, Button, TimeField, TextField, Select, MenuItem, Alert } from '@mui/material';
 import { ItemList } from '../index.js';
 import { createOrder, updateOrder } from '../services/orderService.js';
-
+import formatPrice from '../services/formatPrice.js';
 const DELIVERY_TYPES = [
   { value: 'local', label: 'Local' },
   { value: 'pickup', label: 'Retirada' },
@@ -19,6 +19,14 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
     table_info: '',
   });
   const [errors, setErrors] = useState({});
+
+  const calculateTotalPrice = () => {
+    return orderData.items.reduce((total, item) => {
+      const itemTotal = parseFloat(item.price) || 0;
+      const additionalTotal = item.additional_fields.reduce((acc, field) => acc + (parseFloat(field.additional_value) || 0), 0);
+      return total + itemTotal + additionalTotal;
+    }, 0);
+  };
 
   const handleInputChange = (field, value) => {
     setOrderData(prev => ({ ...prev, [field]: value }));
@@ -70,10 +78,6 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
           }))
       }
     };
-
-    console.log('Payload enviado', orderData);
-    orderData.items.map( item => {
-    })
   
     try {
       const result = initialOrderData
@@ -142,11 +146,46 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
         />
       )}
 
+      {orderData.delivery_type === 'pickup' && (
+        <TextField
+          label="Hora de retirada"
+          type="time"
+          value={orderData.pick_up_time}
+          onChange={(e) => handleInputChange('pick_up_time', e.target.value)}
+          fullWidth
+          margin="normal"
+          error={!!errors.pick_up_time}
+          helperText={errors.pick_up_time}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{
+            step: 300, 
+          }}
+        />
+      )}
+
+      {orderData.delivery_type === 'delivery' && (
+        <TextField
+          label="Endereço"
+          value={orderData.address}
+          onChange={(e) => handleInputChange('address', e.target.value)}
+          fullWidth
+          margin="normal"
+          error={!!errors.address}
+          helperText={errors.address}
+        />
+      )}
+
       <ItemList
         items={orderData.items}
         setItems={(items) => setOrderData(prev => ({ ...prev, items }))}
         errors={errors.items}
       />
+
+      <Typography variant="h6" gutterBottom>
+        Preço Total: R$ {formatPrice(calculateTotalPrice())}
+      </Typography>
 
       <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
         {initialOrderData ? 'Salvar' : 'Criar Pedido'}

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Typography, Box, Divider } from '@mui/material';
 import styled from 'styled-components';
 import putStatus from '../services/putStatus';
+import formatPrice from '../services/formatPrice.js';
 import theme from '../theme';
 
 const Container = styled.div`
@@ -27,6 +28,8 @@ const ItemRow = styled.div`
 const ItemDetails = styled.div`
   flex: 1;
   margin-right: 10px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Actions = styled.div`
@@ -92,6 +95,7 @@ const OrderDetails = () => {
 
   const handleItemUndoPayment = useCallback((itemId) => {
     if (itemStatuses[itemId] !== "pendent") handleItemStatusChange(itemId, "pendent");
+    fetchOrderDetails();
   }, [itemStatuses, handleItemStatusChange]);
 
   const handleConfirmPayment = useCallback(async () => {
@@ -113,7 +117,13 @@ const OrderDetails = () => {
     delivered: 'Entregue',
     paid: 'Pago',
     canceled: 'Cancelado',
-  }[status] || 'Desconhecido'), []);
+  }[status] || 'Desconhecido'), [order]);
+
+  const getDeliveryType = useCallback((delivery) => ({
+    pickup: 'Para retirada',
+    delivery: 'Delivery',
+    local: 'Local',
+  }[delivery] || 'Desconhecido'), []);
 
   const getStatusStyles = useCallback((status) => ({
     doing: { backgroundColor: theme.colors.doing.background, borderColor: theme.colors.doing.border, color: theme.colors.doing.text },
@@ -130,7 +140,7 @@ const OrderDetails = () => {
         <OrderHeader>
           <Typography variant="h4" gutterBottom>Pedido #{order.id}</Typography>
           <Typography><strong>Cliente:</strong> {order.customer}</Typography>
-          <Typography><strong>Tipo de Entrega:</strong> {order.delivery_type}</Typography>
+          <Typography><strong>Tipo de Entrega:</strong> {getDeliveryType(order.delivery_type)}</Typography>
         </OrderHeader>
         <Box sx={{ py: 0.5, px: 1, borderRadius: theme.borderRadius, display: 'flex', alignItems: 'center', gap: 0.5, border: '1px solid', fontSize: '0.9rem', fontWeight: 'bold', letterSpacing: '.05rem', textTransform: 'uppercase', height: '50px', width: '120px', justifyContent: 'center', ...getStatusStyles(order.status) }}>
           {getStatus(order.status)}
@@ -145,8 +155,12 @@ const OrderDetails = () => {
           <React.Fragment key={item.id}>
             <ItemRow>
               <ItemDetails>
-                <Typography variant="body1"><strong>{item.name}</strong> - R$ {totalItemPrice.toFixed(2)}</Typography>
-                <Typography variant="caption" color="gray">Adicionais: {item.additional_fields?.map((add) => `${add.additional} (R$ ${add.additional_value})`).join(', ')}</Typography>
+                <Typography variant="body1"><strong>{item.name}</strong> - R$ {formatPrice(item.price)}</Typography>
+                <Typography variant="caption" color="gray">
+                  Adicionais: {item.additional_fields?.map((add) => 
+                    `${add.additional} (R$ ${formatPrice(add.additional_value)})`).join(', ')}
+                </Typography>
+                <strong>R$ {formatPrice(totalItemPrice)}</strong>
               </ItemDetails>
               <Actions>
                 {itemStatuses[item.id] === 'paid' ? (
@@ -163,8 +177,8 @@ const OrderDetails = () => {
 
       <TotalContainer>
         {order.status === 'paid'
-          ? `Total Pago: R$ ${order.total_price}`
-          : `Total Restante: R$ ${remainingTotal.toFixed(2)}`}
+          ? `Total Pago: R$ ${formatPrice(order.total_price)}`
+          : `Total Restante: R$ ${formatPrice(remainingTotal)}`}
       </TotalContainer>
 
       {remainingTotal === 0 && order.status !== 'paid' && (

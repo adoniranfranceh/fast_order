@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Box, Button, Tooltip } from '@mui/material';
 import { CheckCircle as CheckCircleIcon, Cancel as CancelIcon, HourglassFull as HourglassFullIcon, Payment as PaymentIcon } from '@mui/icons-material';
 import { ObjectList } from '../../index.js';
+import moment from 'moment';
+import formatPrice from '../../services/formatPrice.js';
 
 const OrdersPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -57,7 +59,7 @@ const OrdersPage = () => {
         return 'Local';
       case 'delivery':
         return 'Delivery';
-      case 'pick_up':
+      case 'pickup':
         return 'Para retirada';
       default:
         return 'Desconhecido';
@@ -70,8 +72,8 @@ const OrdersPage = () => {
         return order.table_info;
       case 'delivery':
         return order.address;
-      case 'pick_up':
-        return order.pick_up_time;
+      case 'pickup':
+        return moment.utc(order.pick_up_time).format('HH:mm');
       default:
         return 'Desconhecido';
     }
@@ -83,7 +85,7 @@ const OrdersPage = () => {
     <span key="status">{getStatusIcon(order.status)}</span>,
     <span key="delivery_type">{getDeliveryType(order.delivery_type)}</span>,
     <span key="delivery_info">{getDeliveryInfo(order)}</span>,
-    <span key="total_price">R$ {order.total_price}</span>
+    <span key="total_price">R$ {formatPrice(order.total_price)}</span>
   ];
 
   return (

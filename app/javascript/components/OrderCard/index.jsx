@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaHourglassHalf, FaTruck, FaCheck, FaBan } from 'react-icons/fa';
+import moment from 'moment';
 import { useDrag } from 'react-dnd';
 import {
   OrderCardContainer,
@@ -66,7 +67,7 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
         <CustomerName>{order.customer}</CustomerName>
         <OrderDetails>
           {order.table_info && `Mesa: ${order.table_info}`}<br />
-          {order.pick_up_time && `Horário de retirada: ${order.pick_up_time}`}<br />
+          {order.pick_up_time && `Horário de retirada: ${moment.utc(order.pick_up_time).format('HH:mm')}`}<br />
           {order.address && `Entrega - ${order.address}`}<br />
         </OrderDetails>
       </OrderInfo>
