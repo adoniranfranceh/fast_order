@@ -4,7 +4,7 @@ import { Button } from '../index.js';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-const AdditionalFields = ({ additionalFields, onChange }) => {
+const AdditionalFields = ({ additionalFields = [], onChange }) => {
   const handleFieldChange = (index, field, value) => {
     const updatedFields = [...additionalFields];
     updatedFields[index][field] = value;

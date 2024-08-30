@@ -49,7 +49,6 @@ class Order < ApplicationRecord
   end
 
   def broadcast_order
-    Rails.logger.error('CHEGOU AQUI')
     ActionCable.server.broadcast 'orders_channel', {
       id:,
       user_id:,
@@ -59,7 +58,11 @@ class Order < ApplicationRecord
       table_info:,
       address:,
       pick_up_time:,
-      items:
+      items: items.map { |item|
+        item.as_json.merge(
+          additional_fields: item.additional_fields.as_json
+        )
+      }
     }
   end
 end
