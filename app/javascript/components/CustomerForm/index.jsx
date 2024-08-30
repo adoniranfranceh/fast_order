@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, Dialog, DialogContent, DialogActions } from '@mui/material';
-import { createOrder } from '../services/post';
-import { updateOrder } from '../services/put';
+import updateObject from '../services/updateObject';
+import createObject from '../services/createObject';
 
 const CustomerForm = ({ open, onClose, onSubmit, customerData }) => {
   const [customer, setCustomer] = useState({
@@ -41,8 +41,8 @@ const CustomerForm = ({ open, onClose, onSubmit, customerData }) => {
     const { id, created_at, updated_at, ...dataToSend } = customer;
     try {
       const result = customerData 
-        ? await updateOrder(`/api/v1/customers/${customer.id}`, dataToSend) 
-        : await createOrder('/api/v1/customers', dataToSend);
+        ? await updateObject(`/api/v1/customers/${customer.id}`, dataToSend) 
+        : await createObject('/api/v1/customers', dataToSend);
   
       if (result.error) {
         throw new Error(result.error);

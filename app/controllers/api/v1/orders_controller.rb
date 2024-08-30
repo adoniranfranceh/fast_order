@@ -2,10 +2,10 @@ module Api
   module V1
     class OrdersController < ApplicationController
       def index
-        @orders = Order.includes(items: :additional_fields).order(created_at: :desc)
-        @orders = @orders = @orders.where('created_at >= ?', 12.hours.ago) if params[:query] == 'today'
+        orders = Order.includes(items: :additional_fields).order(created_at: :desc)
+        orders = orders = orders.where('created_at >= ?', 12.hours.ago) if params[:query] == 'today'
 
-        render json: @orders.as_json(include: {
+        render json: orders.as_json(include: {
                                        items: {
                                          include: {
                                            additional_fields: { only: %i[id additional additional_value] }
@@ -17,8 +17,8 @@ module Api
       end
 
       def show
-        @order = Order.includes(items: :additional_fields).find(params[:id])
-        render json: @order.as_json(include: {
+        order = Order.includes(items: :additional_fields).find(params[:id])
+        render json: order.as_json(include: {
                                       items: {
                                         include: {
                                           additional_fields: { only: %i[id additional additional_value] }
@@ -30,21 +30,21 @@ module Api
       end
 
       def create
-        @order = Order.new(order_params)
+        order = Order.new(order_params)
 
-        if @order.save
-          render json: { message: 'Pedido criado com sucesso', order: @order }, status: :created
+        if order.save
+          render json: order, status: :created
         else
-          render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
+          render json: { errors: order.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
       def update
-        @order = Order.find(params[:id])
-        if @order.update(order_params)
-          render json: @order
+        order = Order.find(params[:id])
+        if order.update(order_params)
+          render json: order
         else
-          render json: @order.errors, status: :unprocessable_entity
+          render json: order.errors, status: :unprocessable_entity
         end
       end
 

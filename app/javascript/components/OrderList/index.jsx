@@ -57,7 +57,7 @@ const OrderList = () => {
       });
   };
 
-  const updateOrderStatus = async (id, newStatus) => {
+  const updateObjectStatus = async (id, newStatus) => {
     putStatus('/api/v1/orders', id, { status: newStatus }, setOrders);
   };  
 
@@ -96,8 +96,8 @@ const OrderList = () => {
             status={status}
             title={getSectionTitle(status)}
             orders={groupedOrders[status]}
-            onDrop={(orderId) => updateOrderStatus(orderId, status)}
-            onStatusChange={updateOrderStatus}
+            onDrop={(orderId) => updateObjectStatus(orderId, status)}
+            onStatusChange={updateObjectStatus}
             onCardClick={handleCardClick}
           />
         ))}

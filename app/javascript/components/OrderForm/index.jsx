@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, TimeField, TextField, Select, MenuItem, Alert } from '@mui/material';
 import { ItemList } from '../index.js';
-import { createOrder, updateOrder } from '../services/orderService.js';
+import  createObject from '../services/createObject.js';
+import updateObject from '../services/updateObject.js'
 import formatPrice from '../services/formatPrice.js';
 const DELIVERY_TYPES = [
   { value: 'local', label: 'Local' },
@@ -81,8 +82,8 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
   
     try {
       const result = initialOrderData
-        ? await updateOrder(`/api/v1/orders/${initialOrderData.id}`, payload)
-        : await createOrder('/api/v1/orders', payload);
+        ? await updateObject(`/api/v1/orders/${initialOrderData.id}`, payload)
+        : await createObject('/api/v1/orders', payload);
   
       if (!result.error) {
         onOrderSuccess();

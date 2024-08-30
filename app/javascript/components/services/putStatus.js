@@ -19,8 +19,8 @@ const putStatus = (endpoint, id, updateData, setObjects, objectType) => {
       }
     })
     .catch((error) => {
-      console.error('Erro ao atualizar o status do objeto:', error);
-      alert(`Erro: ${error.response?.data?.errors || error.message}`);
+      console.log('Erro ao atualizar o status do objeto:', error.response.data.base);
+      alert(`Erro: ${error.response?.data?.base}`);
     });
 };
 
