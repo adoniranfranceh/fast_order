@@ -1,5 +1,6 @@
 class Order < ApplicationRecord
   belongs_to :user
+  belongs_to :admin, class_name: 'User', optional: true
 
   enum status: { doing: 1, delivered: 5, paid: 10, canceled: 15 }
   enum delivery_type: { local: 1, delivery: 5, pickup: 10 }
@@ -13,8 +14,8 @@ class Order < ApplicationRecord
 
   after_save :broadcast_order
   after_create :sum_total
-
   before_save :check_all_items_paid, if: :status_changed?
+  before_validation :associate_admin
 
   def content
     return table_info if local?
@@ -31,6 +32,10 @@ class Order < ApplicationRecord
   end
 
   private
+
+  def associate_admin
+    self.admin_id = user.admin.id
+  end
 
   def check_all_items_paid
     return unless status == 'paid'
@@ -58,11 +63,11 @@ class Order < ApplicationRecord
       table_info:,
       address:,
       pick_up_time:,
-      items: items.map { |item|
+      items: items.map do |item|
         item.as_json.merge(
           additional_fields: item.additional_fields.as_json
         )
-      }
+      end
     }
   end
 end

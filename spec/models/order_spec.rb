@@ -78,7 +78,7 @@ RSpec.describe Order, type: :model do
     it 'ao criar pedido' do
       user = create :user
       order = create(:order, items_count: 3, items_price: 15, additional_count: 1, additional_price: 0.5, user:)
-      expect(order.total_price).to eq 3 *(15 + 0.5)
+      expect(order.total_price).to eq 3 * (15 + 0.5)
     end
 
     it 'ao atualizar o preço do item' do

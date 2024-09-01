@@ -12,7 +12,7 @@ FactoryBot.define do
 
     after(:build) do |item, evaluator|
       evaluator.additional_count.times do
-        item.additional_fields << build(:additional_field, additional_value: evaluator.additional_price, item: item)
+        item.additional_fields << build(:additional_field, additional_value: evaluator.additional_price, item:)
       end
     end
   end

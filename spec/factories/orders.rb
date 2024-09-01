@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :order do
     user { nil }
+    admin_id { nil }
     status { 1 }
     delivery_type { 1 }
     table_info { 'MyString' }
@@ -12,6 +13,7 @@ FactoryBot.define do
       items_count { 1 }
       items_price { 10 }
       create_items { true }
+      items_status { :pendent }
       additional_count { 0 }
       additional_price { 0 }
     end
@@ -19,7 +21,7 @@ FactoryBot.define do
     before(:create) do |order, evaluator|
       if evaluator.create_items
         evaluator.items_count.times do
-          item = build(:item, price: evaluator.items_price, order:)
+          item = build(:item, price: evaluator.items_price, status: evaluator.items_status, order:)
           evaluator.additional_count.times do
             item.additional_fields << build(:additional_field, additional_value: evaluator.additional_price, item:)
           end

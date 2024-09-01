@@ -2,18 +2,18 @@ module Api
   module V1
     class OrdersController < ApplicationController
       def index
-        orders = Order.includes(items: :additional_fields).order(created_at: :desc)
-        orders = orders = orders.where('created_at >= ?', 12.hours.ago) if params[:query] == 'today'
-
+        orders = Order.where(admin_id: current_user.admin.id)
+        orders.includes(items: :additional_fields).order(created_at: :desc)
+        orders = orders.where('created_at >= ?', 12.hours.ago) if params[:query] == 'today'
         render json: orders.as_json(include: {
-                                       items: {
-                                         include: {
-                                           additional_fields: { only: %i[id additional additional_value] }
-                                         },
-                                         only: %i[id name price status]
-                                       }
-                                     }, only: %i[id customer status delivery_type total_price
-                                                 table_info address pick_up_time user_id])
+                                      items: {
+                                        include: {
+                                          additional_fields: { only: %i[id additional additional_value] }
+                                        },
+                                        only: %i[id name price status]
+                                      }
+                                    }, only: %i[id customer status delivery_type total_price
+                                                table_info address pick_up_time user_id])
       end
 
       def show
@@ -65,7 +65,7 @@ module Api
             :price,
             :status,
             :_destroy,
-            additional_fields_attributes: %i[id additional additional_value _destroy]
+            { additional_fields_attributes: %i[id additional additional_value _destroy] }
           ]
         ).merge(user_id: current_user.id)
       end
