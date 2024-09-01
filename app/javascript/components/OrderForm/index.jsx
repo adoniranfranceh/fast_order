@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, TimeField, TextField, Select, MenuItem, Alert } from '@mui/material';
+import { Box, Typography, Button, TextField, Select, MenuItem, Alert } from '@mui/material';
 import { ItemList } from '../index.js';
-import  createObject from '../services/createObject.js';
-import updateObject from '../services/updateObject.js'
+import createObject from '../services/createObject.js';
+import updateObject from '../services/updateObject.js';
 import formatPrice from '../services/formatPrice.js';
+
 const DELIVERY_TYPES = [
   { value: 'local', label: 'Local' },
   { value: 'pickup', label: 'Retirada' },
@@ -34,26 +35,46 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
     setErrors(prev => ({ ...prev, [field]: value === '' ? 'Este campo é obrigatório.' : undefined }));
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const validateForm = () => {
     let validationErrors = {};
     let hasErrors = false;
-  
+
     if (!orderData.delivery_type) {
       validationErrors.delivery_type = 'Tipo de entrega é obrigatório.';
       hasErrors = true;
     }
-  
-    if (orderData.items.length === 0) {
-      validationErrors.items = 'Adicione pelo menos um item.';
+
+    if (orderData.delivery_type === 'local' && !orderData.table_info) {
+      validationErrors.table_info = 'Info da mesa é obrigatória para entrega local.';
       hasErrors = true;
     }
-  
-    if (hasErrors) {
-      setErrors(validationErrors);
+
+    if (orderData.delivery_type === 'pickup' && !orderData.pick_up_time) {
+      validationErrors.pick_up_time = 'Hora de retirada é obrigatória para retirada.';
+      hasErrors = true;
+    }
+
+    if (orderData.delivery_type === 'delivery' && !orderData.address) {
+      validationErrors.address = 'Endereço é obrigatório para delivery.';
+      hasErrors = true;
+    }
+
+    if (orderData.items.length === 0 || orderData.items.some(item => !item.name || !item.price)) {
+      validationErrors.items = 'Adicione pelo menos um item com nome e preço.';
+      hasErrors = true;
+    }
+
+    setErrors(validationErrors);
+    return !hasErrors;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    
+    if (!validateForm()) {
       return;
     }
-  
+
     const payload = { 
       order: {
         customer: orderData.customer,
@@ -95,6 +116,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
       setErrors({ general: 'Erro ao salvar o pedido.' });
     }
   };
+
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ p: 2 }}>
       <Typography variant="h6" gutterBottom>
@@ -134,6 +156,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
           </MenuItem>
         ))}
       </Select>
+      {errors.delivery_type && <Typography color="error">{errors.delivery_type}</Typography>}
 
       {orderData.delivery_type === 'local' && (
         <TextField

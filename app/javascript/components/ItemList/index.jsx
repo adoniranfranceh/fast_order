@@ -27,8 +27,6 @@ const ItemList = ({ items = [], setItems, errors }) => {
 
   return (
     <Box>
-      {errors && <Typography color="error">{errors}</Typography>}
-
       {visibleItems.map((item, index) => (
         <Box key={item.id || index} mb={2} p={2} border={1} borderRadius={2}>
           <Box display="flex" alignItems="center" mb={2}>
@@ -57,6 +55,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
         </Box>
       ))}
 
+      {errors && <Typography color="error">{errors}</Typography>}
       <Button onClick={handleAddItem} startIcon={<AddIcon />}>
         Adicionar Item
       </Button>

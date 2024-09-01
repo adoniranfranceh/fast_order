@@ -57,13 +57,15 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
       <OrderInfo>
-        #{order.id}
-        <IconButton
-          color="primary"
-          onClick={() => {setIsEditing(true)}}
-        >
-          <EditIcon/>
-        </IconButton>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          #{order.id}
+          <IconButton
+            color="primary"
+            onClick={() => {setIsEditing(true)}}
+          >
+            <EditIcon/>
+          </IconButton>
+        </div>
         <CustomerName>{order.customer}</CustomerName>
         <OrderDetails>
           {order.table_info && `Mesa: ${order.table_info}`}<br />
