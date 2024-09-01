@@ -42,8 +42,8 @@ RSpec.describe User, type: :model do
 
     it 'deleta os colaboradores associados quando o admin é deletado' do
       admin = create(:user, role: :admin)
-      create(:user, role: :collaborator, admin: admin)
-      create(:user, role: :collaborator, admin: admin)
+      create(:user, role: :collaborator, admin:)
+      create(:user, role: :collaborator, admin:)
 
       expect { admin.destroy }.to change { User.count }.by(-3)
     end

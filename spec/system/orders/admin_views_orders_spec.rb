@@ -34,7 +34,7 @@ describe 'Admin vê pedidos' do
     admin = create :user, role: :admin, email: 'admin@admin.com'
     user = create(:user, role: :collaborator, admin:)
 
-    create :order, user: user, delivery_type: :local, table_info: '4', status: :doing, customer: 'Ernesto'
+    create :order, user:, delivery_type: :local, table_info: '4', status: :doing, customer: 'Ernesto'
     create :order, user:, delivery_type: :pickup, pick_up_time: '19:30', status: :doing, customer: 'Carlos'
     create :order, user:, delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
     create :order, user:, delivery_type: :local, table_info: '7', status: :paid, customer: 'Chris', items_status: :paid

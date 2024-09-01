@@ -10,7 +10,8 @@ describe 'Colaborador vê pedidos' do
     login_as user, scope: :user
     visit root_path
 
-    create :order, user: other_user, delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
+    create :order, user: other_user, delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered,
+                   customer: 'Roger'
 
     within("div[status-type='delivered']") do
       expect(page).to have_content 'Entrega - Rua: Cardoso, 100'
@@ -31,7 +32,8 @@ describe 'Colaborador vê pedidos' do
     login_as user, scope: :user
     visit root_path
 
-    create :order, user: other_user, delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered, customer: 'Roger'
+    create :order, user: other_user, delivery_type: :delivery, address: 'Rua: Cardoso, 100', status: :delivered,
+                   customer: 'Roger'
 
     within("div[status-type='delivered']") do
       expect(page).not_to have_content 'Entrega - Rua: Cardoso, 100'

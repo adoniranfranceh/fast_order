@@ -19,14 +19,14 @@ module Api
       def show
         order = Order.includes(items: :additional_fields).find(params[:id])
         render json: order.as_json(include: {
-                                      items: {
-                                        include: {
-                                          additional_fields: { only: %i[id additional additional_value] }
-                                        },
-                                        only: %i[id name price status]
-                                      }
-                                    }, only: %i[id customer status delivery_type
-                                                table_info address pick_up_time user_id total_price])
+                                     items: {
+                                       include: {
+                                         additional_fields: { only: %i[id additional additional_value] }
+                                       },
+                                       only: %i[id name price status]
+                                     }
+                                   }, only: %i[id customer status delivery_type
+                                               table_info address pick_up_time user_id total_price])
       end
 
       def create
