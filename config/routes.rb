@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :customers, only: %i[index create update show] do
         resource :loyalty_card, only: [:create, :show, :update]
       end
+      resources :users, only: %i[index]
 
       resources :loyalty_cards, only: [] do
         member do

@@ -121,6 +121,7 @@ const DroppableSection = ({ status, title, orders, onDrop, onStatusChange, onCar
     <Section
       ref={drop}
       $status={status}
+      status-type={status}
       style={{ backgroundColor: isOver ? 'lightgray' : 'white' }}
     >
       <SectionTitle>{title}</SectionTitle>

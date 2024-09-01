@@ -61,7 +61,9 @@ const MyNavbar = () => {
           <StyledButton onClick={() => navigate('/clientes')}>
             Clientes
           </StyledButton>
-          <StyledButton>Promoções</StyledButton>
+          <StyledButton onClick={() => navigate('/colaboradores')}>
+            Colaboradores
+          </StyledButton>
           <StyledButton>Relatórios</StyledButton>
         </Box>
 

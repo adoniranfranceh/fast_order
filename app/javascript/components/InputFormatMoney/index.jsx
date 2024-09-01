@@ -18,7 +18,7 @@ const MoneyInput = ({ value, onChange, ...props }) => {
 };
 
 const InputFormatMoney = () => {
-  const [amount, setAmount] = useState('');
+   const [amount, setAmount] = useState('');
 
   return (
     <MoneyInput
