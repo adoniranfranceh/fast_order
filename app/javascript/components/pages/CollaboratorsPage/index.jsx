@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ObjectList, CollaboratorForm } from '../../index.js';
-import { Button, Box, ListItemText } from '@mui/material';
-import moment from 'moment';
+import { Button, Box } from '@mui/material';
 import 'moment/locale/pt-br';
 
 const CollaboratorsPage = () => {
@@ -33,12 +32,11 @@ const CollaboratorsPage = () => {
     setIsFormOpen(false);
   };
 
-  const renderOrderItem = (user) => [
+  const renderCollaborator = (user) => [
     <span key="id">{user.id}</span>,
-    <span key="name">{user.profile.full_name}</span>,
+    <span key="name">{user.profile?.full_name || 'Sem nome'}</span>,
     <span key="email">{user.email}</span>,
-    // <span key="birthdate" >{ moment(customer.birthdate).format('DD [de] MMMM [de] YYYY')}</span>
-  ];
+ ];
 
   return (
     <Box sx={{ p: 2 }}>
@@ -54,9 +52,9 @@ const CollaboratorsPage = () => {
         url='/api/v1/users'
         onEdit={handleEdit}
         refresh={refreshList}
-        renderItem={renderOrderItem}
+        renderItem={renderCollaborator}
         detailName='cliente'
-        columns={['Id', 'Nome', 'E-mail', 'Data de aniversário', 'Ações']}
+        columns={['Id', 'Nome', 'E-mail', 'Ações']}
       />
       <CollaboratorForm
         open={isFormOpen}

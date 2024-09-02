@@ -6,6 +6,7 @@ const createObject = async (url, payload) => {
     return response.data;
   } catch (error) {
     console.error('Erro ao criar pedido:', error);
+    alert('Erro:', error);
     return { error: 'Erro ao criar o pedido.' };
   }
 };
