@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StyledAppBar, StyledToolbar, StyledButton, StyledIconButton, StyledDrawer, StyledMenuIcon } from './style';
 import Box from '@mui/material/Box';
@@ -6,9 +6,11 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import { AuthContext } from '../../context/AuthContext';
 
 const MyNavbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { currentUser } = useContext(AuthContext);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -26,14 +28,16 @@ const MyNavbar = () => {
     >
       <List>
         <ListItem button>
-          <ListItemText primary="Pedidos" />
+          <ListItemText onClick={() => navigate('/pedidos')} primary="Pedidos" />
         </ListItem>
         <ListItem button>
-          <ListItemText primary="Clientes" />
+          <ListItemText onClick={() => navigate('/clientes')} primary="Clientes" />
         </ListItem>
-        <ListItem button>
-          <ListItemText primary="Promoções" />
-        </ListItem>
+        {currentUser && currentUser.role === 'admin' && (
+          <ListItem button>
+            <ListItemText onClick={() => navigate('/colaboradores')} primary="Colaboradores" />
+          </ListItem>
+        ) }
         <ListItem button>
           <ListItemText primary="Relatórios" />
         </ListItem>
@@ -61,9 +65,11 @@ const MyNavbar = () => {
           <StyledButton onClick={() => navigate('/clientes')}>
             Clientes
           </StyledButton>
-          <StyledButton onClick={() => navigate('/colaboradores')}>
-            Colaboradores
-          </StyledButton>
+          {currentUser && currentUser.role === 'admin' && (
+            <StyledButton onClick={() => navigate('/colaboradores')}>
+              Colaboradores
+            </StyledButton>
+          )}
           <StyledButton>Relatórios</StyledButton>
         </Box>
 

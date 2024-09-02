@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      get 'sessions/current', to: 'sessions#current'
       resources :orders, only: %i[index show create update]
       resources :customers, only: %i[index create update show] do
         resource :loyalty_card, only: [:create, :show, :update]
