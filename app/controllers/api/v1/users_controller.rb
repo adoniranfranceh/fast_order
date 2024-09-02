@@ -10,6 +10,16 @@ module Api
                                            })
       end
 
+      def show
+        render json: @user.as_json(
+          include: {
+            profile: {
+              only: %i[full_name]
+            }
+          }
+        )
+      end
+
       def create
         user = current_user.collaborators.build(user_params)
 
