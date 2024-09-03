@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       get 'sessions/current', to: 'sessions#current'
       resources :orders, only: %i[index show create update]
       resources :customers, only: %i[index create update show] do
-        resource :loyalty_card, only: [:create, :show, :update]
+        resource :loyalty_card, only: %i[create show update]
       end
       resources :users, only: %i[index create update show]
 
@@ -18,7 +18,7 @@ Rails.application.routes.draw do
         member do
           patch 'remove'
         end
-        resources :stamps, only: [:create]
+        resources :stamps, only: %i[create update]
       end
     end
   end

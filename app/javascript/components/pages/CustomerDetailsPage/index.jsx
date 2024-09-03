@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { TextField, Button, Box, Typography, Container, Paper } from '@mui/material';
 import LoyaltyCard from '../../LoyaltyCard';
+import theme from '../../theme';
 
 const CustomerDetailsPage = () => {
   const { id } = useParams();
@@ -83,36 +84,63 @@ const CustomerDetailsPage = () => {
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
-        <Typography variant="h4" gutterBottom align="center">
+      <Paper elevation={3} sx={{ 
+        padding: 3, 
+        borderRadius: theme.borderRadius, 
+        boxShadow: theme.boxShadow, 
+        backgroundColor: theme.colors.white,
+        maxWidth: '800px',
+        margin: '0 auto',
+      }}>
+        <Typography variant="h4" gutterBottom align="center" sx={{ 
+          color: theme.colors.primary,
+          fontFamily: theme.fonts.primary,
+        }}>
           Detalhes do Cliente
         </Typography>
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 3 }}>
-          <Box sx={{ flex: 1 }}>
-            <Typography variant="h6">Nome:</Typography>
-            <Typography variant="body1" gutterBottom>{customer.name}</Typography>
 
-            <Typography variant="h6">Email:</Typography>
-            <Typography variant="body1" gutterBottom>{customer.email}</Typography>
-
-            <Typography variant="h6">Telefone:</Typography>
-            <Typography variant="body1" gutterBottom>{customer.phone}</Typography>
-
-            <Typography variant="h6">Data de Nascimento:</Typography>
-            <Typography variant="body1" gutterBottom>{formatDate(customer.birthdate)}</Typography>
-
-            <Typography variant="h6">Data de Registro:</Typography>
-            <Typography variant="body1" gutterBottom>{formatDate(customer.created_at)}</Typography>
-          </Box>
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          gap: 2, 
+          backgroundColor: theme.colors.background, 
+          padding: 2, 
+          borderRadius: theme.borderRadius 
+        }}>
+          {[
+            { label: 'Nome', value: customer.name },
+            { label: 'Email', value: customer.email },
+            { label: 'Telefone', value: customer.phone },
+            { label: 'Data de Nascimento', value: formatDate(customer.birthdate) },
+            { label: 'Data de Registro', value: formatDate(customer.created_at) },
+            { label: 'Quantidade de cartões', value: customer.loyalty_cards.length }
+          ].map((info, index) => (
+            <Box 
+              key={index} 
+              sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center',
+                padding: '8px 0'
+              }}
+            >
+              <Typography variant="h6" sx={{ color: theme.colors.text }}>
+                {info.label}:
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.colors.mutedText }}>
+                {info.value}
+              </Typography>
+            </Box>
+          ))}
         </Box>
-
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h5" gutterBottom>
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="h5" gutterBottom sx={{ color: theme.colors.secondary }}>
             Cartões de Fidelidade
           </Typography>
+
           {activeLoyaltyCards.length > 0 ? (
             activeLoyaltyCards.map((card) => (
-              <LoyaltyCard 
+              <LoyaltyCard
                 key={card.id} 
                 loyaltyCard={card} 
                 onStatusChange={handleStatusChange} 
@@ -120,21 +148,29 @@ const CustomerDetailsPage = () => {
               />
             ))
           ) : (
-            <Typography variant="body1" align="center">Nenhum cartão de fidelidade ativo.</Typography>
+            <Typography variant="body1" align="center" sx={{ color: theme.colors.mutedText }}>
+              Nenhum cartão de fidelidade ativo.
+            </Typography>
           )}
-          <Box sx={{ mt: 4 }}>
-            <TextField
+
+          <Box sx={{ mt: 3 }}>
+            {/* <TextField
               label="Nome do Novo Cartão"
               value={newCardName}
               onChange={(e) => setNewCardName(e.target.value)}
               fullWidth
               sx={{ mb: 2 }}
-            />
+            /> */}
             <Button
               variant="contained"
               color="primary"
               onClick={handleAddCard}
               fullWidth
+              sx={{
+                backgroundColor: theme.colors.primary,
+                '&:hover': { backgroundColor: theme.colors.primaryHover },
+                padding: '12px 20px',
+              }}
             >
               Adicionar Novo Cartão
             </Button>

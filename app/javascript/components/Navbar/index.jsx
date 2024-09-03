@@ -7,6 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { AuthContext } from '../../context/AuthContext';
+import theme from '../theme';
 
 const MyNavbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -21,12 +22,12 @@ const MyNavbar = () => {
 
   const list = () => (
     <Box
-      sx={{ width: 250 }}
+      sx={{ width: 250}}
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
-      <List>
+      <List sx={{color: `${theme.colors.white}`}}>
         <ListItem button>
           <ListItemText onClick={() => navigate('/pedidos')} primary="Pedidos" />
         </ListItem>
@@ -70,7 +71,7 @@ const MyNavbar = () => {
               Colaboradores
             </StyledButton>
           )}
-          <StyledButton>Relatórios</StyledButton>
+          <StyledButton onClick={() => navigate('/dashboard')}>Relatórios</StyledButton>
         </Box>
 
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -80,7 +81,7 @@ const MyNavbar = () => {
             aria-label="menu"
             onClick={toggleDrawer(true)}
           >
-            <StyledMenuIcon />
+            <StyledMenuIcon  color={theme.colors.white}/>
           </StyledIconButton>
           <StyledDrawer
             anchor="left"

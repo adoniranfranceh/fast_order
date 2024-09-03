@@ -31,7 +31,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
         <Box key={item.id || index} mb={2} p={2} border={1} borderRadius={2}>
           <Box display="flex" alignItems="center" mb={2}>
             <TextField
-              label="Nome do Item"
+              label="Nome"
               value={item.name}
               onChange={(e) => handleItemChange(index, 'name', e.target.value)}
               fullWidth

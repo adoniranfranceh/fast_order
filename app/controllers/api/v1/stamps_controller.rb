@@ -12,6 +12,15 @@ module Api
         end
       end
 
+      def update
+        stamp = Stamp.find(params[:id])
+        if stamp.update(stamp_params)
+          render json: stamp, status: :created
+        else
+          render json: stamp.errors, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def set_loyalty_card

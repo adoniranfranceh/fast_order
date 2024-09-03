@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Card, Grid, Typography, Paper, TextField, Button, Box } from '@mui/material';
+import createObject from '../services/createObject';
+import updateObject from '../services/updateObject';
 
 const LoyaltyCardContainer = styled(Card)`
   padding: 16px;
@@ -14,6 +16,7 @@ const LoyaltyCardContainer = styled(Card)`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   background-size: cover;
   background-position: center;
+  margin-bottom: 2em;
 `;
 
 const StampsGrid = styled(Grid)`
@@ -50,7 +53,19 @@ const EditStampModal = ({ stamp, onSave, onClose }) => {
   };
 
   return (
-    <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', padding: 2 }}>
+    <Box sx={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      padding: 2
+    }}>
       <TextField
         value={item}
         onChange={(e) => setItem(e.target.value)}
@@ -79,7 +94,7 @@ const EditStampModal = ({ stamp, onSave, onClose }) => {
   );
 };
 
-const LoyaltyCard = ({ loyaltyCard, onStatusChange, onRemove }) => {
+const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
   const maxStamps = 10;
   const [selectedStampIndex, setSelectedStampIndex] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -93,36 +108,22 @@ const LoyaltyCard = ({ loyaltyCard, onStatusChange, onRemove }) => {
   const handleSaveStamp = async (item) => {
     if (selectedStampIndex === null) return;
 
-    if (stamps[selectedStampIndex]) {
-      try {
-        const response = await fetch(`/api/v1/loyalty_cards/stamps/${stamps[selectedStampIndex].id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ item }),
-        });
-        if (!response.ok) throw new Error('Erro ao editar o selo');
-        const updatedStamp = await response.json();
+    try {
+      if (stamps[selectedStampIndex]) {
+        const updatedStamp = await updateObject(
+          `/api/v1/loyalty_cards/${loyaltyCard.id}/stamps/${stamps[selectedStampIndex].id}`,
+          { item }
+        );
         setStamps(stamps.map((stamp, i) => (i === selectedStampIndex ? updatedStamp : stamp)));
-      } catch (error) {
-        console.error('Erro:', error);
-      }
-    } else {
-      try {
-        const response = await fetch(`/api/v1/loyalty_cards/${loyaltyCard.id}/stamps`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ item }),
-        });
-        if (!response.ok) throw new Error('Erro ao adicionar o selo');
-        const newStamp = await response.json();
+      } else {
+        const newStamp = await createObject(
+          `/api/v1/loyalty_cards/${loyaltyCard.id}/stamps`,
+          { item }
+        );
         setStamps([...stamps, newStamp]);
-      } catch (error) {
-        console.error('Erro:', error);
       }
+    } catch (error) {
+      console.error('Erro:', error);
     }
   };
 
@@ -154,7 +155,7 @@ const LoyaltyCard = ({ loyaltyCard, onStatusChange, onRemove }) => {
                 </Typography>
               ) : (
                 <Typography variant="body2" align="center" style={{ color: '#FF4500' }}>
-                  Clique para adicionar selo
+                  Adicionar selo
                 </Typography>
               )}
             </StampContainer>

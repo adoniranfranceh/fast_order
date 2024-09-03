@@ -32,7 +32,6 @@ const CollaboratorForm = ({ open, onClose, onSubmit, collaboratorData }) => {
     e.preventDefault();
     console.log(collaborator)
     
-    // Certifique-se de que os dados estão aninhados corretamente
     const dataToSend = {
       user: {
         email: collaborator.email,

@@ -1,4 +1,3 @@
-// src/components/style.js
 import styled from 'styled-components';
 import {
   AppBar as MuiAppBar,
@@ -13,7 +12,7 @@ import theme from '../theme';
 export const StyledAppBar = styled(MuiAppBar)`
   background-color: ${theme.colors.primary} !important;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1201; /* Para garantir que fique acima do Drawer */
+  z-index: 1201;
 `;
 
 export const StyledToolbar = styled(MuiToolbar)`
@@ -49,12 +48,12 @@ export const StyledDrawer = styled(MuiDrawer)`
   .MuiDrawer-paper {
     background-color: ${theme.colors.primary};
     padding: 16px;
-    width: 240px; /* Ajuste a largura do Drawer conforme necessário */
+    width: 240px;
   }
 `;
 
 export const StyledMenuIcon = styled(MenuIcon)`
-  color: ${theme.colors.text} !important;
+  color: ${theme.colors.white} !important;
   transition: color 0.3s ease;
 
   &:hover {

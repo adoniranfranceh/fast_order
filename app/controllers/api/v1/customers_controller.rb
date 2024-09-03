@@ -14,7 +14,7 @@ module Api
             loyalty_cards: {
               include: {
                 stamps: {
-                  only: %i[item date time]
+                  only: %i[id item date time]
                 }
               },
               only: %i[id status]
