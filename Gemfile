@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 ruby '3.3.1'
 
 gem 'devise'
+gem 'groupdate'
 gem 'jbuilder'
 gem 'jsbundling-rails'
 gem 'pg', '~> 1.1'

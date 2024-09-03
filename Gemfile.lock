@@ -146,6 +146,8 @@ GEM
       sexp_processor (~> 4.8)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    groupdate (6.4.0)
+      activesupport (>= 6.1)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -359,6 +361,7 @@ DEPENDENCIES
   debug
   devise
   factory_bot_rails
+  groupdate
   jbuilder
   jsbundling-rails
   launchy

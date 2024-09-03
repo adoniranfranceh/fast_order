@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '../components/Home';
-import { CollaboratorsPage, CollaboratorDetailsPage, CustomersPage, CustomerDetailsPage, OrdersPage, OrderDetails } from '../components/index.js';
+import { CollaboratorsPage, CollaboratorDetailsPage, CustomersPage, CustomerDetailsPage, DashboardPage, OrdersPage, OrderDetails } from '../components/index.js';
 import MyNavbar from '../components/Navbar';
 import { AuthContext } from '../context/AuthContext/index.jsx';
 
@@ -19,6 +19,7 @@ const AppRoutes = () => {
         <Route path="/pedido/:id" element={<OrderDetails />} />
         {currentUser && currentUser.role === 'admin' && (
           <>
+            <Route path="/dashboard/" element={<DashboardPage />} />
             <Route path="/colaboradores/" element={<CollaboratorsPage />} />
             <Route path="/colaborador/:id" element={<CollaboratorDetailsPage />} />
           </>

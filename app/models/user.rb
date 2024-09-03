@@ -18,6 +18,7 @@ class User < ApplicationRecord
            dependent: :destroy,
            inverse_of: :admin
   has_many :orders, dependent: :destroy
+  has_many :collaborators, class_name: 'User', foreign_key: 'admin_id'
   has_one :profile, dependent: :destroy
 
   after_create :associate_admin_in_admin, if: :admin?
