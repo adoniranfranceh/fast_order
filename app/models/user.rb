@@ -12,13 +12,14 @@ class User < ApplicationRecord
              optional: true,
              inverse_of: :collaborators
 
+  has_many :customers, dependent: :destroy
+  has_many :loyalty_cards, through: :customers
   has_many :collaborators,
            class_name: 'User',
            foreign_key: 'admin_id',
            dependent: :destroy,
            inverse_of: :admin
   has_many :orders, dependent: :destroy
-  has_many :collaborators, class_name: 'User', foreign_key: 'admin_id'
   has_one :profile, dependent: :destroy
 
   after_create :associate_admin_in_admin, if: :admin?

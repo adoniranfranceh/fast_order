@@ -71,6 +71,7 @@ const CustomerDetailsPage = () => {
       )
     }));
   };
+  const usedLoyaltyCardsCount = customer.loyalty_cards.filter(card => card.status === 'used').length;
 
   if (error) return <p>{error}</p>;
   if (!customer) return <p>Carregando...</p>;
@@ -113,7 +114,7 @@ const CustomerDetailsPage = () => {
             { label: 'Telefone', value: customer.phone },
             { label: 'Data de Nascimento', value: formatDate(customer.birthdate) },
             { label: 'Data de Registro', value: formatDate(customer.created_at) },
-            { label: 'Quantidade de cartões', value: customer.loyalty_cards.length }
+            { label: 'Quantidade cartões completados', value: usedLoyaltyCardsCount }
           ].map((info, index) => (
             <Box 
               key={index} 

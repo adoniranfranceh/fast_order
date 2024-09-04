@@ -55,6 +55,7 @@ const CollaboratorsPage = () => {
         renderItem={renderCollaborator}
         detailName='colaborador'
         columns={['Id', 'Nome', 'E-mail', 'Ações']}
+        listTitle='Colaboradores'
       />
       <CollaboratorForm
         open={isFormOpen}

@@ -4,7 +4,7 @@ module Api
       before_action :set_customer, only: %i[show update]
 
       def index
-        @customers = Customer.where(user_id: current_user.id).order(:name)
+        @customers = Customer.where(user_id: current_user.admin.id).order(:name)
         render json: @customers
       end
 
@@ -56,7 +56,7 @@ module Api
           :description,
           :favorite_order,
           :user_id
-        ).merge(user_id: current_user.id)
+        ).merge(user_id: current_user.admin.id)
       end
     end
   end
