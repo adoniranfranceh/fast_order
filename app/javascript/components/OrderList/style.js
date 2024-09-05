@@ -4,7 +4,7 @@ import theme from '../theme';
 export const OrderListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
   padding: 20px;
 
   @media(min-width: 768px) {

@@ -1,6 +1,7 @@
+# spec/factories/orders.rb
 FactoryBot.define do
   factory :order do
-    user { nil }
+    user
     admin_id { nil }
     status { 1 }
     delivery_type { 1 }

@@ -13,7 +13,8 @@ module Api
                                         only: %i[id name price status]
                                       }
                                     }, only: %i[id customer status delivery_type total_price
-                                                table_info address pick_up_time user_id])
+                                                table_info address pick_up_time user_id
+                                                time_started time_stopped])
       end
 
       def show
@@ -41,6 +42,18 @@ module Api
 
       def update
         order = Order.find(params[:id])
+        new_status = params[:status] || 'delivered'
+        current_time = Time.current
+
+        if new_status == 'doing' && order.time_started.nil?
+          order.update(time_started: current_time, status: new_status)
+
+        elsif order.status == 'doing' && new_status != 'doing'
+          order.update(time_stopped: current_time, status: new_status)
+        else
+          order.update(status: new_status)
+        end
+
         if order.update(order_params)
           render json: order
         else

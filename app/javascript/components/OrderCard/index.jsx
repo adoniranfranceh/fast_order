@@ -14,6 +14,7 @@ import {
 import OrderModal from '../OrderModal';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
+import useOrderTimer from '../../hooks/useOrderTimer';
 
 const OrderCard = ({ order, onStatusChange, onClick }) => {
   const [{ isDragging }, drag] = useDrag({
@@ -23,6 +24,8 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
       isDragging: !!monitor.isDragging(),
     }),
   });
+
+  const elapsedTime = useOrderTimer(order.id, order.time_started, order.time_stopped, order.status);
 
   const getOrderStatus = (status) => {
     const statusMap = {
@@ -49,7 +52,7 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
       const allPaid = order.items.every(item => item.status === 'paid');
       setShowPaidIcon(allPaid);
     }
-  }, [order]);  
+  }, [order]);
 
   return (
     <OrderCardContainer
@@ -57,11 +60,11 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
       <OrderInfo>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           #{order.id}
           <IconButton
             color="primary"
-            onClick={() => {setIsEditing(true)}}
+            onClick={() => setIsEditing(true)}
           >
             <EditIcon/>
           </IconButton>
@@ -74,6 +77,7 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
         </OrderDetails>
       </OrderInfo>
       <OrderStatus>Status: {getOrderStatus(order.status)}</OrderStatus>
+        <div>Tempo de espera: {moment.utc(elapsedTime * 1000).format('HH:mm:ss')}</div>
       <IconButtonContainer>
         {order.status !== 'doing' && (
           <FaHourglassHalf
@@ -114,13 +118,13 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
           />
         )}
       </IconButtonContainer>
-      <DetailsButton onClick={onClick}>Ver Detalhes</DetailsButton> 
+      <DetailsButton onClick={onClick}>Ver Detalhes</DetailsButton>
       <OrderModal
         open={isEditing} 
         onClose={closeModal} 
         onOrderSuccess={handleOrderSuccess}
         order={order}
-      ></OrderModal>
+      />
     </OrderCardContainer>
   );
 };

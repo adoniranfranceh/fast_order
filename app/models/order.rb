@@ -11,6 +11,7 @@ class Order < ApplicationRecord
 
   validates :delivery_type, :items, presence: true
   validate :validate_delivery_details
+  validate :cannot_revert_delivered_to_doing, if: :status_changed?
 
   after_save :broadcast_order
   after_create :sum_total
@@ -31,10 +32,23 @@ class Order < ApplicationRecord
     save
   end
 
+  def duration
+    return 0 unless time_started && time_stopped
+
+    (time_stopped - time_started).to_i
+  end
+
   private
 
+  def cannot_revert_delivered_to_doing
+    return unless status_was == 'delivered' && status == 'doing'
+    return unless time_stopped < 1.hour.ago
+
+    errors.add(:status, 'pode ser alterado para "Novos Pedidos" 1 hora depois de entregue')
+  end
+
   def associate_admin
-    self.admin_id = user.admin.id
+    self.admin_id = user.admin&.id
   end
 
   def check_all_items_paid
@@ -54,15 +68,13 @@ class Order < ApplicationRecord
   end
 
   def broadcast_order
-    ActionCable.server.broadcast 'orders_channel', {
-      id:,
-      user_id:,
-      delivery_type:,
-      status:,
-      customer:,
-      table_info:,
-      address:,
-      pick_up_time:,
+    ActionCable.server.broadcast 'orders_channel', order_data
+  end
+
+  def order_data
+    {
+      id:, user_id:, delivery_type:, status:, customer:, table_info:,
+      address:, pick_up_time:, time_started:, time_stopped:,
       items: items.map do |item|
         item.as_json.merge(
           additional_fields: item.additional_fields.as_json
