@@ -29,19 +29,24 @@ const MyNavbar = () => {
     >
       <List sx={{color: `${theme.colors.white}`}}>
         <ListItem button>
+          <ListItemText onClick={() => navigate('/')} primary="Pedidos" />
+        </ListItem>
+        <ListItem button>
           <ListItemText onClick={() => navigate('/pedidos')} primary="Pedidos" />
         </ListItem>
         <ListItem button>
           <ListItemText onClick={() => navigate('/clientes')} primary="Clientes" />
         </ListItem>
         {currentUser && currentUser.role === 'admin' && (
-          <ListItem button>
-            <ListItemText onClick={() => navigate('/colaboradores')} primary="Colaboradores" />
-          </ListItem>
+          <>
+            <ListItem button>
+              <ListItemText onClick={() => navigate('/colaboradores')} primary="Colaboradores" />
+            </ListItem>
+            <ListItem button>
+              <ListItemText onClick={() => navigate('/colaboradores')} primary="Relatórios" />
+            </ListItem>
+          </>
         ) }
-        <ListItem button>
-          <ListItemText primary="Relatórios" />
-        </ListItem>
       </List>
     </Box>
   );
@@ -60,6 +65,9 @@ const MyNavbar = () => {
         </Typography>
         
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '1rem' }}>
+          <StyledButton  onClick={() => navigate('/')}>
+            Home
+          </StyledButton>
           <StyledButton  onClick={() => navigate('/pedidos')}>
             Pedidos
           </StyledButton>
@@ -67,11 +75,15 @@ const MyNavbar = () => {
             Clientes
           </StyledButton>
           {currentUser && currentUser.role === 'admin' && (
-            <StyledButton onClick={() => navigate('/colaboradores')}>
-              Colaboradores
-            </StyledButton>
+            <>
+              <StyledButton onClick={() => navigate('/colaboradores')}>
+                Colaboradores
+              </StyledButton>
+              <StyledButton onClick={() => navigate('/dashboard')}>
+                Dashboard
+              </StyledButton>
+            </>
           )}
-          <StyledButton onClick={() => navigate('/dashboard')}>Relatórios</StyledButton>
         </Box>
 
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
