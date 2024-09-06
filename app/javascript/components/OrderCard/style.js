@@ -1,61 +1,96 @@
 import styled from 'styled-components';
+import theme from '../theme';
 
 export const OrderCardContainer = styled.div`
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  color: #333;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: ${theme.colors.white};
+  padding: ${theme.spacing.small};
+  border-radius: ${theme.borderRadius};
+  color: ${theme.colors.text};
+  box-shadow: ${theme.boxShadow};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  max-width: 350px;
+  margin: ${theme.spacing.small};
+`;
+
+export const OrderHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid ${theme.colors.mutedText};
+  padding-bottom: ${theme.spacing.small};
+  margin-bottom: ${theme.spacing.small};
 `;
 
 export const OrderInfo = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: ${theme.spacing.small};
 `;
 
 export const CustomerName = styled.h3`
-  font-size: 20px;
+  font-size: ${theme.fontSizes.small};
   margin: 0;
 `;
 
-export const OrderDetails = styled.p`
+export const OrderDetails = styled.div`
   margin: 0;
-  font-size: 16px;
+  font-size: ${theme.fontSizes.small};
+  color: ${theme.colors.mutedText};
 `;
 
 export const OrderStatus = styled.span`
-  align-self: flex-end;
-  font-size: 14px;
+  font-size: ${theme.fontSizes.small};
   font-weight: bold;
+  color: ${theme.colors.text};
+  margin-top: ${theme.spacing.small};
 `;
 
 export const IconButtonContainer = styled.div`
   display: flex;
   justify-content: space-around;
-  margin-top: 10px;
+  margin-top: ${theme.spacing.small};
 
   svg {
     cursor: pointer;
-    color: #333;
+    color: ${theme.colors.text};
     transition: color 0.2s;
+    font-size: 24px;
 
     &:hover {
-      color: #007bff;
+      color: ${theme.colors.primary};
     }
   }
 `;
 
 export const DetailsButton = styled.button`
-  margin-top: 10px;
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: white;
+  margin-top: ${theme.spacing.small};
+  padding: ${theme.spacing.small} ${theme.spacing.small};
+  background-color: ${theme.colors.primary};
+  color: ${theme.colors.white};
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: ${theme.fontSizes.small};
+  text-align: center;
+  transition: background-color 0.3s;
+
   &:hover {
-    background-color: #0056b3;
+    background-color: ${theme.colors.primaryHover};
   }
+`;
+
+export const TimeIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${theme.colors.primary};
+  font-size: ${theme.fontSizes.small};
+  margin-top: ${theme.spacing.small};
+`;
+
+export const TimeText = styled.span`
+  margin-left: ${theme.spacing.small};
+  color: ${theme.colors.primary};
+  font-size: ${theme.fontSizes.small};
+  display: flex;
+  align-items: center;
 `;

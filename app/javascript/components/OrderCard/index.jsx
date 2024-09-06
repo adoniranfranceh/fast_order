@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { FaHourglassHalf, FaTruck, FaCheck, FaBan } from 'react-icons/fa';
+import { FaHourglassHalf, FaTruck, FaCheck, FaBan, FaClock } from 'react-icons/fa';
 import moment from 'moment';
 import { useDrag } from 'react-dnd';
 import {
   OrderCardContainer,
+  OrderHeader,
   OrderInfo,
   CustomerName,
   OrderDetails,
   OrderStatus,
   IconButtonContainer,
-  DetailsButton
+  DetailsButton,
+  TimeIconWrapper,
+  TimeText
 } from './style';
 import OrderModal from '../OrderModal';
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import useOrderTimer from '../../hooks/useOrderTimer';
 
 const OrderCard = ({ order, onStatusChange, onClick }) => {
@@ -59,27 +62,33 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
       ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
+      <OrderHeader>
+        <div>Pedido #{order.id}</div>
+        <IconButton color="primary" onClick={openModal}>
+          <EditIcon />
+        </IconButton>
+      </OrderHeader>
       <OrderInfo>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          #{order.id}
-          <IconButton
-            color="primary"
-            onClick={() => setIsEditing(true)}
-          >
-            <EditIcon/>
-          </IconButton>
-        </div>
         <CustomerName>{order.customer}</CustomerName>
         <OrderDetails>
-          {order.table_info && `Mesa: ${order.table_info}`}<br />
-          {order.pick_up_time && `Horário de retirada: ${moment.utc(order.pick_up_time).format('HH:mm')}`}<br />
-          {order.address && `Entrega - ${order.address}`}<br />
+          {order.table_info && <p>Mesa: {order.table_info}</p>}
+          {order.pick_up_time && <p>Horário de retirada: {moment.utc(order.pick_up_time).format('HH:mm')}</p>}
+          {order.address && <p>Endereço: {order.address}</p>}
         </OrderDetails>
       </OrderInfo>
       <OrderStatus>Status: {getOrderStatus(order.status)}</OrderStatus>
-        <div>Tempo de espera: {moment.utc(elapsedTime * 1000).format('HH:mm:ss')}</div>
+      <TimeIconWrapper>
+        <Tooltip title={`Tempo de espera: ${moment.utc(elapsedTime * 1000).format('HH:mm:ss')}`} arrow>
+          <div>
+            <FaClock size={20} />
+          </div>
+        </Tooltip>
+        <TimeText>
+          {moment.utc(elapsedTime * 1000).format('HH:mm:ss')}
+        </TimeText>
+      </TimeIconWrapper>
       <IconButtonContainer>
-        {order.status !== 'doing' && (
+        {order.status !== 'doing' && order.time_stopped === moment().subtract(2, 'hours') && (
           <FaHourglassHalf
             onClick={(e) => {
               e.stopPropagation();
