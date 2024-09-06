@@ -17,7 +17,7 @@ module Api
         if @loyalty_card.save
           render json: @loyalty_card, status: :created
         else
-          render json: { errors: @loyalty_card.errors }, status: :unprocessable_entity
+          render @loyalty_card.errors, status: :unprocessable_entity
         end
       end
 

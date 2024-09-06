@@ -36,14 +36,14 @@ module Api
         if order.save
           render json: order, status: :created
         else
-          render json: { errors: order.errors.full_messages }, status: :unprocessable_entity
+          render json: order.errors, status: :unprocessable_entity
         end
       end
 
       def update
         order = Order.find(params[:id])
         new_status = params[:status] || 'delivered'
-        current_time = Time.current
+        current_time = Time.zone.now
 
         if new_status == 'doing' && order.time_started.nil?
           order.update(time_started: current_time, status: new_status)
@@ -57,6 +57,7 @@ module Api
         if order.update(order_params)
           render json: order
         else
+
           render json: order.errors, status: :unprocessable_entity
         end
       end

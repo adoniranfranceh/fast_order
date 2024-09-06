@@ -29,7 +29,7 @@ module Api
         if @customer.save
           render json: { message: 'Cliente registrado com sucesso', customer: @customer }, status: :created
         else
-          render json: { errors: @customer.errors }, status: :unprocessable_entity
+          render @customer.errors, status: :unprocessable_entity
         end
       end
 

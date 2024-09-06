@@ -41,10 +41,10 @@ class Order < ApplicationRecord
   private
 
   def cannot_revert_delivered_to_doing
-    return unless status_was == 'delivered' && status == 'doing'
+    return unless status == 'doing' && time_stopped.present?
     return unless time_stopped < 1.hour.ago
 
-    errors.add(:status, 'pode ser alterado para "Novos Pedidos" 1 hora depois de entregue')
+    errors.add(:base, 'Status não pode ser alterado para "Novos Pedidos" 1 hora depois de entregue')
   end
 
   def associate_admin
