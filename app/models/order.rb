@@ -17,6 +17,9 @@ class Order < ApplicationRecord
   after_create :sum_total
   before_save :check_all_items_paid, if: :status_changed?
   before_validation :associate_admin
+  before_create :start_time
+
+  include Filterable
 
   def content
     return table_info if local?
@@ -40,9 +43,13 @@ class Order < ApplicationRecord
 
   private
 
+  def start_time
+    self.time_started = Time.zone.now
+  end
+
   def cannot_revert_delivered_to_doing
     return unless status == 'doing' && time_stopped.present?
-    return unless time_stopped < 1.hour.ago
+    return unless time_stopped <= 1.hour.ago
 
     errors.add(:base, 'Status não pode ser alterado para "Novos Pedidos" 1 hora depois de entregue')
   end

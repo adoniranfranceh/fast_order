@@ -105,6 +105,7 @@ const OrdersPage = () => {
         refresh={refreshList}
         detailName="pedido"
         columns={['ID', 'Cliente', 'Status', 'Tipo de Entrega', 'Info da Entrega', 'Valor']}
+        objectName='orders'
       />
     </Box>
   );

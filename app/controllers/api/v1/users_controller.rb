@@ -4,10 +4,24 @@ module Api
       before_action :set_user, only: %i[show update]
 
       def index
-        collaborators = User.where(admin_id: current_user.admin.id).order(:email)
-        render json: collaborators.as_json(include: {
-                                             profile: { only: %i[full_name] }
-                                           })
+        page = (params[:page] || 1).to_i
+        per_page = (params[:per_page] || 5).to_i
+
+        collaborators = User.where(admin_id: current_user.admin.id)
+                            .order(:email)
+                            .paginate(page:, per_page:)
+
+        search_query = params[:search_query].downcase
+        searchable_attributes = %w[profile.full_name id email]
+
+        collaborators = collaborators.filter_by_attributes(search_query, searchable_attributes) if search_query.present?
+
+        render json: {
+          users: collaborators.as_json(include: {
+                                         profile: { only: %i[full_name] }
+                                       }),
+          total_count: collaborators.total_entries
+        }
       end
 
       def show
@@ -26,7 +40,7 @@ module Api
         if user.save
           render json: { message: 'Colaborador registrado com sucesso', user: }, status: :created
         else
-          render user.errors.full_messages, status: :unprocessable_entity
+          render user.errors, status: :unprocessable_entity
         end
       end
 
@@ -34,7 +48,7 @@ module Api
         if @user.update(user_params)
           render json: { message: 'Colaborador registrado com sucesso', user: @user }, status: :created
         else
-          render @user.errors.full_messages, status: :unprocessable_entity
+          render @user.errors, status: :unprocessable_entity
         end
       end
 

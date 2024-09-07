@@ -6,6 +6,6 @@ FactoryBot.define do
     birthdate { '2024-08-16' }
     description { 'MyString' }
     favorite_order { 'MyString' }
-    user { nil }
+    user
   end
 end

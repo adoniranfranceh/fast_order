@@ -56,8 +56,9 @@ const CustomersPage = () => {
         refresh={refreshList}
         renderItem={renderOrderItem}
         detailName='cliente'
-        columns={['Id', 'Nome', 'E-mail', 'Data de nascimento', 'Ações']}
+        columns={['Id', 'Nome', 'E-mail', 'Data de nascimento', '']}
         listTitle='Clientes'
+        objectName='customers'
       />
       <CustomerForm
         open={isFormOpen}

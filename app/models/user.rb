@@ -24,6 +24,16 @@ class User < ApplicationRecord
 
   after_create :associate_admin_in_admin, if: :admin?
 
+  include Filterable
+
+  def self.ransackable_attributes(_auth_object = nil)
+    ['name', 'email', '']
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    ['profile']
+  end
+
   private
 
   def associate_admin_in_admin

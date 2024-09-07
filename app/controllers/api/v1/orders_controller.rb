@@ -2,19 +2,10 @@ module Api
   module V1
     class OrdersController < ApplicationController
       def index
-        orders = Order.where(admin_id: current_user.admin.id)
-        orders.includes(items: :additional_fields).order(created_at: :desc)
-        orders = orders.where('created_at >= ?', 12.hours.ago) if params[:query] == 'today'
-        render json: orders.as_json(include: {
-                                      items: {
-                                        include: {
-                                          additional_fields: { only: %i[id additional additional_value] }
-                                        },
-                                        only: %i[id name price status]
-                                      }
-                                    }, only: %i[id customer status delivery_type total_price
-                                                table_info address pick_up_time user_id
-                                                time_started time_stopped])
+        orders = fetch_orders
+        orders = paginate_orders(orders)
+
+        render json: format_response(orders)
       end
 
       def show
@@ -45,10 +36,7 @@ module Api
         new_status = params[:status] || 'delivered'
         current_time = Time.zone.now
 
-        if new_status == 'doing' && order.time_started.nil?
-          order.update(time_started: current_time, status: new_status)
-
-        elsif order.status == 'doing' && new_status != 'doing'
+        if order.status == 'doing' && new_status != 'doing'
           order.update(time_stopped: current_time, status: new_status)
         else
           order.update(status: new_status)
@@ -63,6 +51,51 @@ module Api
       end
 
       private
+
+      def fetch_orders
+        orders = Order.where(admin_id: current_user.admin.id)
+                      .includes(items: :additional_fields)
+                      .order(created_at: :desc)
+        filter_orders(orders)
+      end
+
+      def filter_orders(orders)
+        search_query = params[:search_query]
+        return orders unless search_query != ''
+
+        search_query = params[:search_query]
+        searchable_attributes = %w[customer id status delivery_type total_price
+                                   table_info address pick_up_time]
+
+        orders = orders.filter_by_attributes(search_query.downcase, searchable_attributes) if search_query.present?
+
+        return orders unless params[:query] == 'today'
+
+        orders.where('created_at >= ?', 12.hours.ago)
+      end
+
+      def paginate_orders(orders)
+        page = (params[:page] || 1).to_i
+        per_page = (params[:per_page] || 5).to_i
+
+        orders.paginate(page:, per_page:)
+      end
+
+      def format_response(orders)
+        {
+          orders: orders.as_json(include: {
+                                   items: {
+                                     include: {
+                                       additional_fields: { only: %i[id additional additional_value] }
+                                     },
+                                     only: %i[id name price status]
+                                   }
+                                 }, only: %i[id customer status delivery_type total_price
+                                             table_info address pick_up_time user_id
+                                             time_started time_stopped]),
+          total_count: orders.total_entries
+        }
+      end
 
       def order_params
         params.require(:order).permit(

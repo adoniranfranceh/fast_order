@@ -4,8 +4,22 @@ module Api
       before_action :set_customer, only: %i[show update]
 
       def index
-        @customers = Customer.where(user_id: current_user.admin.id).order(:name)
-        render json: @customers
+        page = (params[:page] || 1).to_i
+        per_page = (params[:per_page] || 5).to_i
+
+        customers = Customer.where(user_id: current_user.admin.id)
+                            .order(:name)
+                            .paginate(page:, per_page:)
+
+        search_query = params[:search_query].downcase
+        searchable_attributes = %w[name id email birthdate]
+
+        customers = Customer.filter_by_attributes(search_query, searchable_attributes) if search_query.present?
+
+        render json: {
+          customers:,
+          total_count: customers.count
+        }
       end
 
       def show

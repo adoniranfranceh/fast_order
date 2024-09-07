@@ -54,8 +54,9 @@ const CollaboratorsPage = () => {
         refresh={refreshList}
         renderItem={renderCollaborator}
         detailName='colaborador'
-        columns={['Id', 'Nome', 'E-mail', 'Ações']}
+        columns={['Id', 'Nome', 'E-mail', '']}
         listTitle='Colaboradores'
+        objectName='users'
       />
       <CollaboratorForm
         open={isFormOpen}

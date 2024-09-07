@@ -50,7 +50,7 @@ const OrderList = () => {
     axios
       .get('/api/v1/orders?query=today')
       .then((response) => {
-        setOrders(response.data);
+        setOrders(response.data.orders);
       })
       .catch((error) => {
         console.error(error);
