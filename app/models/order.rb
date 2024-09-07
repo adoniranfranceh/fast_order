@@ -11,12 +11,12 @@ class Order < ApplicationRecord
 
   validates :delivery_type, :items, presence: true
   validate :validate_delivery_details
-  validate :cannot_revert_delivered_to_doing, if: :status_changed?
+  before_save :cannot_revert_delivered_to_doing, if: :status_changed?
 
   after_save :broadcast_order
   after_create :sum_total
   before_save :check_all_items_paid, if: :status_changed?
-  before_validation :associate_admin
+  validate :associate_admin
   before_create :start_time
 
   include Filterable
@@ -29,8 +29,16 @@ class Order < ApplicationRecord
   end
 
   def sum_total
-    total_items = items.sum { |item| BigDecimal(item.price.to_s) }
-    total_additionals = additional_fields.sum { |additional| BigDecimal(additional.additional_value.to_s) }
+    total_items = items.sum do |item|
+      price = item.price.to_s
+      BigDecimal(price.empty? ? '0' : price)
+    end
+
+    total_additionals = additional_fields.sum do |additional|
+      additional_value = additional.additional_value.to_s
+      BigDecimal(additional_value.empty? ? '0' : additional_value)
+    end
+
     self.total_price = total_items + total_additionals
     save
   end
@@ -48,8 +56,7 @@ class Order < ApplicationRecord
   end
 
   def cannot_revert_delivered_to_doing
-    return unless status == 'doing' && time_stopped.present?
-    return unless time_stopped <= 1.hour.ago
+    return unless status == 'doing' && time_stopped <= 1.hour.ago
 
     errors.add(:base, 'Status não pode ser alterado para "Novos Pedidos" 1 hora depois de entregue')
   end

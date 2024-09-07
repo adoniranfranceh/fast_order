@@ -27,6 +27,7 @@ describe 'Vê pedidos' do
         ]
       )
 
+      login_as user
       get '/api/v1/orders'
 
       expect(response).to have_http_status(:success)
@@ -35,14 +36,14 @@ describe 'Vê pedidos' do
 
       expect(json_response.length).to eq 2
 
-      first_order = json_response.find { |order| order['customer'] == 'Roger' }
+      first_order = json_response['orders'].find { |order| order['customer'] == 'Roger' }
       expect(first_order['status']).to eq 'doing'
       expect(first_order['customer']).to eq 'Roger'
       expect(first_order['items'].length).to eq 1
       expect(first_order['items'].first['name']).to eq 'Item 1'
       expect(first_order['additional_fields']).to eq nil
 
-      second_order = json_response.find { |order| order['customer'] == 'Ernesto' }
+      second_order = json_response['orders'].find { |order| order['customer'] == 'Ernesto' }
       expect(second_order['status']).to eq 'doing'
       expect(second_order['customer']).to eq 'Ernesto'
       expect(second_order['items'].length).to eq 1

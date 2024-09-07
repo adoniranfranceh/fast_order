@@ -64,7 +64,7 @@ const CustomersPage = () => {
         open={isFormOpen}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
-        customerData={selectedCustomer}
+        customerData={selectedCustomer.customers}
       />
     </Box>
   );

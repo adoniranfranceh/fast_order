@@ -73,7 +73,7 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
         <OrderDetails>
           {order.table_info && <p>Mesa: {order.table_info}</p>}
           {order.pick_up_time && <p>Horário de retirada: {moment.utc(order.pick_up_time).format('HH:mm')}</p>}
-          {order.address && <p>Endereço: {order.address}</p>}
+          {order.address && <p>Entrega - {order.address}</p>}
         </OrderDetails>
       </OrderInfo>
       <OrderStatus>Status: {getOrderStatus(order.status)}</OrderStatus>

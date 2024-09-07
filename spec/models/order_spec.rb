@@ -138,12 +138,13 @@ RSpec.describe Order, type: :model do
     end
 
     context '.cannot_revert_delivered_to_doing' do
-      it 'status não pode ser doing se stopped_time for de 1 hora atrás' do
-        order = create(:order, time_stopped: 2.hours.ago, status: :delivered)
+      it 'status não pode ser doing se stopped_time for de 1 ou mais horas atrás' do
+        order = create(:order, status: :delivered)
 
+        order.update time_stopped: 2.hours.ago
         order.update status: :doing
 
-        expect(order.errors[:status]).to include 'pode ser alterado para "Novos Pedidos" 1 hora depois de entregue'
+        expect(order.errors[:base]).to include 'Status não pode ser alterado para "Novos Pedidos" 1 hora depois de entregue'
       end
     end
   end

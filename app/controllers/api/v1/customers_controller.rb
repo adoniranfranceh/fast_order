@@ -38,12 +38,12 @@ module Api
       end
 
       def create
-        @customer = Customer.new(customer_params)
+        customer = Customer.new(customer_params)
 
-        if @customer.save
-          render json: { message: 'Cliente registrado com sucesso', customer: @customer }, status: :created
+        if customer.save
+          render json: { message: 'Cliente registrado com sucesso', customer: }, status: :created
         else
-          render @customer.errors, status: :unprocessable_entity
+          render json: customer.errors, status: :unprocessable_entity
         end
       end
 
@@ -62,7 +62,7 @@ module Api
       end
 
       def customer_params
-        params.require(:customer).permit(
+        permitted_params = params.require(:customer).permit(
           :name,
           :email,
           :birthdate,
@@ -70,7 +70,12 @@ module Api
           :description,
           :favorite_order,
           :user_id
-        ).merge(user_id: current_user.admin.id)
+        )
+        if current_user&.admin?
+          permitted_params.merge(user_id: current_user.id)
+        else
+          permitted_params
+        end
       end
     end
   end

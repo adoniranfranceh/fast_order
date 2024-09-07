@@ -114,7 +114,7 @@ module Api
             :_destroy,
             { additional_fields_attributes: %i[id additional additional_value _destroy] }
           ]
-        ).merge(user_id: current_user.id)
+        )
       end
     end
   end

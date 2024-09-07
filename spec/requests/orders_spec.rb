@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Orders', type: :request do
   describe 'GET /index' do
     it 'com sucesso' do
-      user = create :user, role: :collaborator
+      user = create :user
 
       login_as user, scope: :user
       get root_path
@@ -12,7 +12,7 @@ RSpec.describe 'Orders', type: :request do
     end
 
     it 'e não está autenticado' do
-      create :user, role: :collaborator
+      create :user
 
       get root_path
 

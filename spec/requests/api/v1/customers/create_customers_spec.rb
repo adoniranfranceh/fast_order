@@ -19,11 +19,11 @@ describe 'Cria cliente' do
     expect(response).to have_http_status :created
     expect(Customer.count).to eq 1
     json_response = JSON.parse(response.body)
-    expect(json_response['message']).to eq 'Cliente salvo com sucesso'
+    expect(json_response['message']).to eq 'Cliente registrado com sucesso'
     customer = Customer.last
     expect(customer.name).to eq 'Michael'
     expect(customer.email).to eq 'michael@email.com'
-    expect(customer.birthdate).to eq Time.zone.parse('2000-07-12')
+    expect(customer.birthdate).to eq Date.new(2000, 0o7, 12)
     expect(customer.phone).to eq '525252525'
     expect(customer.favorite_order).to eq 'Xícara de chá'
     expect(customer.user_id).to eq user.id
@@ -47,7 +47,9 @@ describe 'Cria cliente' do
     expect(response).to have_http_status :unprocessable_entity
     expect(Customer.count).to eq 0
     json_response = JSON.parse(response.body)
-    expect(json_response['errors']).to eq ['Nome não pode ficar em branco',
-                                           'Data de nascimento não pode ficar em branco']
+    expect(json_response).to include(
+      'name' => ['não pode ficar em branco'],
+      'birthdate' => ['não pode ficar em branco']
+    )
   end
 end

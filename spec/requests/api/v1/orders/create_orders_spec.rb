@@ -71,7 +71,7 @@ describe 'Cria pedido' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse response.body
-        expect(json_response['errors']).to include 'Tipo de entrega não pode ficar em branco'
+        expect(json_response).to include 'delivery_type' => ['não pode ficar em branco']
 
         expect(Order.count).to eq 0
       end
@@ -100,7 +100,7 @@ describe 'Cria pedido' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse response.body
-        expect(json_response['errors']).to include 'Info da mesa não pode ficar em branco. Entrega local'
+        expect(json_response).to include 'table_info' => ['não pode ficar em branco. Entrega local']
 
         expect(Order.count).to eq 0
       end
@@ -129,7 +129,7 @@ describe 'Cria pedido' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse response.body
-        expect(json_response['errors']).to include 'Endereço não pode ficar em branco. Entrega delivery'
+        expect(json_response).to include 'address' => ['não pode ficar em branco. Entrega delivery']
 
         expect(Order.count).to eq 0
       end
@@ -158,7 +158,7 @@ describe 'Cria pedido' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse response.body
-        expect(json_response['errors']).to include 'Hora de retirada não pode ficar em branco. Entrega para retirada'
+        expect(json_response).to include 'pick_up_time' => ['não pode ficar em branco. Entrega para retirada']
 
         expect(Order.count).to eq 0
       end
@@ -178,7 +178,7 @@ describe 'Cria pedido' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse response.body
-        expect(json_response['errors']).to include 'Items não pode ficar em branco'
+        expect(json_response).to include 'items' => ['não pode ficar em branco']
         expect(Order.count).to eq 0
       end
     end
