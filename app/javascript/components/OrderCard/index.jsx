@@ -63,7 +63,7 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
       <OrderHeader>
-        <div>Pedido #{order.id}</div>
+        <strong>Pedido #{order.code}</strong>
         <IconButton color="primary" onClick={openModal}>
           <EditIcon />
         </IconButton>

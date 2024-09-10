@@ -11,10 +11,9 @@ module Api
                             .order(:name)
                             .paginate(page:, per_page:)
 
-        search_query = params[:search_query].downcase
         searchable_attributes = %w[name id email birthdate]
 
-        customers = Customer.filter_by_attributes(search_query, searchable_attributes) if search_query.present?
+        customers = Customer.filter_by_attributes(params[:search_query].downcase, searchable_attributes) if params[:search_query].present?
 
         render json: {
           customers:,

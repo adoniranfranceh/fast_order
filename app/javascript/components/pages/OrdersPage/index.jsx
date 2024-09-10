@@ -80,7 +80,7 @@ const OrdersPage = () => {
   };
 
   const renderOrderItem = (order) => [
-    <span key="id">{order.id}</span>,
+    <span key="id">{order.code || ''}</span>,
     <span key="customer">{order.customer}</span>,
     <span key="status">{getStatusIcon(order.status)}</span>,
     <span key="delivery_type">{getDeliveryType(order.delivery_type)}</span>,
@@ -104,7 +104,7 @@ const OrdersPage = () => {
         listTitle="Lista de Pedidos"
         refresh={refreshList}
         detailName="pedido"
-        columns={['ID', 'Cliente', 'Status', 'Tipo de Entrega', 'Info da Entrega', 'Valor']}
+        columns={['Código', 'Cliente', 'Status', 'Tipo de Entrega', 'Info da Entrega', 'Valor']}
         objectName='orders'
       />
     </Box>

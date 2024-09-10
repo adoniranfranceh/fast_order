@@ -16,16 +16,36 @@ class Order < ApplicationRecord
   after_save :broadcast_order
   after_create :sum_total
   before_save :check_all_items_paid, if: :status_changed?
-  validate :associate_admin
-  before_create :start_time
+  before_create :associate_admin
+  before_create :start_time, :generate_unique_code
 
   include Filterable
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[customer code status delivery_type total_price
+       table_info address pick_up_time]
+  end
 
   def content
     return table_info if local?
     return address if delivery?
 
     pick_up_time if pickup?
+  end
+
+  def duration
+    return 0 unless time_started && time_stopped
+
+    (time_stopped - time_started).to_i
+  end
+
+  private
+
+  def generate_unique_code
+    self.code = loop do
+      random_code = SecureRandom.alphanumeric(6).upcase
+      break random_code unless Order.exists?(code: random_code)
+    end
   end
 
   def sum_total
@@ -42,14 +62,6 @@ class Order < ApplicationRecord
     self.total_price = total_items + total_additionals
     save
   end
-
-  def duration
-    return 0 unless time_started && time_stopped
-
-    (time_stopped - time_started).to_i
-  end
-
-  private
 
   def start_time
     self.time_started = Time.zone.now
@@ -88,7 +100,7 @@ class Order < ApplicationRecord
   def order_data
     {
       id:, user_id:, delivery_type:, status:, customer:, table_info:,
-      address:, pick_up_time:, time_started:, time_stopped:,
+      address:, pick_up_time:, time_started:, time_stopped:, code:,
       items: items.map do |item|
         item.as_json.merge(
           additional_fields: item.additional_fields.as_json

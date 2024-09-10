@@ -17,7 +17,7 @@ module Api
                                        },
                                        only: %i[id name price status]
                                      }
-                                   }, only: %i[id customer status delivery_type
+                                   }, only: %i[id customer status delivery_type code
                                                table_info address pick_up_time user_id total_price])
       end
 
@@ -64,7 +64,7 @@ module Api
         return orders unless search_query != ''
 
         search_query = params[:search_query]
-        searchable_attributes = %w[customer id status delivery_type total_price
+        searchable_attributes = %w[customer code status delivery_type total_price
                                    table_info address pick_up_time]
 
         orders = orders.filter_by_attributes(search_query.downcase, searchable_attributes) if search_query.present?
@@ -90,7 +90,7 @@ module Api
                                      },
                                      only: %i[id name price status]
                                    }
-                                 }, only: %i[id customer status delivery_type total_price
+                                 }, only: %i[id code customer status delivery_type total_price
                                              table_info address pick_up_time user_id
                                              time_started time_stopped]),
           total_count: orders.total_entries

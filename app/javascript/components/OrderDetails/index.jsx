@@ -138,7 +138,7 @@ const OrderDetails = () => {
     <Container>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <OrderHeader>
-          <Typography variant="h4" gutterBottom>Pedido #{order.id}</Typography>
+          <Typography variant="h4" gutterBottom>Pedido #{order.code}</Typography>
           <Typography><strong>Cliente:</strong> {order.customer}</Typography>
           <Typography><strong>Tipo de Entrega:</strong> {getDeliveryType(order.delivery_type)}</Typography>
         </OrderHeader>
