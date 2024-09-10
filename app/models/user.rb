@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :collaborators, class_name: 'User', foreign_key: 'admin_id', dependent: :destroy
   has_many :orders, dependent: :destroy
   has_one :profile, dependent: :destroy
+  accepts_nested_attributes_for :profile
 
   validate :admin_must_be_present_if_collaborator, if: :collaborator?
   after_create :associate_admin_in_admin, if: :admin?

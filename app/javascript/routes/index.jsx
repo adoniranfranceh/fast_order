@@ -1,27 +1,52 @@
 import React, { useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from '../components/Home';
-import { CollaboratorsPage, CollaboratorDetailsPage, CustomersPage, CustomerDetailsPage, DashboardPage, OrdersPage, OrderDetails } from '../components/index.js';
+import { 
+  CollaboratorsPage,
+  CustomersPage,
+  CustomerDetailsPage,
+  DashboardPage,
+  OrdersPage,
+  OrderDetails,
+  ProfilePage,
+  ProfileDetails
+} from '../components/index.js';
 import MyNavbar from '../components/Navbar';
 import { AuthContext } from '../context/AuthContext/index.jsx';
 
 const AppRoutes = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return <div>Carregando...</div>;
+  }
+
+  const isProfileComplete = currentUser.profile;
 
   return (
     <Router>
       <MyNavbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/clientes" element={<CustomersPage />} />
-        <Route path="/cliente/:id" element={<CustomerDetailsPage />} />
-        <Route path="/pedidos" element={<OrdersPage />} />
-        <Route path="/pedido/:id" element={<OrderDetails />} />
-        {currentUser && currentUser.role === 'admin' && (
+        <Route path="/editar/perfil" element={<ProfilePage />} />
+       
+        {!isProfileComplete ? (
+          <Route path="*" element={<Navigate to="/editar/perfil" replace />} />
+        ) : (
           <>
-            <Route path="/dashboard/" element={<DashboardPage />} />
-            <Route path="/colaboradores/" element={<CollaboratorsPage />} />
-            <Route path="/colaborador/:id" element={<CollaboratorDetailsPage />} />
+            <Route path="/perfil/:id" element={<ProfileDetails />} />
+
+            <Route path="/" element={<Home />} />
+            <Route path="/clientes" element={<CustomersPage />} />
+            <Route path="/cliente/:id" element={<CustomerDetailsPage />} />
+            <Route path="/pedidos" element={<OrdersPage />} />
+            <Route path="/pedido/:id" element={<OrderDetails />} />
+
+            {currentUser?.role === 'admin' && (
+              <>
+                <Route path="/dashboard/" element={<DashboardPage />} />
+                <Route path="/colaboradores/" element={<CollaboratorsPage />} />
+              </>
+            )}
           </>
         )}
       </Routes>

@@ -4,6 +4,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -15,6 +16,7 @@ export const AuthProvider = ({ children }) => {
           },
           credentials: 'include',
         });
+
         if (response.ok) {
           const data = await response.json();
           setCurrentUser(data.user);
@@ -24,14 +26,20 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         console.error('Erro ao buscar o usuário:', error);
         setCurrentUser(null);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchCurrentUser();
   }, []);
 
+  const updateCurrentUser = (updatedUser) => {
+    setCurrentUser(updatedUser);
+  };
+
   return (
-    <AuthContext.Provider value={{ currentUser }}>
+    <AuthContext.Provider value={{ currentUser, loading, updateCurrentUser }}>
       {children}
     </AuthContext.Provider>
   );

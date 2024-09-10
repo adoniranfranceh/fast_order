@@ -53,7 +53,7 @@ const CollaboratorsPage = () => {
         onEdit={handleEdit}
         refresh={refreshList}
         renderItem={renderCollaborator}
-        detailName='colaborador'
+        detailName='perfil'
         columns={['Id', 'Nome', 'E-mail', '']}
         listTitle='Colaboradores'
         objectName='users'

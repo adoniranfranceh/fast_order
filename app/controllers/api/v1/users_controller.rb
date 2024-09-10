@@ -28,7 +28,8 @@ module Api
         render json: @user.as_json(
           include: {
             profile: {
-              only: %i[full_name]
+              only: %i[full_name],
+              methods: [:photo_url]
             }
           }
         )
@@ -62,7 +63,8 @@ module Api
         params.require(:user).permit(
           :email,
           :password,
-          :password_confirmation
+          :password_confirmation,
+          profile_attributes: [:full_name, :photo]
         )
       end
     end

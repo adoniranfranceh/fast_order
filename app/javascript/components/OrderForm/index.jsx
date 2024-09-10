@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Typography, Button, TextField, Select, MenuItem, Alert } from '@mui/material';
 import { ItemList } from '../index.js';
 import createObject from '../services/createObject.js';
 import updateObject from '../services/updateObject.js';
 import formatPrice from '../services/formatPrice.js';
+import { AuthContext } from '../../context/AuthContext';
 
 const DELIVERY_TYPES = [
   { value: 'local', label: 'Local' },
@@ -12,6 +13,7 @@ const DELIVERY_TYPES = [
 ];
 
 const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
+  const { currentUser } = useContext(AuthContext);
   const [orderData, setOrderData] = useState(initialOrderData || {
     delivery_type: '',
     customer: '',
@@ -77,6 +79,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
 
     const payload = { 
       order: {
+        user_id: currentUser?.id,
         customer: orderData.customer,
         status: orderData.status,
         delivery_type: orderData.delivery_type,
