@@ -39,15 +39,6 @@ class Order < ApplicationRecord
     (time_stopped - time_started).to_i
   end
 
-  private
-
-  def generate_unique_code
-    self.code = loop do
-      random_code = SecureRandom.alphanumeric(6).upcase
-      break random_code unless Order.exists?(code: random_code)
-    end
-  end
-
   def sum_total
     total_items = items.sum do |item|
       price = item.price.to_s
@@ -61,6 +52,15 @@ class Order < ApplicationRecord
 
     self.total_price = total_items + total_additionals
     save
+  end
+
+  private
+
+  def generate_unique_code
+    self.code = loop do
+      random_code = SecureRandom.alphanumeric(6).upcase
+      break random_code unless Order.exists?(code: random_code)
+    end
   end
 
   def start_time
@@ -101,6 +101,7 @@ class Order < ApplicationRecord
     {
       id:, user_id:, delivery_type:, status:, customer:, table_info:,
       address:, pick_up_time:, time_started:, time_stopped:, code:,
+      user: user.as_json(only: [:email], include: { profile: { only: [:full_name], methods: [:photo_url] } }),
       items: items.map do |item|
         item.as_json.merge(
           additional_fields: item.additional_fields.as_json

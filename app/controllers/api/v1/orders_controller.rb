@@ -11,6 +11,15 @@ module Api
       def show
         order = Order.includes(items: :additional_fields).find(params[:id])
         render json: order.as_json(include: {
+                                     user: {
+                                       only: [:email],
+                                       include: {
+                                         profile: {
+                                           only: [:full_name],
+                                           methods: [:photo_url]
+                                         }
+                                       }
+                                     },
                                      items: {
                                        include: {
                                          additional_fields: { only: %i[id additional additional_value] }
@@ -83,38 +92,65 @@ module Api
 
       def format_response(orders)
         {
-          orders: orders.as_json(include: {
-                                   items: {
-                                     include: {
-                                       additional_fields: { only: %i[id additional additional_value] }
-                                     },
-                                     only: %i[id name price status]
-                                   }
-                                 }, only: %i[id code customer status delivery_type total_price
-                                             table_info address pick_up_time user_id
-                                             time_started time_stopped]),
+          orders: orders.as_json(
+            include: order_includes,
+            only: order_only_attributes
+          ),
           total_count: orders.total_entries
         }
       end
 
+      def order_includes
+        {
+          user: {
+            include: {
+              profile: { only: [:full_name], methods: [:photo_url] }
+            }, only: [:email]
+          },
+          items: {
+            include: {
+              additional_fields: { only: %i[id additional additional_value] }
+            }, only: %i[id name price status]
+          }
+        }
+      end
+
+      def order_only_attributes
+        %i[id code customer status delivery_type total_price table_info address pick_up_time user_id time_started time_stopped]
+      end
+
       def order_params
         params.require(:order).permit(
-          :customer,
-          :status,
-          :delivery_type,
-          :table_info,
-          :address,
-          :pick_up_time,
-          :user_id,
-          items_attributes: [
-            :id,
-            :name,
-            :price,
-            :status,
-            :_destroy,
-            { additional_fields_attributes: %i[id additional additional_value _destroy] }
-          ]
+          *order_attributes,
+          items_attributes: item_attributes
         )
+      end
+
+      def order_attributes
+        %i[
+          customer
+          status
+          delivery_type
+          table_info
+          address
+          pick_up_time
+          user_id
+        ]
+      end
+
+      def item_attributes
+        [
+          :id,
+          :name,
+          :price,
+          :status,
+          :_destroy,
+          { additional_fields_attributes: additional_field_attributes }
+        ]
+      end
+
+      def additional_field_attributes
+        %i[id additional additional_value _destroy]
       end
     end
   end

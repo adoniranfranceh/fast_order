@@ -6,8 +6,11 @@ module Api
       def current
         if current_user
           render json: { user: current_user.as_json(include: {
-            profile: { only: %i[full_name] }
-          })}
+                                                      profile: {
+                                                        only: %i[full_name],
+                                                        methods: [:photo_url]
+                                                      }
+                                                    }) }
         else
           render json: { error: 'Not logged in' }, status: :unauthorized
         end

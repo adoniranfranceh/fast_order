@@ -79,7 +79,6 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
 
     const payload = { 
       order: {
-        user_id: currentUser?.id,
         customer: orderData.customer,
         status: orderData.status,
         delivery_type: orderData.delivery_type,

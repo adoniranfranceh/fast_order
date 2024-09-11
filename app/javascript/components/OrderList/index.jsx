@@ -57,6 +57,8 @@ const OrderList = () => {
       });
   };
 
+  console.log('loooooooog da lista', orders)
+
   const updateObjectStatus = async (id, newStatus) => {
     putStatus('/api/v1/orders', id, { status: newStatus }, setOrders);
   };  

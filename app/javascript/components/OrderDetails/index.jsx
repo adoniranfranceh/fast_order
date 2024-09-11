@@ -141,6 +141,7 @@ const OrderDetails = () => {
           <Typography variant="h4" gutterBottom>Pedido #{order.code}</Typography>
           <Typography><strong>Cliente:</strong> {order.customer}</Typography>
           <Typography><strong>Tipo de Entrega:</strong> {getDeliveryType(order.delivery_type)}</Typography>
+          <Typography><strong>Por:</strong> {order.user.profile?.full_name || order.user.email}</Typography>
         </OrderHeader>
         <Box sx={{ py: 0.5, px: 1, borderRadius: theme.borderRadius, display: 'flex', alignItems: 'center', gap: 0.5, border: '1px solid', fontSize: '0.9rem', fontWeight: 'bold', letterSpacing: '.05rem', textTransform: 'uppercase', height: '50px', width: '120px', justifyContent: 'center', ...getStatusStyles(order.status) }}>
           {getStatus(order.status)}

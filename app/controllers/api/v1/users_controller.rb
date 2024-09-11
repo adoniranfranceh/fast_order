@@ -64,7 +64,7 @@ module Api
           :email,
           :password,
           :password_confirmation,
-          profile_attributes: [:full_name, :photo]
+          profile_attributes: %i[full_name photo]
         )
       end
     end

@@ -57,7 +57,7 @@ const ProfileDetails = () => {
       <ProfileEmail>
         {user.email || 'Email não disponível'}
       </ProfileEmail>
-      { currentUser.id === id && (
+      { currentUser.id == id && (
         <EditButton
           onClick={() => navigate('/editar/perfil')}
         >

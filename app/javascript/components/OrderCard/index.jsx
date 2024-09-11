@@ -16,8 +16,9 @@ import {
 } from './style';
 import OrderModal from '../OrderModal';
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton, Tooltip } from '@mui/material';
+import { Avatar, IconButton, Tooltip } from '@mui/material';
 import useOrderTimer from '../../hooks/useOrderTimer';
+import { useNavigate } from 'react-router-dom';
 
 const OrderCard = ({ order, onStatusChange, onClick }) => {
   const [{ isDragging }, drag] = useDrag({
@@ -29,6 +30,7 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
   });
 
   const elapsedTime = useOrderTimer(order.id, order.time_started, order.time_stopped, order.status);
+  const navigate = useNavigate();
 
   const getOrderStatus = (status) => {
     const statusMap = {
@@ -57,6 +59,10 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
     }
   }, [order]);
 
+  const handleProfileClick = (userId) => {
+    navigate(`/perfil/${userId}`);
+  };
+
   return (
     <OrderCardContainer
       ref={drag}
@@ -76,6 +82,16 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
           {order.address && <p>Entrega - {order.address}</p>}
         </OrderDetails>
       </OrderInfo>
+
+      <Tooltip title={order.user?.profile?.full_name || order.user?.email} arrow>
+        <Avatar
+          alt="User Avatar"
+          src={order.user?.profile?.photo_url}
+          onClick={() => handleProfileClick(order.user_id)}
+          style={{ cursor: 'pointer', width: '40px', height: '40px', marginBottom: '10px' }}
+        />
+      </Tooltip>
+
       <OrderStatus>Status: {getOrderStatus(order.status)}</OrderStatus>
       <TimeIconWrapper>
         <Tooltip title={`Tempo de espera: ${moment.utc(elapsedTime * 1000).format('HH:mm:ss')}`} arrow>
