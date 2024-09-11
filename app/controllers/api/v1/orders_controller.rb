@@ -59,12 +59,18 @@ module Api
         end
       end
 
+      def print_invoice
+        order = Order.find(params[:id])
+        pdf = InvoicePdfService.new(order).generate_pdf
+        send_data pdf, filename: "invoice_#{order.code}.pdf", type: 'application/pdf', disposition: 'inline'
+      end
+
       private
 
       def fetch_orders
         orders = Order.where(admin_id: current_user.admin.id)
                       .includes(items: :additional_fields)
-                      .order(created_at: :desc)
+                      .order(created_at: :asc)
         filter_orders(orders)
       end
 
@@ -116,7 +122,8 @@ module Api
       end
 
       def order_only_attributes
-        %i[id code customer status delivery_type total_price table_info address pick_up_time user_id time_started time_stopped]
+        %i[id code customer status delivery_type total_price table_info address pick_up_time user_id time_started
+           time_stopped]
       end
 
       def order_params

@@ -9,7 +9,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'dashboard', to: 'dashboard#index'
       get 'sessions/current', to: 'sessions#current'
-      resources :orders, only: %i[index show create update]
+      resources :orders, only: %i[index show create update] do
+        get 'print_invoice', on: :member
+      end
       resources :customers, only: %i[index create update show] do
         resource :loyalty_card, only: %i[create show update]
       end

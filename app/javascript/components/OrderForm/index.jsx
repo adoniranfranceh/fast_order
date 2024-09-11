@@ -79,6 +79,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
 
     const payload = { 
       order: {
+        user_id: orderData.user_id ? orderData.user_id : currentUser.id,
         customer: orderData.customer,
         status: orderData.status,
         delivery_type: orderData.delivery_type,
@@ -96,7 +97,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
               .map(field => ({
                 id: field.id, 
                 additional: field.additional,
-                additional_value: field.additional_value,
+                additional_value: field.additional_value || 0,
                 _destroy: field._destroy
               }))
           }))

@@ -16,6 +16,8 @@ import {
 } from './style';
 import OrderModal from '../OrderModal';
 import EditIcon from '@mui/icons-material/Edit';
+import PrintIcon from '@mui/icons-material/Print';
+
 import { Avatar, IconButton, Tooltip } from '@mui/material';
 import useOrderTimer from '../../hooks/useOrderTimer';
 import { useNavigate } from 'react-router-dom';
@@ -93,16 +95,24 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
       </Tooltip>
 
       <OrderStatus>Status: {getOrderStatus(order.status)}</OrderStatus>
-      <TimeIconWrapper>
-        <Tooltip title={`Tempo de espera: ${moment.utc(elapsedTime * 1000).format('HH:mm:ss')}`} arrow>
-          <div>
-            <FaClock size={20} />
-          </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <TimeIconWrapper>
+          <Tooltip title={`Tempo de espera: ${moment.utc(elapsedTime * 1000).format('HH:mm:ss')}`} arrow>
+            <div>
+              <FaClock size={20} />
+            </div>
+          </Tooltip>
+          <TimeText>
+            {moment.utc(elapsedTime * 1000).format('HH:mm:ss')}
+          </TimeText>
+        </TimeIconWrapper>
+        <Tooltip title="Imprimir Nota" arrow>
+          <IconButton onClick={() => window.open(`api/v1/orders/${order.id}/print_invoice`, '_blank')}>
+            <PrintIcon />
+          </IconButton>
         </Tooltip>
-        <TimeText>
-          {moment.utc(elapsedTime * 1000).format('HH:mm:ss')}
-        </TimeText>
-      </TimeIconWrapper>
+      </div>
+
       <IconButtonContainer>
         {order.status !== 'doing' && order.time_stopped === moment().subtract(2, 'hours') && (
           <FaHourglassHalf

@@ -9,6 +9,7 @@ gem 'groupdate'
 gem 'jbuilder'
 gem 'jsbundling-rails'
 gem 'pg', '~> 1.1'
+gem 'prawn'
 gem 'puma', '>= 5.0'
 gem 'rails', '~> 7.1.3', '>= 7.1.3.2'
 gem 'ransack'
@@ -38,5 +39,6 @@ end
 group :test do
   gem 'cuprite', '~> 0.15'
   gem 'launchy'
+  gem 'pdf-reader'
   gem 'simplecov', require: false
 end

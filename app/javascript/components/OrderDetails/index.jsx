@@ -159,7 +159,7 @@ const OrderDetails = () => {
                 <Typography variant="body1"><strong>{item.name}</strong> - R$ {formatPrice(item.price)}</Typography>
                 <Typography variant="caption" color="gray">
                   Adicionais: {item.additional_fields?.map((add) => 
-                    `${add.additional} (R$ ${formatPrice(add.additional_value)})`).join(', ')}
+                    `${add.additional} (R$ ${formatPrice(add.additional_value) })`).join(', ')}
                 </Typography>
                 <strong>R$ {formatPrice(totalItemPrice)}</strong>
               </ItemDetails>

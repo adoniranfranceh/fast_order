@@ -13,7 +13,10 @@ module Api
 
         searchable_attributes = %w[name id email birthdate]
 
-        customers = Customer.filter_by_attributes(params[:search_query].downcase, searchable_attributes) if params[:search_query].present?
+        if params[:search_query].present?
+          customers = Customer.filter_by_attributes(params[:search_query].downcase,
+                                                    searchable_attributes)
+        end
 
         render json: {
           customers:,
