@@ -9,7 +9,8 @@ import {
   OrdersPage,
   OrderDetails,
   ProfilePage,
-  ProfileDetails
+  ProfileDetails,
+  NotFoundPage
 } from '../components/index.js';
 import MyNavbar from '../components/Navbar';
 import { AuthContext } from '../context/AuthContext/index.jsx';
@@ -28,13 +29,12 @@ const AppRoutes = () => {
       <MyNavbar />
       <Routes>
         <Route path="/editar/perfil" element={<ProfilePage />} />
-       
+
         {!isProfileComplete ? (
           <Route path="*" element={<Navigate to="/editar/perfil" replace />} />
         ) : (
           <>
             <Route path="/perfil/:id" element={<ProfileDetails />} />
-
             <Route path="/" element={<Home />} />
             <Route path="/clientes" element={<CustomersPage />} />
             <Route path="/cliente/:id" element={<CustomerDetailsPage />} />
@@ -47,6 +47,8 @@ const AppRoutes = () => {
                 <Route path="/colaboradores/" element={<CollaboratorsPage />} />
               </>
             )}
+
+            <Route path="*" element={<NotFoundPage />} />
           </>
         )}
       </Routes>
