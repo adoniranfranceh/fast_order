@@ -14,8 +14,16 @@ module Api
         searchable_attributes = %w[name id email birthdate]
 
         if params[:search_query].present?
-          customers = Customer.filter_by_attributes(params[:search_query].downcase,
-                                                    searchable_attributes)
+          customers = Customer.filter_by_attributes(params[:search_query].downcase, searchable_attributes)
+        end
+
+        if params[:date_filter].present?
+          begin
+            date_filter = Date.parse(params[:date_filter])
+            customers = customers.where(birthdate: date_filter)
+          rescue ArgumentError
+            Rails.logger.error("Invalid date format: #{params[:date_filter]}")
+          end
         end
 
         render json: {

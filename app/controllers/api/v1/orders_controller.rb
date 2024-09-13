@@ -70,23 +70,19 @@ module Api
       def fetch_orders
         orders = Order.where(admin_id: current_user.admin.id)
                       .includes(items: :additional_fields)
-                      .order(created_at: :asc)
+                      .order(created_at: :desc)
         filter_orders(orders)
       end
 
       def filter_orders(orders)
         search_query = params[:search_query]
-        return orders unless search_query != ''
-
-        search_query = params[:search_query]
-        searchable_attributes = %w[customer code status delivery_type total_price
-                                   table_info address pick_up_time]
+        searchable_attributes = %w[customer code status delivery_type total_price table_info address pick_up_time]
 
         orders = orders.filter_by_attributes(search_query.downcase, searchable_attributes) if search_query.present?
 
-        return orders unless params[:query] == 'today'
+        orders = orders.where('created_at >= ?', 12.hours.ago).order(created_at: :asc) if params[:query] == 'today'
 
-        orders.where('created_at >= ?', 12.hours.ago)
+        orders
       end
 
       def paginate_orders(orders)

@@ -59,6 +59,7 @@ const CustomersPage = () => {
         columns={['Id', 'Nome', 'E-mail', 'Data de nascimento', '']}
         listTitle='Clientes'
         objectName='customers'
+        enableDateFilter
       />
       <CustomerForm
         open={isFormOpen}

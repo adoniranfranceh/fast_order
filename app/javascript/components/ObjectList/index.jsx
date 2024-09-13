@@ -11,31 +11,35 @@ import {
   Typography,
   IconButton,
   CircularProgress,
-  TablePagination
+  TablePagination,
+  TextField,
+  Button
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import { SearchWrapper, SearchInput, SearchIconWrapper } from './style';
-import SearchIcon from '@mui/icons-material/Search';
 
 const ObjectList = ({ 
-  url, 
+  url,
   onEdit, 
   renderItem, 
   refresh,
   listTitle = 'Lista de Itens',
   columns = [],
   detailName,
-  objectName
+  objectName,
+  enableDateFilter = false
 }) => {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
+  const [searchActive, setSearchActive] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,7 +47,7 @@ const ObjectList = ({
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${url}?page=${page + 1}&per_page=${rowsPerPage}&search_query=${searchQuery}`);
+        const response = await fetch(`${url}?page=${page + 1}&per_page=${rowsPerPage}&search_query=${searchActive ? searchQuery : ''}&date_filter=${dateFilter}`);
         if (!response.ok) {
           throw new Error('Erro ao carregar dados');
         }
@@ -61,16 +65,18 @@ const ObjectList = ({
     };
   
     fetchItems();
-  }, [url, refresh, page, rowsPerPage, searchQuery]);  
+  }, [url, refresh, page, rowsPerPage, searchActive]);  
 
   useEffect(() => {
-    const lowercasedQuery = searchQuery.toLowerCase();
-    const filtered = items.filter(item => {
-      const renderedValues = renderItem(item).map(cell => cell.props.children.toString().toLowerCase());
-      return renderedValues.some(value => value.includes(lowercasedQuery));
-    });
-    setFilteredItems(filtered);
-  }, [searchQuery, items, renderItem]);
+    if (searchActive) {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      const filtered = items.filter(item => {
+        const renderedValues = renderItem(item).map(cell => cell.props.children.toString().toLowerCase());
+        return renderedValues.some(value => value.includes(lowercasedQuery));
+      });
+      setFilteredItems(filtered);
+    }
+  }, [items, renderItem, searchActive]);
 
   const handleItemClick = (item) => {
     navigate(`/${detailName}/${item.id}`);
@@ -85,76 +91,127 @@ const ObjectList = ({
     setPage(0);
   };
 
+  const handleSearchClick = () => {
+    setSearchActive(true);
+  };
+
+  const isPaginationVisible = totalCount > rowsPerPage;
+
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Typography variant="h6" gutterBottom>
         {listTitle}
       </Typography>
-      <SearchWrapper>
-        <SearchInput
+      <Box sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+        <TextField
           id="search"
           type="text"
           placeholder="Digite sua pesquisa..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          sx={{ mr: 2 }}
         />
-        <SearchIconWrapper>
-          <SearchIcon />
-        </SearchIconWrapper>
-      </SearchWrapper>
-      {loading && <CircularProgress />}
+        <Button
+          variant="contained"
+          onClick={handleSearchClick}
+        >
+          Pesquisar
+        </Button>
+      </Box>
+      {enableDateFilter && (
+        <Box sx={{ mb: 2 }}>
+          <TextField
+            id="date-filter"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            sx={{ mr: 2 }}
+          />
+          <Button
+            variant="contained"
+            onClick={() => setSearchActive(true)}
+          >
+            Filtrar por Data
+          </Button>
+        </Box>
+      )}
+      {loading && !error && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <CircularProgress />
+        </Box>
+      )}
       {error && <Typography color="error">{error}</Typography>}
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {columns.map((column, index) => (
-                <TableCell key={index} align="left" sx={{ fontWeight: 'bold', minWidth: '150px' }}>
-                  {column}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredItems.map((item) => (
-              <TableRow 
-                key={item.id} 
-                sx={{ cursor: 'pointer', '&:hover': { backgroundColor: '#f5f5f5' } }}
-                hover
-                onClick={() => handleItemClick(item)}
-              >
-                {renderItem(item).map((cell, index) => (
-                  <TableCell key={index} align="left">
-                    {cell}
-                  </TableCell>
-                ))}
-                {onEdit && (
-                  <TableCell align="center">
-                    <IconButton
-                      color="primary"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onEdit(item);
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </TableCell>
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={totalCount}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
+        {!loading && !error && (
+          <>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {columns.map((column, index) => (
+                      <TableCell key={index} align="left" sx={{ fontWeight: 'bold', minWidth: '150px' }}>
+                        {column}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredItems.length > 0 ? (
+                    filteredItems.map((item) => (
+                      <TableRow 
+                        key={item.id} 
+                        sx={{ cursor: 'pointer', '&:hover': { backgroundColor: '#f5f5f5' } }}
+                        hover
+                        onClick={() => handleItemClick(item)}
+                      >
+                        {renderItem(item).map((cell, index) => (
+                          <TableCell key={index} align="left">
+                            {cell}
+                          </TableCell>
+                        ))}
+                        {onEdit && (
+                          <TableCell align="center">
+                            <IconButton
+                              color="primary"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onEdit(item);
+                              }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={columns.length + (onEdit ? 1 : 0)} align="center">
+                        <Typography variant="body2">Nenhum item encontrado.</Typography>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        )}
+      </Box>
+      {isPaginationVisible && (
+        <Box sx={{ mt: 2 }}>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={totalCount}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            sx={{ position: 'sticky', bottom: 0, backgroundColor: '#fff', borderTop: '1px solid #ddd' }} // Mantém a paginação no fundo
+          />
+        </Box>
+      )}
     </Box>
   );
 };
