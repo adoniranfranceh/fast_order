@@ -6,10 +6,61 @@ RSpec.describe Filterable, type: :model do
       it 'encontra cliente baseado no nome' do
         user = create :user, role: :admin
         customer = create(:customer, name: 'Clodoaldo', user:)
+        create :customer
 
-        result = Customer.filter_by_attributes('Clodoal', %w[name id email birthdate])
+        params = %w[name id email birthdate]
+        result = Customer.filter_by_attributes('Clodoal', params)
 
         expect(result).to include(customer)
+        expect(result.count).to eq 1
+      end
+
+      it 'não encontra cliente quando o texto não corresponde a nenhum atributo' do
+        create(:customer, name: 'AnotherName')
+
+        params = %w[name email]
+        result = Customer.filter_by_attributes('NonExistingName', params)
+
+        expect(result).to be_empty
+      end
+
+      it 'encontra cliente baseado em diferentes atributos' do
+        user = create :user, role: :admin
+        customer1 = create(:customer, name: 'Clodoaldo', email: 'clodoaldo@example.com', user:)
+        customer2 = create(:customer, name: 'AnotherName', email: 'clodoaldo@example.com', user:)
+
+        params = %w[name email]
+        result = Customer.filter_by_attributes('clodoaldo@example.com', params)
+
+        expect(result).to include(customer1, customer2)
+        expect(result.count).to eq 2
+      end
+    end
+
+    context 'Pedido' do
+      it 'encontra pedido baseado no cliente' do
+        create :user, role: :admin
+        order = create(:order, customer: 'Junior')
+        create :order
+
+        params = %i[id code customer status delivery_type total_price table_info address pick_up_time user_id time_started
+                    time_stopped]
+
+        result = Order.filter_by_attributes('Junior', params)
+
+        expect(result).to include(order)
+        expect(result.count).to eq 1
+      end
+
+      it 'não encontra pedido quando o texto não corresponde a nenhum atributo' do
+        create(:order, customer: 'AnotherCustomer')
+
+        params = %i[id code customer status delivery_type total_price table_info address pick_up_time user_id time_started
+                    time_stopped]
+
+        result = Order.filter_by_attributes('NonExistingCustomer', params)
+
+        expect(result).to be_empty
       end
     end
 
@@ -17,28 +68,37 @@ RSpec.describe Filterable, type: :model do
       it 'encontra usuário baseado no nome do perfil' do
         user = create(:user, role: :admin)
         create(:profile, user:, full_name: 'Clodoaldo')
+        other_user = create :user
+        other_user.create_profile(full_name: 'Jorge')
 
-        result = User.filter_by_attributes('Clodoal', ['profile.full_name'])
+        result = User.filter_by_attributes('Clodoal', ['profile.full_name', 'email'])
 
         expect(result).to include(user)
-      end
-    end
-
-    context 'quando o atributo é uma data' do
-      it 'encontra cliente baseado na data de nascimento' do
-        user = create :user, role: :admin
-        customer = create(:customer, birthdate: '2024-08-20', user:)
-        result = Customer.filter_by_attributes('20 de agosto de 2024', %w[name id email birthdate])
-
-        expect(result).to include(customer)
+        expect(result.count).to eq 1
       end
 
-      it 'não encontra cliente para uma data fora do intervalo' do
-        user = create :user, role: :admin
-        create(:customer, birthdate: '2024-08-20', user:)
-        result = Customer.filter_by_attributes('19 de agosto de 2024', %w[name id email birthdate])
+      it 'não encontra usuário quando o texto não corresponde ao nome do perfil' do
+        user = create(:user, role: :admin)
+        create(:profile, user:, full_name: 'Clodoaldo')
+        other_user = create :user
+        other_user.create_profile(full_name: 'Jorge')
+
+        result = User.filter_by_attributes('NonExistingName', ['profile.full_name', 'email'])
 
         expect(result).to be_empty
+      end
+
+      it 'encontra usuário baseado em um atributo da relação e um atributo direto' do
+        user1 = create(:user, email: 'user1@example.com')
+        user2 = create(:user, email: 'user2@example.com')
+        create(:profile, user: user1, full_name: 'Clodoaldo')
+        create(:profile, user: user2, full_name: 'AnotherName')
+
+        result = User.filter_by_attributes('Clodoaldo', ['profile.full_name', 'email'])
+
+        expect(result).to include(user1)
+        expect(result).not_to include(user2)
+        expect(result.count).to eq 1
       end
     end
   end

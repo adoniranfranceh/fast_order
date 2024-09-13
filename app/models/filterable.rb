@@ -1,68 +1,75 @@
 module Filterable
   extend ActiveSupport::Concern
 
-  module ClassMethods
-    def filter_by_attributes(query, attributes)
-      search_params = attributes.each_with_object({}) do |attribute, params|
-        if attribute.to_s.include? 'date'
-          add_date_params(query, params)
-        elsif attribute.to_s.include?('.')
-          add_association_params(attribute, query, params)
-        else
-          params[attribute] = query
-        end
-      end
+  class_methods do
+    def filter_by_attributes(query, params)
+      query = query.downcase
+      joins_tables, conditions, values = process_params(query, params)
 
-      ransack_query = ransack(search_params)
-      ransack_query.result(distinct: true)
+      query_result = apply_joins(joins_tables)
+      result = query_result.where(conditions.join(' OR '), *values).distinct
+
+      log_query(result, conditions, values)
+      result
     end
 
     private
 
-    def add_date_params(query, params)
-      date_query = parse_date(query)
-      return unless date_query
+    def process_params(query, params)
+      joins_tables = []
+      conditions = []
+      values = []
 
-      params[:birthdate_gteq] = date_query.beginning_of_day
-      params[:birthdate_lteq] = date_query.end_of_day
-    end
-
-    def add_association_params(attribute, query, params)
-      association, field = attribute.to_s.split('.')
-      params["#{association}_#{field}"] = query
-    end
-
-    def parse_date(date_string)
-      months = I18n.t('date.month_names').compact.map.with_index do |month, index|
-        [month.downcase, Date::MONTHNAMES[index + 1]]
-      end.to_h
-
-      date_string = replace_month_name(date_string, months)
-
-      formats.each do |format|
-        date = Date.strptime(date_string, format)
-        return date if date.year > 1900
-      rescue ArgumentError
-        next
+      params.each do |param|
+        if param.is_a?(String) && param.include?('.')
+          process_relation(param, query, joins_tables, conditions, values)
+        else
+          process_attribute(param, query, conditions, values)
+        end
       end
 
-      nil
+      [joins_tables, conditions, values]
     end
 
-    def formats
-      [
-        '%d/%m/%Y',
-        '%d-%m-%Y',
-        '%d %B %Y',
-        '%d de %B de %Y'
-      ]
+    def process_relation(param, query, joins_tables, conditions, values)
+      relation, column = param.split('.')
+      relation_sym = relation.to_sym
+
+      raise "Unknown relation: #{relation}" unless reflect_on_association(relation_sym)
+
+      associated_table = reflect_on_association(relation_sym).klass.table_name
+      joins_tables << relation_sym
+      conditions << "LOWER(#{associated_table}.#{column}) LIKE ?"
+      values << "%#{query}%"
     end
 
-    def replace_month_name(date_string, months)
-      months.each do |pt_month, en_month|
-        return date_string.gsub(pt_month, en_month) if date_string.downcase.include?(pt_month)
+    def process_attribute(param, query, conditions, values)
+      if column_names.include?(param.to_s)
+        column_type = columns_hash[param.to_s].type
+
+        conditions << if %i[string text].include?(column_type)
+                        "LOWER(#{table_name}.#{param}) LIKE ?"
+                      else
+                        "#{table_name}.#{param}::text LIKE ?"
+                      end
+        values << "%#{query}%"
+      else
+        Rails.logger.warn "Column #{param} does not exist in the model #{name}"
       end
-      date_string
+    end
+
+    def apply_joins(joins_tables)
+      query_result = self
+      joins_tables.uniq.each do |table|
+        query_result = query_result.joins(table)
+      end
+      query_result
+    end
+
+    def log_query(result, conditions, values)
+      Rails.logger.info "Generated SQL query: #{result.to_sql}"
+      Rails.logger.info "Filter conditions: #{conditions.join(' OR ')}"
+      Rails.logger.info "Values: #{values.inspect}"
     end
   end
 end

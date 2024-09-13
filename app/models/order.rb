@@ -21,11 +21,6 @@ class Order < ApplicationRecord
 
   include Filterable
 
-  def self.ransackable_attributes(_auth_object = nil)
-    %w[customer code status delivery_type total_price
-       table_info address pick_up_time]
-  end
-
   def content
     return table_info if local?
     return address if delivery?
