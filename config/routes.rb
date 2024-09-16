@@ -1,5 +1,4 @@
-# frozen_string_literal: true
-
+# config/routes.rb
 Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
   devise_for :users
@@ -9,13 +8,23 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'dashboard', to: 'dashboard#index'
       get 'sessions/current', to: 'sessions#current'
+
       resources :orders, only: %i[index show create update] do
         get 'print_invoice', on: :member
       end
+
       resources :customers, only: %i[index create update show] do
         resource :loyalty_card, only: %i[create show update]
       end
-      resources :users, only: %i[index create update show]
+
+      resources :users, only: %i[index create update show destroy] do
+        member do
+          put :deactivate
+        end
+        collection do
+          post 'validate_admin_password'
+        end
+      end
 
       resources :loyalty_cards, only: [] do
         member do
@@ -25,6 +34,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
   get '*path', to: 'orders#index', constraints: ->(request) do
     !request.xhr? && request.format.html?
   end

@@ -1,7 +1,8 @@
+# app/controllers/api/v1/users_controller.rb
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :set_user, only: %i[show update]
+      before_action :set_user, only: %i[show update deactivate destroy]
 
       def index
         page = (params[:page] || 1).to_i
@@ -11,15 +12,13 @@ module Api
                             .order(:email)
                             .paginate(page:, per_page:)
 
-        search_query = params[:search_query].downcase
+        search_query = params[:search_query]&.downcase
         searchable_attributes = %w[profile.full_name id email]
 
         collaborators = collaborators.filter_by_attributes(search_query, searchable_attributes) if search_query.present?
 
         render json: {
-          users: collaborators.as_json(include: {
-                                         profile: { only: %i[full_name] }
-                                       }),
+          users: collaborators.as_json(include: { profile: { only: %i[full_name] } }),
           total_count: collaborators.total_entries
         }
       end
@@ -41,22 +40,49 @@ module Api
         if user.save
           render json: { message: 'Colaborador registrado com sucesso', user: }, status: :created
         else
-          render user.errors, status: :unprocessable_entity
+          render json: user.errors, status: :unprocessable_entity
         end
       end
 
       def update
         if @user.update(user_params)
-          render json: { message: 'Colaborador registrado com sucesso', user: @user }, status: :created
+          render json: { message: 'Colaborador atualizado com sucesso', user: @user }, status: :ok
         else
-          render @user.errors, status: :unprocessable_entity
+          render json: @user.errors, status: :unprocessable_entity
+        end
+      end
+
+      def deactivate
+        if verify_admin_password(@user)
+          if @user.update(status: 'inactive')
+            render json: { message: 'Usuário desativado com sucesso' }, status: :ok
+          else
+            render json: { error: 'Não foi possível desativar o usuário' }, status: :unprocessable_entity
+          end
+        else
+          render json: { error: 'Senha inválida' }, status: :unauthorized
+        end
+      end
+
+      def destroy
+        if verify_admin_password(@user)
+          @user.destroy
+          render json: { message: 'Usuário excluído com sucesso' }, status: :ok
+        else
+          render json: { error: 'Senha inválida' }, status: :unauthorized
         end
       end
 
       private
 
       def set_user
-        @user = User.find(params[:id])
+        @user = User.find_by(id: params[:id])
+        render json: { error: 'Usuário não encontrado' }, status: :not_found unless @user
+      end
+
+      def verify_admin_password(user)
+        admin = User.find_by(id: user.admin_id)
+        admin&.valid_password?(params[:admin_password])
       end
 
       def user_params

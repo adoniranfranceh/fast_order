@@ -4,6 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   enum role: { collaborator: 1, admin: 5 }
+  enum status: { active: 0, inactive: 1 }
 
   belongs_to :admin,
              class_name: 'User',
@@ -21,14 +22,6 @@ class User < ApplicationRecord
   after_create :associate_admin_in_admin, if: :admin?
 
   include Filterable
-
-  def self.ransackable_attributes(_auth_object = nil)
-    %w[name email]
-  end
-
-  def self.ransackable_associations(_auth_object = nil)
-    ['profile']
-  end
 
   private
 

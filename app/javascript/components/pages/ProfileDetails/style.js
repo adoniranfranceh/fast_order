@@ -63,3 +63,7 @@ export const AvatarIcon = styled.div`
   justify-content: center;
   margin-bottom: ${theme.spacing.medium};
 `;
+
+export const StyledUserDesactived = styled.strong`
+  color: ${theme.colors.text};
+`
