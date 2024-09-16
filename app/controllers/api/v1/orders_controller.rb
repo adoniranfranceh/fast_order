@@ -80,6 +80,11 @@ module Api
 
         orders = orders.filter_by_attributes(search_query.downcase, searchable_attributes) if search_query.present?
 
+        if params[:date_filter].present?
+          date_filter = Date.parse(params[:date_filter])
+          orders = orders.where(created_at: date_filter.all_day)
+        end
+
         orders = orders.where('created_at >= ?', 12.hours.ago).order(created_at: :asc) if params[:query] == 'today'
 
         orders

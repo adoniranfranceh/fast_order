@@ -17,7 +17,6 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
-import { SearchWrapper, SearchInput, SearchIconWrapper } from './style';
 
 const ObjectList = ({ 
   url,
@@ -39,15 +38,15 @@ const ObjectList = ({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
-  const [searchActive, setSearchActive] = useState(false);
   const navigate = useNavigate();
 
+  // Buscar itens sempre que `url`, `refresh`, `page`, `rowsPerPage`, `searchQuery`, ou `dateFilter` mudar
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${url}?page=${page + 1}&per_page=${rowsPerPage}&search_query=${searchActive ? searchQuery : ''}&date_filter=${dateFilter}`);
+        const response = await fetch(`${url}?page=${page + 1}&per_page=${rowsPerPage}&search_query=${searchQuery}&date_filter=${dateFilter}`);
         if (!response.ok) {
           throw new Error('Erro ao carregar dados');
         }
@@ -65,19 +64,9 @@ const ObjectList = ({
     };
   
     fetchItems();
-  }, [url, refresh, page, rowsPerPage, searchActive]);  
+  }, [url, refresh, page, rowsPerPage, searchQuery, dateFilter]);
 
-  useEffect(() => {
-    if (searchActive) {
-      const lowercasedQuery = searchQuery.toLowerCase();
-      const filtered = items.filter(item => {
-        const renderedValues = renderItem(item).map(cell => cell.props.children.toString().toLowerCase());
-        return renderedValues.some(value => value.includes(lowercasedQuery));
-      });
-      setFilteredItems(filtered);
-    }
-  }, [items, renderItem, searchActive]);
-
+  // Lógica para navegar para o detalhe de um item
   const handleItemClick = (item) => {
     navigate(`/${detailName}/${item.id}`);
   };
@@ -91,10 +80,6 @@ const ObjectList = ({
     setPage(0);
   };
 
-  const handleSearchClick = () => {
-    setSearchActive(true);
-  };
-
   const isPaginationVisible = totalCount > rowsPerPage;
 
   return (
@@ -102,22 +87,20 @@ const ObjectList = ({
       <Typography variant="h6" gutterBottom>
         {listTitle}
       </Typography>
+
+      {/* Campo de busca */}
       <Box sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
         <TextField
           id="search"
           type="text"
           placeholder="Digite sua pesquisa..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => setSearchQuery(e.target.value)} // Atualiza a busca automaticamente
           sx={{ mr: 2 }}
         />
-        <Button
-          variant="contained"
-          onClick={handleSearchClick}
-        >
-          Pesquisar
-        </Button>
       </Box>
+
+      {/* Filtro por data */}
       {enableDateFilter && (
         <Box sx={{ mb: 2 }}>
           <TextField
@@ -125,23 +108,21 @@ const ObjectList = ({
             type="date"
             InputLabelProps={{ shrink: true }}
             value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
+            onChange={(e) => setDateFilter(e.target.value)} // Aplica o filtro de data automaticamente
             sx={{ mr: 2 }}
           />
-          <Button
-            variant="contained"
-            onClick={() => setSearchActive(true)}
-          >
-            Filtrar por Data
-          </Button>
         </Box>
       )}
+
+      {/* Loading e erros */}
       {loading && !error && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
           <CircularProgress />
         </Box>
       )}
       {error && <Typography color="error">{error}</Typography>}
+
+      {/* Tabela */}
       <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
         {!loading && !error && (
           <>
@@ -198,6 +179,7 @@ const ObjectList = ({
           </>
         )}
       </Box>
+
       {isPaginationVisible && (
         <Box sx={{ mt: 2 }}>
           <TablePagination
@@ -208,7 +190,7 @@ const ObjectList = ({
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            sx={{ position: 'sticky', bottom: 0, backgroundColor: '#fff', borderTop: '1px solid #ddd' }} // Mantém a paginação no fundo
+            sx={{ position: 'sticky', bottom: 0, backgroundColor: '#fff', borderTop: '1px solid #ddd' }}
           />
         </Box>
       )}

@@ -18,12 +18,8 @@ module Api
         end
 
         if params[:date_filter].present?
-          begin
-            date_filter = Date.parse(params[:date_filter])
-            customers = customers.where(birthdate: date_filter)
-          rescue ArgumentError
-            Rails.logger.error("Invalid date format: #{params[:date_filter]}")
-          end
+          date_filter = Date.parse(params[:date_filter])
+          customers = customers.where(birthdate: date_filter)
         end
 
         render json: {

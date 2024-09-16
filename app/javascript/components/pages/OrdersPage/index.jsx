@@ -1,25 +1,18 @@
 import React, { useState } from 'react';
 import { Box, Button, Tooltip } from '@mui/material';
 import { CheckCircle as CheckCircleIcon, Cancel as CancelIcon, HourglassFull as HourglassFullIcon, Payment as PaymentIcon } from '@mui/icons-material';
-import { ObjectList } from '../../index.js';
 import moment from 'moment';
 import formatPrice from '../../services/formatPrice.js';
+import { ObjectList } from '../../index.js';
 
 const OrdersPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
 
-  const handleRefresh = () => setRefreshList(prev => !prev);
-  
   const handleNewOrder = () => {
     setSelectedOrder(null);
     setIsFormOpen(true);
-  };
-
-  const handleFormClose = () => {
-    setIsFormOpen(false);
-    setSelectedOrder(null);
   };
 
   const getStatusIcon = (status) => {
@@ -106,6 +99,7 @@ const OrdersPage = () => {
         detailName="pedido"
         columns={['Código', 'Cliente', 'Status', 'Tipo de Entrega', 'Info da Entrega', 'Valor']}
         objectName='orders'
+        enableDateFilter
       />
     </Box>
   );
