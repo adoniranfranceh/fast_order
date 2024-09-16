@@ -2,7 +2,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :set_user, only: %i[show update deactivate destroy]
+      before_action :set_user, only: %i[show update activate deactivate destroy]
 
       def index
         page = (params[:page] || 1).to_i
@@ -55,6 +55,18 @@ module Api
       def deactivate
         if verify_admin_password(@user)
           if @user.update(status: 'inactive')
+            render json: { message: 'Usuário desativado com sucesso' }, status: :ok
+          else
+            render json: { error: 'Não foi possível desativar o usuário' }, status: :unprocessable_entity
+          end
+        else
+          render json: { error: 'Senha inválida' }, status: :unauthorized
+        end
+      end
+
+      def activate
+        if verify_admin_password(@user)
+          if @user.update(status: 'active')
             render json: { message: 'Usuário desativado com sucesso' }, status: :ok
           else
             render json: { error: 'Não foi possível desativar o usuário' }, status: :unprocessable_entity

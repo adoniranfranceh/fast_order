@@ -10,8 +10,10 @@ import {
   OrderDetails,
   ProfilePage,
   ProfileDetails,
-  NotFoundPage
+  NotFoundPage,
+  DisabledAccountPage,
 } from '../components/index.js';
+
 import MyNavbar from '../components/Navbar';
 import { AuthContext } from '../context/AuthContext/index.jsx';
 
@@ -23,6 +25,16 @@ const AppRoutes = () => {
   }
 
   const isProfileComplete = currentUser.profile;
+
+  if (currentUser.status !== 'active') {
+    return (
+      <Router>
+        <Routes>
+          <Route path="*" element={<DisabledAccountPage />} />
+        </Routes>
+      </Router>
+    );
+  }
 
   return (
     <Router>

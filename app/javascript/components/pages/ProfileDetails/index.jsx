@@ -8,12 +8,12 @@ import {
   ProfileAvatar,
   ProfileName,
   ProfileEmail,
+  ActiveButton,
   EditButton,
   InfoMessage,
   AvatarIcon,
   StyledUserDesactived
 } from './style';
-
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const ProfileDetails = () => {
@@ -88,7 +88,22 @@ const ProfileDetails = () => {
     if (password) {
       try {
         await axios.put(`/api/v1/users/${id}/deactivate`, { admin_password: password });
+        setUser((prevUser) => ({ ...prevUser, status: 'inactive' }));
         Swal.fire('Desativado!', 'O colaborador foi desativado com sucesso.', 'success');
+      } catch (error) {
+        Swal.fire('Erro', 'Houve um problema. Verifique sua senha.', 'error');
+      }
+    }
+  };
+
+  const handleActive = async () => {
+    const password = await handlePasswordPrompt('ativar');
+
+    if (password) {
+      try {
+        await axios.put(`/api/v1/users/${id}/activate`, { admin_password: password });
+        setUser((prevUser) => ({ ...prevUser, status: 'active' }));
+        Swal.fire('Ativado!', 'O colaborador foi ativado com sucesso.', 'success');
       } catch (error) {
         Swal.fire('Erro', 'Houve um problema. Verifique sua senha.', 'error');
       }
@@ -137,7 +152,12 @@ const ProfileDetails = () => {
       <ProfileEmail>
         {user.email || 'Email não disponível'}
       </ProfileEmail>
-      { user.status === 'inactive' && <StyledUserDesactived style={{color: 'text.secondary'}}>Usuário desativado</StyledUserDesactived> }
+
+      {user.status === 'inactive' && (
+        <StyledUserDesactived style={{color: 'text.secondary'}}>
+          Usuário desativado
+        </StyledUserDesactived>
+      )}
 
       {currentUser.id === id && (
         <EditButton onClick={() => navigate('/editar/perfil')}>
@@ -151,10 +171,16 @@ const ProfileDetails = () => {
             <EditButton onClick={handleDeactivate}>
               Desativar Colaborador
             </EditButton>
-          : 
+          :
+          <div style={{display: 'flex'}}> 
+            <ActiveButton onClick={handleActive}>
+              Ativar colaborador
+            </ActiveButton>
+
             <EditButton onClick={handleDelete}>
               Excluir Colaborador
             </EditButton>
+          </div>
           }
         </>
       )}

@@ -32,17 +32,33 @@ export const ProfileEmail = styled.p`
 `;
 
 export const EditButton = styled.button`
-  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  padding: ${theme.spacing.small} ${theme.spacing.small};
   border: none;
   border-radius: ${theme.borderRadius};
-  background-color: ${theme.colors.primary};
+  background-color: ${theme.colors.danger};
   color: ${theme.colors.white};
-  font-size: ${theme.fontSizes.medium};
+  font-size: ${theme.fontSizes.small};
   cursor: pointer;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: ${theme.colors.primaryHover};
+    background-color: ${theme.colors.dangerHover};
+  }
+`;
+
+export const ActiveButton = styled.button`
+  padding: ${theme.spacing.small} ${theme.spacing.small};
+  border: none;
+  border-radius: ${theme.borderRadius};
+  background-color: ${theme.colors.secondary};
+  color: ${theme.colors.white};
+  font-size: ${theme.fontSizes.small};
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 5px;
+
+  &:hover {
+    background-color: ${theme.colors.secondaryHover};
   }
 `;
 

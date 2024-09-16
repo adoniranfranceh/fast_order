@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resources :users, only: %i[index create update show destroy] do
         member do
           put :deactivate
+          put :activate
         end
         collection do
           post 'validate_admin_password'
