@@ -83,14 +83,6 @@ const OrdersPage = () => {
 
   return (
     <Box sx={{ p: 2 }}>
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={handleNewOrder} 
-        sx={{ mb: 2 }}
-      >
-        Novo Pedido
-      </Button>
       <ObjectList
         url="/api/v1/orders"
         renderItem={renderOrderItem}
@@ -100,6 +92,7 @@ const OrdersPage = () => {
         columns={['Código', 'Cliente', 'Status', 'Tipo de Entrega', 'Info da Entrega', 'Valor']}
         objectName='orders'
         enableDateFilter
+        dateLabel='Buscar pedidos do dia:'
       />
     </Box>
   );

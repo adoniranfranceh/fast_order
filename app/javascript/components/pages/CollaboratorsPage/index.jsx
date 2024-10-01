@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { ObjectList, CollaboratorForm } from '../../index.js';
-import { Button, Box } from '@mui/material';
+import { ObjectList, CollaboratorForm, Button } from '../../index.js';
+import { Box } from '@mui/material';
 import 'moment/locale/pt-br';
+import styled from "styled-components";
+import theme from "../../theme";
 
 const CollaboratorsPage = () => {
   const [selectedCollaborator, setSelectedCollaborator] = useState(null);
@@ -38,16 +40,30 @@ const CollaboratorsPage = () => {
     <span key="email">{user.email}</span>,
  ];
 
+  const StyledButtonContainer = styled.div`
+    margin-top: ${theme.spacing.medium};
+    
+    Button {
+      background-color: ${theme.colors.primary};
+      color: ${theme.colors.white};
+      &:hover {
+        background-color: ${theme.colors.primaryHover};
+      }
+    }
+  `;
+
   return (
     <Box sx={{ p: 2 }}>
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={handleNewCollaborator} 
-        sx={{ mb: 2 }}
-      >
-        Novo Colaborador
-      </Button>
+      <StyledButtonContainer>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={handleNewCollaborator} 
+          sx={{ mb: 2 }}
+        >
+          Novo Colaborador
+        </Button>
+      </StyledButtonContainer>
       <ObjectList
         url='/api/v1/users'
         onEdit={handleEdit}

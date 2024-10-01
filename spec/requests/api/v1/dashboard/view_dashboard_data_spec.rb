@@ -13,6 +13,8 @@ RSpec.describe Api::V1::DashboardController, type: :request do
                        items_count: 1, items_price: 100)
         create(:order, user: @admin, admin_id: @admin.id, status: :paid,
                        items_count: 1, items_price: 100)
+        create(:order, user: @admin, admin_id: @admin.id, status: :canceled,
+                       items_count: 1, items_price: 100)
       end
 
       travel_to 2.months.ago do

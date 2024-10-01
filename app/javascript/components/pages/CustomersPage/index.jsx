@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ObjectList, CustomerForm } from '../../index.js';
-import { Button, Box, ListItemText } from '@mui/material';
+import { ObjectList, CustomerForm, Button } from '../../index.js'
+import { Box } from '@mui/material';
+import { StyledButtonContainer} from './style.js'
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
@@ -42,14 +43,16 @@ const CustomersPage = () => {
 
   return (
     <Box sx={{ p: 2 }}>
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={handleNewCustomer} 
-        sx={{ mb: 2 }}
-      >
-        Novo Cliente
-      </Button>
+      <StyledButtonContainer>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={handleNewCustomer} 
+          sx={{ mb: 2 }}
+        >
+          Novo Cliente
+        </Button>
+      </StyledButtonContainer>
       <ObjectList
         url='/api/v1/customers'
         onEdit={handleEdit}
@@ -60,6 +63,7 @@ const CustomersPage = () => {
         listTitle='Clientes'
         objectName='customers'
         enableDateFilter
+        dateLabel='Data de nascimento:'
       />
       <CustomerForm
         open={isFormOpen}

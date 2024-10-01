@@ -13,7 +13,9 @@ import {
   CircularProgress,
   TablePagination,
   TextField,
-  Button
+  Button,
+  InputLabel,
+  FormControl
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
@@ -27,7 +29,8 @@ const ObjectList = ({
   columns = [],
   detailName,
   objectName,
-  enableDateFilter = false
+  enableDateFilter = false,
+  dateLabel = 'Buscar por data'
 }) => {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -40,7 +43,6 @@ const ObjectList = ({
   const [totalCount, setTotalCount] = useState(0);
   const navigate = useNavigate();
 
-  // Buscar itens sempre que `url`, `refresh`, `page`, `rowsPerPage`, `searchQuery`, ou `dateFilter` mudar
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
@@ -66,7 +68,6 @@ const ObjectList = ({
     fetchItems();
   }, [url, refresh, page, rowsPerPage, searchQuery, dateFilter]);
 
-  // Lógica para navegar para o detalhe de um item
   const handleItemClick = (item) => {
     navigate(`/${detailName}/${item.id}`);
   };
@@ -88,33 +89,38 @@ const ObjectList = ({
         {listTitle}
       </Typography>
 
-      {/* Campo de busca */}
-      <Box sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
-        <TextField
-          id="search"
-          type="text"
-          placeholder="Digite sua pesquisa..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} // Atualiza a busca automaticamente
-          sx={{ mr: 2 }}
-        />
-      </Box>
-
-      {/* Filtro por data */}
-      {enableDateFilter && (
-        <Box sx={{ mb: 2 }}>
+      <div style={{display: 'flex'}}>
+        <Box sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
           <TextField
-            id="date-filter"
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)} // Aplica o filtro de data automaticamente
+            id="search"
+            type="text"
+            placeholder="Digite sua pesquisa..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             sx={{ mr: 2 }}
           />
         </Box>
-      )}
 
-      {/* Loading e erros */}
+        {enableDateFilter && (
+          <Box sx={{ mb: 2 }}>
+          <FormControl>
+            <InputLabel shrink htmlFor="date-filter" sx={{ mb: 1, fontSize: '1.1rem', color: '#3f51b5' }}>
+              {dateLabel}
+            </InputLabel>
+            
+            <TextField
+              id="date-filter"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              sx={{ mr: 2 }}
+            />
+          </FormControl>
+        </Box>
+        )}
+      </div>
+
       {loading && !error && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
           <CircularProgress />
@@ -122,7 +128,6 @@ const ObjectList = ({
       )}
       {error && <Typography color="error">{error}</Typography>}
 
-      {/* Tabela */}
       <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
         {!loading && !error && (
           <>

@@ -48,8 +48,8 @@ const AdditionalFields = ({ additionalFields = [], onChange }) => {
         </Box>
       ))}
 
-      <Button onClick={handleAddField} type="button" startIcon={<AddIcon />}>
-        Adicionar Adicional
+      <Button width='8em' onClick={handleAddField} type="button" startIcon={<AddIcon />}>
+        + Adicional
       </Button>
     </Box>
   );
