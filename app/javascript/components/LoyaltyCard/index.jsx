@@ -138,7 +138,7 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
     } catch (error) {
       console.error('Erro:', error);
     }
-  };  
+  };
 
   return (
     <LoyaltyCardContainer>
@@ -149,7 +149,7 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
         {Array.from({ length: maxStamps }).map((_, index) => (
           <Grid item key={index}>
             <StampContainer elevation={3} onClick={() => handleStampClick(index)}>
-              {stamps[index] ? (
+              {stamps[index] && stamps.item ? (
                 <Typography variant="body2" align="center">
                   {stamps[index].item}
                 </Typography>

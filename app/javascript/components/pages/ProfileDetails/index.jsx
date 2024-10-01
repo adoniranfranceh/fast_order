@@ -159,7 +159,7 @@ const ProfileDetails = () => {
         </StyledUserDesactived>
       )}
 
-      {currentUser.id === id && (
+      {currentUser.id == id && (
         <EditButton onClick={() => navigate('/editar/perfil')}>
           Editar Perfil
         </EditButton>

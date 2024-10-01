@@ -1,8 +1,12 @@
 FactoryBot.define do
   factory :item do
-    name { 'Item 1' }
-    price { 10 }
-    status { :pendent }
+    name do
+      ['Açaí 500ml', 'Açaí com granola', 'Açaí com paçoca',
+       'Açaí com banana', 'Açaí com morango', 'Açaí 300ml',
+       'Açaí bowl com frutas', 'Açaí com creme de cupuaçu'].sample
+    end
+    price { Faker::Commerce.price(range: 10..100.0) }
+    status { %i[pendent paid].sample }
     association :order
 
     transient do
@@ -10,10 +14,8 @@ FactoryBot.define do
       additional_price { '0' }
     end
 
-    after(:build) do |item, evaluator|
-      evaluator.additional_count.times do
-        item.additional_fields << build(:additional_field, additional_value: evaluator.additional_price, item:)
-      end
+    after(:create) do |item, evaluator|
+      create_list(:additional_field, evaluator.additional_count, additional_value: evaluator.additional_price, item:)
     end
   end
 end

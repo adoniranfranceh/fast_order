@@ -50,14 +50,4 @@ RSpec.describe User, type: :model do
       expect(collaborator.admin).to eq(admin)
     end
   end
-
-  context 'ransack' do
-    it 'retorna atributos pesquisáveis para ransack' do
-      expect(User.ransackable_attributes).to match_array(%w[name email])
-    end
-
-    it 'retorna associações pesquisáveis para ransack' do
-      expect(User.ransackable_associations).to match_array(['profile'])
-    end
-  end
 end

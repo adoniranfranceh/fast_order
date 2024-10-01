@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :profile do
-    user { nil }
-    full_name { 'MyString' }
+    association :user
+    full_name { Faker::Name.name }
   end
 end
