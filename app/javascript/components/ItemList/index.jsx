@@ -44,7 +44,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
               fullWidth
               sx={{ ml: 2 }}
             />
-            <IconButton onClick={() => handleRemoveItem(item.id)} color="error" sx={{ ml: 2 }}>
+            <IconButton onClick={() => handleRemoveItem(item.id)} color="error" sx={{ ml: 2, margin:'0' }}>
               <RemoveIcon />
             </IconButton>
           </Box>

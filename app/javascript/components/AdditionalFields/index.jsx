@@ -42,7 +42,7 @@ const AdditionalFields = ({ additionalFields = [], onChange }) => {
             fullWidth
             sx={{ ml: 2 }}
           />
-          <IconButton onClick={() => handleRemoveField(field.id)} color="error" sx={{ ml: 2 }}>
+          <IconButton onClick={() => handleRemoveField(field.id)} color="error" sx={{ ml: 2, margin:'0' }}>
             <RemoveIcon />
           </IconButton>
         </Box>
