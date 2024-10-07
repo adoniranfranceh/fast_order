@@ -1,7 +1,7 @@
 module Api
   module V1
     class LoyaltyCardsController < ApplicationController
-      before_action :set_customer, only: %i[show create update]
+      before_action :set_customer, only: %i[show create]
 
       def show
         @loyalty_card = @customer.loyalty_card
@@ -22,7 +22,7 @@ module Api
       end
 
       def update
-        @loyalty_card = @customer.loyalty_card
+        @loyalty_card = LoyaltyCard.find(params[:id])
         if @loyalty_card.nil?
           render json: { message: 'Nenhum cartão de fidelidade encontrado para atualizar.' }, status: :not_found
         elsif @loyalty_card.update(loyalty_card_params)
@@ -32,9 +32,9 @@ module Api
         end
       end
 
-      def remove
+      def destroy
         @loyalty_card = LoyaltyCard.find(params[:id])
-        if @loyalty_card.removed!
+        if @loyalty_card.destroy
           render json: @loyalty_card
         else
           render json: @loyalty_card.errors, status: :unprocessable_entity

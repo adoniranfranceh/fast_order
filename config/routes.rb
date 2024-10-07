@@ -13,7 +13,7 @@ Rails.application.routes.draw do
         get 'print_invoice', on: :member
       end
 
-      resources :customers, only: %i[index create update show] do
+      resources :customers, only: %i[index create show] do
         resource :loyalty_card, only: %i[create show update]
       end
 
@@ -21,13 +21,14 @@ Rails.application.routes.draw do
         member do
           put :deactivate
           put :activate
+          patch 'upload_profile_image', to: 'users#upload_profile_image'
         end
         collection do
           post 'validate_admin_password'
         end
       end
 
-      resources :loyalty_cards, only: [] do
+      resources :loyalty_cards, only: %i[destroy update] do
         member do
           patch 'remove'
         end

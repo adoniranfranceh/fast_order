@@ -2,7 +2,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :set_user, only: %i[show update activate deactivate destroy]
+      before_action :set_user, only: %i[show update activate deactivate destroy upload_profile_image]
 
       def index
         page = (params[:page] || 1).to_i
@@ -24,6 +24,9 @@ module Api
       end
 
       def show
+        total_orders = @user.orders.where(created_at: 1.year.ago..Time.current).count
+        monthly_orders = @user.orders.where(created_at: Time.current.beginning_of_month..Time.current.end_of_month).count
+
         render json: @user.as_json(
           include: {
             profile: {
@@ -31,6 +34,9 @@ module Api
               methods: [:photo_url]
             }
           }
+        ).merge(
+          total_orders:,
+          monthly_orders:
         )
       end
 
@@ -50,6 +56,12 @@ module Api
         else
           render json: @user.errors, status: :unprocessable_entity
         end
+      end
+
+      def upload_profile_image
+        return unless params[:user][:profile_attributes][:photo]
+
+        @user.profile.photo.attach(params[:user][:profile_attributes][:photo])
       end
 
       def deactivate
@@ -102,7 +114,7 @@ module Api
           :email,
           :password,
           :password_confirmation,
-          profile_attributes: %i[full_name photo]
+          profile_attributes: %i[full_name]
         )
       end
     end

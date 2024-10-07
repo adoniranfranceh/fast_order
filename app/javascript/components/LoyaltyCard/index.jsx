@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Card, Grid, Typography, Paper, TextField, Button, Box } from '@mui/material';
 import createObject from '../services/createObject';
 import updateObject from '../services/updateObject';
+import putStatus from '../services/putStatus';
+import deleteObject from '../services/deleteObject';
 
 const LoyaltyCardContainer = styled(Card)`
   padding: 16px;
@@ -99,6 +101,7 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
   const [selectedStampIndex, setSelectedStampIndex] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [stamps, setStamps] = useState(loyaltyCard.stamps || []);
+  const [currentLoyaltyCard, setLoyaltyCard] = useState(loyaltyCard);
 
   const handleStampClick = (index) => {
     setSelectedStampIndex(index);
@@ -129,16 +132,29 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
 
   const handleRemoveCard = async () => {
     try {
-      const response = await fetch(`/api/v1/loyalty_cards/${loyaltyCard.id}/remove`, {
-        method: 'PATCH',
-      });
-      if (!response.ok) throw new Error('Erro ao remover o cartão de fidelidade');
-      
-      onRemove();
+      const response = deleteObject('/api/v1/loyalty_cards', loyaltyCard.id, setLoyaltyCard, 'loyalty_card');
+
+      console.log(response)
+      if (response) {
+        onRemove();
+      }
     } catch (error) {
-      console.error('Erro:', error);
+      console.error('Erro inesperado:', error);
     }
   };
+
+  const handleCompleteCard = async () => {
+    try {
+      const response = await putStatus('/api/v1/loyalty_cards/', loyaltyCard.id, { status: 'used' }, setLoyaltyCard, 'loyalty_card');
+      if (response) {
+        onRemove();
+      }
+    } catch (error) {
+      console.error('Erro inesperado:', error);
+    }
+  };
+
+  const stampsWithItem = stamps.filter(stamp => stamp.item && stamp.item.trim() !== '');
 
   return (
     <LoyaltyCardContainer>
@@ -149,7 +165,7 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
         {Array.from({ length: maxStamps }).map((_, index) => (
           <Grid item key={index}>
             <StampContainer elevation={3} onClick={() => handleStampClick(index)}>
-              {stamps[index] && stamps.item ? (
+              {stamps[index] && stamps[index].item ? (
                 <Typography variant="body2" align="center">
                   {stamps[index].item}
                 </Typography>
@@ -162,14 +178,25 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
           </Grid>
         ))}
       </StampsGrid>
-      <Box sx={{ mt: 2, textAlign: 'center' }}>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={handleRemoveCard}
-        >
-          Remover Cartão
-        </Button>
+      <Box sx={{ mt: 2, justifyContent: 'center', display: 'flex' }}>
+        
+        { stampsWithItem.length === maxStamps ? (
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleCompleteCard}
+          >
+            Usar cartão
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleRemoveCard}
+          >
+            Remover Cartão
+          </Button>
+        )}
       </Box>
       {modalOpen && (
         <EditStampModal

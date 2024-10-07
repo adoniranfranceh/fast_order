@@ -1,35 +1,33 @@
 import axios from "axios";
 import Swal from 'sweetalert2';
 
-const putStatus = (endpoint, id, updateData, setObjects, objectType) => {
+const deleteObject = (endpoint, id, setObjects, objectType) => {
   return axios
-    .put(`${endpoint}/${id}`, updateData)
+    .delete(`${endpoint}/${id}`)
     .then((response) => {
       if (objectType === 'order') {
         setObjects((prevOrder) => ({
           ...prevOrder,
-          ...response.data.order,
+          orders: prevOrder.orders.filter(order => order.id !== id),
         }));
       } else if (objectType === 'item') {
         setObjects((prevOrder) => ({
           ...prevOrder,
-          items: prevOrder.items.map((item) =>
-            item.id === updateData.id ? { ...item, status: updateData.status } : item
-          ),
+          items: prevOrder.items.filter(item => item.id !== id),
         }));
       }
-      
+
       Swal.fire({
         icon: 'success',
         title: 'Sucesso!',
-        text: 'O status do objeto foi atualizado com sucesso.',
+        text: 'O objeto foi excluído com sucesso.',
         confirmButtonText: 'OK'
       });
-      
+
       return true;
     })
     .catch((error) => {
-      console.log('Erro ao atualizar o status do objeto:', error.response.data.base);
+      console.log('Erro ao excluir o objeto:', error.response.data.base);
       
       Swal.fire({
         icon: 'error',
@@ -42,4 +40,4 @@ const putStatus = (endpoint, id, updateData, setObjects, objectType) => {
     });
 };
 
-export default putStatus;
+export default deleteObject;
