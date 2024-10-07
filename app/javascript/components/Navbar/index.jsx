@@ -50,7 +50,7 @@ const MyNavbar = () => {
     >
       <List sx={{ color: `${theme.colors.white}` }}>
         <ListItem button>
-          <ListItemText onClick={() => navigate('/')} primary="Pedidos" />
+          <ListItemText onClick={() => navigate('/')} primary="Home" />
         </ListItem>
         <ListItem button>
           <ListItemText onClick={() => navigate('/pedidos')} primary="Pedidos" />
@@ -81,7 +81,7 @@ const MyNavbar = () => {
           sx={{ flexGrow: 1 }}
           onClick={() => navigate('/')}
         >
-          Meu Projeto
+          Ponto do Açaí
         </Typography>
         
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '1rem' }}>
