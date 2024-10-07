@@ -104,9 +104,13 @@ const ObjectList = ({
         {enableDateFilter && (
           <Box sx={{ mb: 2 }}>
           <FormControl>
-            <InputLabel shrink htmlFor="date-filter" sx={{ mb: 1, fontSize: '1.1rem', color: '#3f51b5' }}>
-              {dateLabel}
-            </InputLabel>
+          <InputLabel
+            htmlFor="date-filter"
+            shrink={true}
+            sx={{ mb: 1, fontSize: '1.1rem', color: '#3f51b5' }}
+          >
+            {dateLabel}
+          </InputLabel>
             
             <TextField
               id="date-filter"

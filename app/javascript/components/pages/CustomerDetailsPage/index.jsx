@@ -47,30 +47,13 @@ const CustomerDetailsPage = () => {
     }
   };
 
-  const handleRemoveCard = async (cardId) => {
-    try {
-      const response = await fetch(`/api/v1/loyalty_cards/${cardId}/remove`, {
-        method: 'PATCH',
-      });
-      if (!response.ok) throw new Error('Erro ao remover o cartão de fidelidade');
-      
-      setCustomer(prevCustomer => ({
-        ...prevCustomer,
-        loyalty_cards: prevCustomer.loyalty_cards.filter(card => card.id !== cardId)
-      }));
-    } catch (error) {
-      console.error('Erro:', error);
-    }
-  };  
-
-  const handleStatusChange = (updatedCard) => {
+  const handleRemoveCard = async (cardId) => {  
     setCustomer(prevCustomer => ({
       ...prevCustomer,
-      loyalty_cards: prevCustomer.loyalty_cards.map(card =>
-        card.id === updatedCard.id ? updatedCard : card
-      )
+      loyalty_cards: prevCustomer.loyalty_cards.filter(card => card.id !== cardId)
     }));
-  };
+  };  
+
   const usedLoyaltyCardsCount = customer.loyalty_cards.filter(card => card.status === 'used').length;
 
   if (error) return <p>{error}</p>;
@@ -144,7 +127,6 @@ const CustomerDetailsPage = () => {
               <LoyaltyCard
                 key={card.id} 
                 loyaltyCard={card} 
-                onStatusChange={handleStatusChange} 
                 onRemove={() => handleRemoveCard(card.id)} 
               />
             ))
