@@ -29,7 +29,7 @@ export const StyledButton = styled(MuiButton)`
   transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
-    background-color: ${theme.colors.secondary} !important;
+    background-color: ${theme.colors.primaryHover} !important;
     transform: translateY(-2px);
   }
 `;
