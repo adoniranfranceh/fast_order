@@ -199,6 +199,7 @@ const ObjectList = ({
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Linhas por página"
             sx={{ position: 'sticky', bottom: 0, backgroundColor: '#fff', borderTop: '1px solid #ddd' }}
           />
         </Box>
