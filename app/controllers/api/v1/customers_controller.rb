@@ -46,7 +46,9 @@ module Api
       def create
         customer = Customer.new(customer_params)
 
-        if customer.save
+        p '---------====================='
+        p current_user
+        if customer.save!
           render json: { message: 'Cliente registrado com sucesso', customer: }, status: :created
         else
           render json: customer.errors, status: :unprocessable_entity
@@ -77,11 +79,7 @@ module Api
           :favorite_order,
           :user_id
         )
-        if current_user&.admin?
-          permitted_params.merge(user_id: current_user.id)
-        else
-          permitted_params
-        end
+        permitted_params.merge(user_id: current_user.id)
       end
     end
   end
