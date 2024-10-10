@@ -188,7 +188,7 @@ const DroppableSection = ({ status, title, orders, onDrop, onStatusChange, onCar
           </button>
         )}
         
-        {totalPages > 1 && <span>Página {currentPage} de {totalPages}</span>}
+        {totalPages > 1 && <span>Lista {currentPage} de {totalPages}</span>}
         
         {currentPage < totalPages && (
           <button onClick={goToNextPage}>

@@ -3,8 +3,7 @@ module Api
     class OrdersController < ApplicationController
       def index
         orders = fetch_orders
-        orders = paginate_orders(orders)
-
+        orders = paginate_orders(orders) if params[:query] != 'today'
         render json: format_response(orders)
       end
 
@@ -98,12 +97,14 @@ module Api
       end
 
       def format_response(orders)
+        total_count = orders.count
+        total_count = orders.total_entries if params[:query] != 'today'
         {
           orders: orders.as_json(
             include: order_includes,
             only: order_only_attributes
           ),
-          total_count: orders.total_entries
+          total_count:
         }
       end
 

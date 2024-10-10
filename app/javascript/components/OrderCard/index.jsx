@@ -79,9 +79,9 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
       <OrderInfo>
         <CustomerName>{order.customer}</CustomerName>
         <OrderDetails>
-          {order.table_info && <p>Mesa: {order.table_info}</p>}
-          {order.pick_up_time && <p>Horário de retirada: {moment.utc(order.pick_up_time).format('HH:mm')}</p>}
-          {order.address && <p>Entrega - {order.address}</p>}
+          {order.delivery_type === 'local' && <p>Mesa: {order.table_info}</p>}
+          {order.delivery_type === 'pickup' && <p>Horário de retirada: {moment.utc(order.pick_up_time).format('HH:mm')}</p>}
+          {order.delivery_type === 'delivery' && <p>Entrega - {order.address}</p>}
         </OrderDetails>
       </OrderInfo>
 
