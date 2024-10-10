@@ -115,7 +115,7 @@ const Dashboard = () => {
               borderColor: '#2196F3',
             })}
           />
-          <ChartDescription>Quantidade de novos cartões fidelidade por mês.</ChartDescription>
+          <ChartDescription>Quantidade cartões fidelidade usados por mês.</ChartDescription>
         </ChartWrapper>
 
         <ChartWrapper>

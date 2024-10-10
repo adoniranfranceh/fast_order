@@ -54,7 +54,7 @@ module Api
 
       def new_loyalty_cards_by_month
         LoyaltyCard.joins(:customer)
-                   .where(customers: { user_id: current_user.id })
+                   .where(customers: { user_id: current_user.id }, status: :used)
                    .where('loyalty_cards.created_at >= ?', Time.current.beginning_of_month)
                    .group("DATE_TRUNC('month', loyalty_cards.created_at AT TIME ZONE 'America/Sao_Paulo')::date")
                    .count
