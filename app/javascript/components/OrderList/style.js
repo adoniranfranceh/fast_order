@@ -35,7 +35,7 @@ export const Section = styled.div`
 export const SectionTitle = styled.h2`
   color: ${({ $status }) => theme.colors.text};
   font-weight: 700;
-  font-size: 16;
+  font-size: 16px;
   font-size: 24px;
   margin-bottom: 15px;
 `;
@@ -47,5 +47,43 @@ export const OrderGrid = styled.div`
 
   @media(min-width: 480px) {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+`;
+
+export const OrderCount = styled.span`
+  font-size: 14px;
+  color: #888;
+  margin-left: 10px;
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-weight: normal;
+`;
+
+export const Pagination = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 0 10px;
+  font-size: 14px;
+
+  button {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
   }
 `;

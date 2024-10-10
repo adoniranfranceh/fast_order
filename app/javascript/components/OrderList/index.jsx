@@ -9,6 +9,8 @@ import {
   Section,
   SectionTitle,
   OrderGrid,
+  OrderCount,
+  Pagination,
 } from './style';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -117,6 +119,22 @@ const DroppableSection = ({ status, title, orders, onDrop, onStatusChange, onCar
     }),
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
+
+  const totalPages = Math.ceil(orders.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const displayedOrders = orders.slice(startIndex, startIndex + itemsPerPage);
+
+  const goToNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
+  const goToPreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
   return (
     <Section
       ref={drop}
@@ -124,9 +142,13 @@ const DroppableSection = ({ status, title, orders, onDrop, onStatusChange, onCar
       status-type={status}
       style={{ backgroundColor: isOver ? 'lightgray' : 'white' }}
     >
-      <SectionTitle>{title}</SectionTitle>
+      <SectionTitle>
+        {title}
+        <OrderCount>{orders.length}</OrderCount>
+      </SectionTitle>
+      
       <OrderGrid>
-        {orders.map((order) => (
+        {displayedOrders.map((order) => (
           <DraggableOrderCard
             key={order.id}
             order={order}
@@ -135,6 +157,22 @@ const DroppableSection = ({ status, title, orders, onDrop, onStatusChange, onCar
           />
         ))}
       </OrderGrid>
+
+      <Pagination>
+        {currentPage > 1 && (
+          <button onClick={goToPreviousPage}>
+            Anterior
+          </button>
+        )}
+        
+        {totalPages > 1 && <span>Página {currentPage} de {totalPages}</span>}
+        
+        {currentPage < totalPages && (
+          <button onClick={goToNextPage}>
+            Próximo
+          </button>
+        )}
+      </Pagination>
     </Section>
   );
 };
