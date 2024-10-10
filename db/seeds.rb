@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 require 'net/http'
 require 'json'
+require 'active_support/testing/time_helpers'
+include ActiveSupport::Testing::TimeHelpers
 
 def fetch_user_info_from_api
   url = URI("https://randomuser.me/api/")
@@ -16,93 +18,88 @@ end
 
 def create_user_with_profile(role, admin = nil)
   user_info = fetch_user_info_from_api
-
   email = user_info['email']
   photo_url = user_info['image_path']
   full_name = user_info['name']
 
   user = FactoryBot.create(:user, email: email, role: role, admin: admin)
-
   profile = FactoryBot.build(:profile, user: user, full_name: full_name)
 
-  begin
-    image = URI.open(photo_url)
-    profile.photo.attach(io: image, filename: File.basename(photo_url), content_type: 'image/jpeg')
-  rescue OpenURI::HTTPError => e
-  end
+  attach_profile_photo(profile, photo_url)
 
-  if profile.valid?
-    profile.save!
-  else
-  end
+  profile.save! if profile.valid?
 
   user
 end
 
-admin = FactoryBot.create(:user, email: 'admin@admin.com')
+def attach_profile_photo(profile, photo_url)
+  image = URI.open(photo_url)
+  profile.photo.attach(io: image, filename: File.basename(photo_url), content_type: 'image/jpeg')
+end
 
-5.times do
-  create_user_with_profile(:collaborator, admin)
+def create_users_with_travel(admin, count, role)
+  count.times do |i|
+    created_at_time = i.months.ago.beginning_of_month + rand(0..30).days + rand(0..23).hours + rand(0..59).minutes
+    travel_to(created_at_time) do
+      create_user_with_profile(role, admin)
+    end
+  end
 end
 
 def create_customers(admin, months_back, count)
   months_back.times do |i|
-    (1..count).each do |j|
+    count.times do
       FactoryBot.create(:customer,
-             created_at: Date.today.beginning_of_month - i.months + rand(1..30).days,
-             user: admin)
+                        created_at: Date.today.beginning_of_month - i.months + rand(1..30).days,
+                        user: admin)
     end
   end
 end
 
-create_customers(admin, 6, 10)
+def create_orders(admin, start_date, end_date, daily_orders_range)
+  (start_date..end_date).each do |day|
+    orders_count = rand(daily_orders_range)
 
-def create_orders(admin, count)
-  (0..11).each do |i|
-    start_of_week = (Date.today - i.months).beginning_of_week
-
-    (0..6).each do |day|
-      created_at = start_of_week + day.days
-      20.times do
+    orders_count.times do
+      travel_to(day.to_time + rand(0..23).hours + rand(0..59).minutes) do
         FactoryBot.create(:order,
-                          created_at: created_at,
                           items_count: rand(1..8),
                           items_status: :paid,
                           additional_count: rand(1..5),
-                          time_stopped: created_at + rand(5..50).minutes,
+                          time_stopped: Time.current + rand(5..50).minutes,
                           user: admin.collaborators.sample)
       end
     end
   end
-
-  count.times do
-    created_at = DateTime.now - rand(0..10).hours
-    FactoryBot.create(:order,
-                      created_at: created_at,
-                      items_count: rand(1..8),
-                      items_status: :paid,
-                      additional_count: rand(1..5),
-                      time_stopped: created_at + rand(5..50).minutes,
-                      user: admin.collaborators.sample)
-  end
 end
-
-admin = User.first
-create_orders(admin, 50)
 
 def create_loyalty_cards(months_back)
   Customer.find_each do |customer|
     months_back.times do |i|
       FactoryBot.create_list(:loyalty_card, rand(1..3),
-                   created_at: Date.today.beginning_of_month - i.months + rand(1..30).days,
-                   customer: customer)
+                             created_at: Date.today.beginning_of_month - i.months + rand(1..30).days,
+                             customer: customer)
     end
   end
 end
 
-create_loyalty_cards(6)
-
-LoyaltyCard.find_each do |card|
-  user = card.customer.user
-  FactoryBot.create_list(:stamp, rand(1..10), loyalty_card: card, user: user)
+def create_stamps_for_loyalty_cards
+  LoyaltyCard.find_each do |card|
+    user = card.customer.user
+    FactoryBot.create_list(:stamp, rand(1..10), loyalty_card: card, user: user)
+  end
 end
+
+
+admin = FactoryBot.create(:user, email: 'admin@admin.com')
+
+create_users_with_travel(admin, 5, :collaborator)
+
+create_customers(admin, 6, 10)
+
+create_orders(admin, 1.year.ago.to_date, Date.today, 5..20)
+
+create_orders(admin, Date.today - 1, Date.today, 30..50)
+
+create_loyalty_cards(6)
+create_stamps_for_loyalty_cards
