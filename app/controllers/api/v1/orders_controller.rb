@@ -70,7 +70,7 @@ module Api
       def fetch_orders
         orders = Order.where(admin_id: current_user.admin.id)
                       .includes(items: :additional_fields)
-                      .order(created_at: :desc)
+                      .order(id: :desc)
         filter_orders(orders)
       end
 
@@ -85,7 +85,7 @@ module Api
           orders = orders.where(created_at: date_filter.all_day)
         end
 
-        orders = orders.where('created_at >= ?', 12.hours.ago).order(created_at: :asc) if params[:query] == 'today'
+        orders = orders.where('created_at >= ?', 12.hours.ago) if params[:query] == 'today'
 
         orders
       end
@@ -123,7 +123,7 @@ module Api
       end
 
       def order_only_attributes
-        %i[id code customer status delivery_type total_price table_info address pick_up_time user_id time_started
+        %i[id code customer status delivery_type total_price table_info address pick_up_time user_id time_started elapsed_time
            time_stopped]
       end
 

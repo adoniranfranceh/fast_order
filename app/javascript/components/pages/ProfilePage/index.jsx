@@ -3,6 +3,7 @@ import { Button, TextField, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthContext/index.jsx';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState({ full_name: '' });
@@ -43,11 +44,21 @@ const ProfilePage = () => {
         profile: { ...profile },
       }));
 
-      alert("Perfil atualizado com sucesso!");
+      Swal.fire({
+        icon: 'success',
+        title: 'Sucesso!',
+        text: 'Perfil atualizado com sucesso!',
+        confirmButtonText: 'OK'
+      });
 
       navigate(`/perfil/${currentUser.id}`);
     } catch (error) {
-      alert(`Erro ao atualizar o perfil. Por favor, tente novamente. ${error}`);
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro!',
+        text: `Erro ao atualizar o perfil. Por favor, tente novamente. ${error}`,
+        confirmButtonText: 'OK'
+      });
     } finally {
       setIsSubmitting(false);
     }

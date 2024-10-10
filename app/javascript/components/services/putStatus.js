@@ -1,7 +1,7 @@
 import axios from "axios";
 import Swal from 'sweetalert2';
 
-const putStatus = (endpoint, id, updateData, setObjects, objectType) => {
+const putStatus = (endpoint, id, updateData, setObjects, objectType, showNotification = true) => {
   return axios
     .put(`${endpoint}/${id}`, updateData)
     .then((response) => {
@@ -18,25 +18,29 @@ const putStatus = (endpoint, id, updateData, setObjects, objectType) => {
           ),
         }));
       }
-      
-      Swal.fire({
-        icon: 'success',
-        title: 'Sucesso!',
-        text: 'O status do objeto foi atualizado com sucesso.',
-        confirmButtonText: 'OK'
-      });
+
+      if (showNotification) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Sucesso!',
+          text: 'Status atualizado com sucesso.',
+          confirmButtonText: 'OK'
+        });
+      }
       
       return true;
     })
     .catch((error) => {
-      console.log('Erro ao atualizar o status do objeto:', error.response.data.base);
-      
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro!',
-        text: `Erro: ${error.response?.data?.base}`,
-        confirmButtonText: 'OK'
-      });
+      console.log('Erro ao atualizar o status:', error.response?.data?.base);
+
+      if (showNotification) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro!',
+          text: `Erro: ${error.response?.data?.base}`,
+          confirmButtonText: 'OK'
+        });
+      }
       
       return null;
     });
