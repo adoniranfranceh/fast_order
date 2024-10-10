@@ -27,8 +27,8 @@ const putStatus = (endpoint, id, updateData, setObjects, objectType, showNotific
           confirmButtonText: 'OK'
         });
       }
-      
-      return true;
+
+      return { PromiseResult: true }; 
     })
     .catch((error) => {
       console.log('Erro ao atualizar o status:', error.response?.data?.base);
@@ -41,8 +41,8 @@ const putStatus = (endpoint, id, updateData, setObjects, objectType, showNotific
           confirmButtonText: 'OK'
         });
       }
-      
-      return null;
+
+      return { PromiseResult: false };
     });
 };
 

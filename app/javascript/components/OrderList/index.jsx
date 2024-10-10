@@ -14,6 +14,7 @@ import {
 } from './style';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -60,7 +61,29 @@ const OrderList = () => {
   };
 
   const updateObjectStatus = async (id, newStatus) => {
-    putStatus('/api/v1/orders', id, { status: newStatus }, setOrders,  'orders', false);
+    try {
+      const response = await putStatus('/api/v1/orders', id, { status: newStatus }, setOrders, 'orders', false);
+      console.log(response);
+  
+      if (response && response.PromiseResult === true) {
+        console.log("Status atualizado com sucesso");
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Erro: Verifique se todos os itens do pedido estão pagos',
+          confirmButtonText: 'OK'
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar status:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro!',
+        text: 'Ocorreu um erro ao atualizar o status. Tente novamente.',
+        confirmButtonText: 'OK'
+      });
+    }
   };  
 
   const groupedOrders = {
