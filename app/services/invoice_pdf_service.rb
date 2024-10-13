@@ -10,6 +10,8 @@ class InvoicePdfService
       pdf.text "Tipo de Entrega: #{delivery_type(@order.delivery_type)}"
       pdf.text "Informação da entrega #{@order.content}"
       pdf.text "Por: #{@order.user.profile&.full_name || @order.user.email}"
+      pdf.text "\n"
+      pdf.text @order.created_at.strftime('%d/%m/%Y %H:%M').to_s
 
       pdf.move_down 10
       pdf.text 'Itens:', style: :bold

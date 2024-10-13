@@ -34,7 +34,7 @@ module Api
       end
 
       def recent_orders_count
-        @orders.where('created_at >= ?', 7.days.ago)
+        @orders.where('created_at >= ?', 6.days.ago.beginning_of_day)
                .group_by_day(:created_at, format: '%a')
                .count
       end
