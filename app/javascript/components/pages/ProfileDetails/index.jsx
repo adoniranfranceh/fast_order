@@ -70,8 +70,8 @@ const ProfileDetails = () => {
       title: `Digite sua senha para ${action}`,
       html: `
       <div style="position: relative;">
-        <input type="password" id="password" class="swal2-input" placeholder="Digite sua senha">
-        <button id="togglePassword" type="button" style="position: absolute; right: 72px; top: 60%; transform: translateY(-50%); background: none; border: none; cursor: pointer;">
+        <input type="password" style="width: 72%;" id="password" class="swal2-input" placeholder="Digite sua senha">
+        <button id="togglePassword" type="button" style="position: absolute; right: 17%; top: 60%; transform: translateY(-50%); background: none; border: none; cursor: pointer;">
           👁️
         </button>
       </div>

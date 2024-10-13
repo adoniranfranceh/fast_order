@@ -21,6 +21,16 @@ services:
       POSTGRES_HOST: ${POSTGRES_HOST}
     env_file: 
       - .env
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - app
 
   esbuild:
     build:
