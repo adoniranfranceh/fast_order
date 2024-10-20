@@ -1,9 +1,12 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, IconButton, useMediaQuery, useTheme } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import OrderForm from '../OrderForm';
 
 const OrderModal = ({ open, onClose, onOrderSuccess, order }) => {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   const handleOrderSuccess = () => {
     if (onOrderSuccess) {
       onOrderSuccess();
@@ -12,7 +15,7 @@ const OrderModal = ({ open, onClose, onOrderSuccess, order }) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" fullScreen={fullScreen}>
       <DialogTitle>
         {order ? 'Editar Pedido' : 'Novo Pedido'}
         <IconButton
@@ -25,12 +28,12 @@ const OrderModal = ({ open, onClose, onOrderSuccess, order }) => {
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent style={{ padding: '0 0 20px 0' }}>
         <OrderForm
           onClose={onClose}
           onOrderSuccess={handleOrderSuccess}
           initialOrderData={order}
-          />
+        />
       </DialogContent>
     </Dialog>
   );

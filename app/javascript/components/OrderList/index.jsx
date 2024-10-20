@@ -62,8 +62,7 @@ const OrderList = () => {
 
   const updateObjectStatus = async (id, newStatus) => {
     try {
-      const response = await putStatus('/api/v1/orders', id, { status: newStatus }, setOrders, 'orders', false);
-      console.log(response);
+      const response = await putStatus('/api/v1/orders', id, { status: newStatus }, false);
   
       if (response && response.PromiseResult === true) {
         console.log("Status atualizado com sucesso");

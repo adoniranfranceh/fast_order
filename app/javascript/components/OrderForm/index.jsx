@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, Typography, Button, TextField, Select, MenuItem, Alert } from '@mui/material';
 import { ItemList } from '../index.js';
 import createObject from '../services/createObject.js';
@@ -24,6 +24,13 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
   });
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    const unsavedOrder = localStorage.getItem('unsavedOrder');
+    if (unsavedOrder && !initialOrderData) {
+      setOrderData(JSON.parse(unsavedOrder));
+    }
+  }, [initialOrderData]);
+
   const calculateTotalPrice = () => {
     return orderData.items.reduce((total, item) => {
       const itemTotal = parseFloat(item.price) || 0;
@@ -33,9 +40,12 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
   };
 
   const handleInputChange = (field, value) => {
-    setOrderData(prev => ({ ...prev, [field]: value }));
+    const updatedOrderData = { ...orderData, [field]: value };
+    setOrderData(updatedOrderData);
     setErrors(prev => ({ ...prev, [field]: value === '' ? 'Este campo é obrigatório.' : undefined }));
-  };
+  
+    localStorage.setItem('unsavedOrder', JSON.stringify(updatedOrderData));
+  };   
 
   const validateForm = () => {
     let validationErrors = {};
@@ -86,21 +96,16 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
         table_info: orderData.table_info,
         pick_up_time: orderData.pick_up_time,
         address: orderData.address,
-        items_attributes: orderData.items
-          .map(item => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            status: item.status,
-            _destroy: item._destroy,
-            additional_fields_attributes: item.additional_fields
-              .map(field => ({
-                id: field.id, 
-                additional: field.additional,
-                additional_value: field.additional_value || 0,
-                _destroy: field._destroy
-              }))
+        items_attributes: orderData.items.map(item => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          additional_fields_attributes: item.additional_fields.map(field => ({
+            id: field.id, 
+            additional: field.additional,
+            additional_value: field.additional_value || 0,
           }))
+        }))
       }
     };
   
@@ -112,11 +117,12 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
       if (!result.error) {
         onOrderSuccess();
         onClose();
+        localStorage.removeItem('unsavedOrder');
       } else {
         setErrors({ general: result.error });
       }
     } catch (error) {
-      setErrors({ general: 'Erro ao salvar o pedido.' });
+      onClose();
     }
   };
 
@@ -206,7 +212,10 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
 
       <ItemList
         items={orderData.items}
-        setItems={(items) => setOrderData(prev => ({ ...prev, items }))}
+        setItems={(items) => {
+          setOrderData(prev => ({ ...prev, items }));
+          localStorage.setItem('unsavedOrder', JSON.stringify({ ...orderData, items }));
+        }}
         errors={errors.items}
       />
 

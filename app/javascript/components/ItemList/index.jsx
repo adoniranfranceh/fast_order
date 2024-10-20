@@ -1,40 +1,103 @@
-import React from 'react';
-import { Box, Button, IconButton, TextField, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Button, IconButton, TextField, Typography, Autocomplete } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { AdditionalFields } from '../index.js';
+import fetchProducts from '../services/fetchProducts.js';
 
 const ItemList = ({ items = [], setItems, errors }) => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const fetchedProducts = await fetchProducts();
+        setProducts(fetchedProducts.products);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
+  const handleProductSelection = (index, productName) => {
+    const selectedProduct = products.find((product) => product.name === productName);
+
+    if (selectedProduct) {
+      const updatedItems = items.map((item, i) =>
+        i === index ? {
+          ...item,
+          name: selectedProduct.name,
+          price: selectedProduct.base_price,
+          max_additional_quantity: selectedProduct.max_additional_quantity
+        } : item
+      );
+      setItems(updatedItems);
+    }
+  };
+
   const handleItemChange = (index, field, value) => {
-    const updatedItems = items.map((item, i) =>
-      i === index ? { ...item, [field]: value } : item
-    );
+    const updatedItems = items.map((item, i) => {
+      if (i === index) {
+        return { ...item, [field]: value || item[field] };
+      }
+      return item;
+    });
     setItems(updatedItems);
   };
 
   const handleAddItem = () => {
-    setItems([...items, { id: '', name: '', price: '', additional_fields: [] }]);
+    const newItem = { id: Date.now(), name: '', price: '', additional_fields: [] };
+    setItems([...items, newItem]);
   };
 
-  const handleRemoveItem = (id) => {
-    const updatedItems = items.map(item =>
-      item.id === id ? { ...item, _destroy: true } : item
-    );
+  const handleRemoveItem = (index) => {
+    const updatedItems = items.filter((_, i) => i !== index);
     setItems(updatedItems);
   };
 
-  const visibleItems = items.filter(item => !item._destroy);
-
   return (
     <Box>
-      {visibleItems.map((item, index) => (
-        <Box key={item.id || index} mb={2} p={2} border={1} borderRadius={2}>
+      {items.map((item, index) => (
+        <Box key={item.id || index} mb={2} p={2} border={1} borderRadius={2} style={{ paddingRight: '0px' }}>
           <Box display="flex" alignItems="center" mb={2}>
-            <TextField
-              label="Nome"
-              value={item.name}
-              onChange={(e) => handleItemChange(index, 'name', e.target.value)}
-              fullWidth
+            <Autocomplete
+              options={products.map((product) => product.name)}
+              value={item.name || ''}
+              onChange={(e, newValue) => {
+                if (newValue) {
+                  handleProductSelection(index, newValue);
+                }
+              }}
+              onInputChange={(e, newValue) => {
+                if (newValue.trim() !== '') {
+                  handleItemChange(index, 'name', newValue);
+                }
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Nome"
+                  fullWidth
+                  sx={{
+                    flex: 2,
+                    mr: { xs: 7, sm: 25 },
+                    mb: { xs: 2, sm: 0 },
+                  }}
+                />
+              )}
+              renderOption={(props, option) => (
+                <li {...props} style={{ whiteSpace: 'normal' }}>
+                  {option}
+                </li>
+              )}
+              noOptionsText="Nenhum produto encontrado"
+              sx={{
+                '& .MuiAutocomplete-option': {
+                  whiteSpace: 'normal',
+                },
+              }}
             />
             <TextField
               label="Preço"
@@ -42,19 +105,23 @@ const ItemList = ({ items = [], setItems, errors }) => {
               value={item.price}
               onChange={(e) => handleItemChange(index, 'price', e.target.value)}
               fullWidth
-              sx={{ ml: 2 }}
+              sx={{
+                ml: 2,
+                width: { xs: '30%', sm: '24%' },
+                mb: { xs: 2, sm: 0 }
+              }}
             />
-            <IconButton onClick={() => handleRemoveItem(item.id)} color="error" sx={{ ml: 2, margin:'0' }}>
+            <IconButton onClick={() => handleRemoveItem(index)} color="error" sx={{ ml: 2, margin: '0', height: '40px' }}>
               <RemoveIcon />
             </IconButton>
           </Box>
           <AdditionalFields
             additionalFields={item.additional_fields}
             onChange={(updatedFields) => handleItemChange(index, 'additional_fields', updatedFields)}
+            maxAdditionals={products.find(product => product.name === item.name)?.max_additional_quantity || 0}
           />
         </Box>
       ))}
-
       {errors && <Typography color="error">{errors}</Typography>}
       <Button onClick={handleAddItem} startIcon={<AddIcon />}>
         Adicionar Item
