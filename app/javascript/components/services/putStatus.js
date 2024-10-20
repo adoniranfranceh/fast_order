@@ -1,24 +1,10 @@
 import axios from "axios";
 import Swal from 'sweetalert2';
 
-const putStatus = (endpoint, id, updateData, setObjects, objectType, showNotification = true) => {
+const putStatus = (endpoint, id, updateData, showNotification = true) => {
   return axios
     .put(`${endpoint}/${id}`, updateData)
     .then((response) => {
-      if (objectType === 'order') {
-        setObjects((prevOrder) => ({
-          ...prevOrder,
-          ...response.data.order,
-        }));
-      } else if (objectType === 'item') {
-        setObjects((prevOrder) => ({
-          ...prevOrder,
-          items: prevOrder.items.map((item) =>
-            item.id === updateData.id ? { ...item, status: updateData.status } : item
-          ),
-        }));
-      }
-
       if (showNotification) {
         Swal.fire({
           icon: 'success',

@@ -1,7 +1,7 @@
 module Api
   module V1
     class CustomersController < ApplicationController
-      before_action :set_customer, only: %i[show update]
+      before_action :set_customer, only: %i[show update destroy]
 
       def index
         page = (params[:page] || 1).to_i
@@ -58,6 +58,14 @@ module Api
           render json: @customer
         else
           render json: @customer.errors, status: :unprocessable_entity
+        end
+      end
+
+      def destroy
+        if @customer.destroy
+          render json: @customer
+        else
+          render json: @customer.errors
         end
       end
 

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
         get 'print_invoice', on: :member
       end
 
-      resources :customers, only: %i[index create show] do
+      resources :customers, only: %i[index create show destroy] do
         resource :loyalty_card, only: %i[create show update]
       end
 

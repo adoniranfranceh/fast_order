@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography, Container, Paper } from '@mui/material';
 import LoyaltyCard from '../../LoyaltyCard';
 import theme from '../../theme';
+import deleteObject from '../../services/deleteObject';
 
 const CustomerDetailsPage = () => {
   const { id } = useParams();
   const [customer, setCustomer] = useState({ loyalty_cards: [] });
   const [error, setError] = useState(null);
   const [newCardName, setNewCardName] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -52,7 +54,18 @@ const CustomerDetailsPage = () => {
       ...prevCustomer,
       loyalty_cards: prevCustomer.loyalty_cards.filter(card => card.id !== cardId)
     }));
-  };  
+  };
+
+  const handleDeleteCustomer = async () => {
+    const response = await deleteObject('/api/v1/customers', customer.id, setCustomer, 'customer')
+    console.log(response)
+    if(response && response === true) {
+      navigate('/clientes');
+    }else{
+      console.log('aqui entrei')
+      console.error('Erro:', error);
+    }
+  }
 
   const usedLoyaltyCardsCount = customer.loyalty_cards.filter(card => card.status === 'used').length;
 
@@ -136,7 +149,15 @@ const CustomerDetailsPage = () => {
             </Typography>
           )}
 
-          <Box sx={{ mt: 3 }}>
+          <Box
+            sx={{
+              mt: 3,
+              display: 'flex',
+              gap: 2,
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+            }}
+          >
             {/* <TextField
               label="Nome do Novo Cartão"
               value={newCardName}
@@ -152,10 +173,26 @@ const CustomerDetailsPage = () => {
               sx={{
                 backgroundColor: theme.colors.primary,
                 '&:hover': { backgroundColor: theme.colors.primaryHover },
-                padding: '12px 20px',
+                flex: 1,
+                padding: '12px 16px',
               }}
             >
               Adicionar Novo Cartão
+            </Button>
+
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleDeleteCustomer}
+              fullWidth
+              sx={{
+                backgroundColor: theme.colors.danger,
+                '&:hover': { backgroundColor: theme.colors.dangerHover },
+                flex: 1,
+                padding: '12px 16px',
+              }}
+            >
+              Excluir Cliente
             </Button>
           </Box>
         </Box>
