@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Açaí", "imageUrl": "/images/acai.jpg" },
+  { "id": 2, "name": "Pastel", "imageUrl": "/images/pasteis.jpg" },
+  { "id": 3, "name": "Creme", "imageUrl": "/images/cremes.jpg" },
+  { "id": 4, "name": "Guaraná", "imageUrl": "/images/guaranas.jpg" },
+  { "id": 5, "name": "Bebida", "imageUrl": "/images/sucos.jpg" },
+  { "id": 6, "name": "Adicional", "imageUrl": "/images/sucos.jpg" }
+]

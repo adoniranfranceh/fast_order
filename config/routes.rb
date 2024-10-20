@@ -34,6 +34,8 @@ Rails.application.routes.draw do
         end
         resources :stamps, only: %i[create update]
       end
+
+      resources :products, only: %i[index create update]
     end
   end
 

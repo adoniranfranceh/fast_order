@@ -12,6 +12,9 @@ import {
   ProfileDetails,
   NotFoundPage,
   DisabledAccountPage,
+  ProductsPage,
+  CategoryList,
+  ProductForm,
 } from '../components/index.js';
 
 import MyNavbar from '../components/Navbar';
@@ -52,6 +55,9 @@ const AppRoutes = () => {
             <Route path="/cliente/:id" element={<CustomerDetailsPage />} />
             <Route path="/pedidos" element={<OrdersPage />} />
             <Route path="/pedido/:id" element={<OrderDetails />} />
+            <Route path="/produtos" element={<CategoryList />} />
+            <Route path="/categoria/:id" element={<ProductsPage />} />
+            <Route path="/produto/novo" element={<ProductForm />} />
 
             {currentUser?.role === 'admin' && (
               <>

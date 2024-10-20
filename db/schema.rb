@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_14_025559) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_19_054246) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -69,7 +69,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_14_025559) do
     t.bigint "order_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "price", precision: 10, scale: 2, default: "0.0"
+    t.decimal "price", precision: 10, scale: 2
     t.integer "status", default: 0
     t.index ["order_id"], name: "index_items_on_order_id"
   end
@@ -100,6 +100,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_14_025559) do
     t.string "code"
     t.index ["code"], name: "index_orders_on_code", unique: true
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.text "category"
+    t.decimal "base_price", precision: 10, scale: 2, null: false
+    t.integer "max_additional_quantity"
+    t.decimal "extra_additional_price", precision: 10, scale: 2
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_products_on_user_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -143,6 +156,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_14_025559) do
   add_foreign_key "items", "orders"
   add_foreign_key "loyalty_cards", "customers"
   add_foreign_key "orders", "users"
+  add_foreign_key "products", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "stamps", "loyalty_cards"
   add_foreign_key "stamps", "users"

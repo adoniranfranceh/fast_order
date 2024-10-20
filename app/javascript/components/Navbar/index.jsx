@@ -61,6 +61,9 @@ const MyNavbar = () => {
         {currentUser && currentUser.role === 'admin' && (
           <>
             <ListItem button>
+              <ListItemText onClick={() => navigate('/produtos')} primary="Produtos" />
+            </ListItem>
+            <ListItem button>
               <ListItemText onClick={() => navigate('/colaboradores')} primary="Colaboradores" />
             </ListItem>
             <ListItem button>
@@ -96,6 +99,9 @@ const MyNavbar = () => {
           </StyledButton>
           {currentUser && currentUser.role === 'admin' && (
             <>
+            <StyledButton onClick={() => navigate('/produtos')}>
+                Produtos
+              </StyledButton>
               <StyledButton onClick={() => navigate('/colaboradores')}>
                 Colaboradores
               </StyledButton>

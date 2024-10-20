@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :loyalty_cards, through: :customers
   has_many :collaborators, class_name: 'User', foreign_key: 'admin_id', dependent: :destroy
   has_many :orders, dependent: :destroy
+  has_many :products
   has_one :profile, dependent: :destroy
   accepts_nested_attributes_for :profile, reject_if: proc { |attributes|
                                                        attributes['full_name'].blank?
