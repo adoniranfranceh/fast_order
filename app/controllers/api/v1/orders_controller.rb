@@ -69,7 +69,6 @@ module Api
       def fetch_orders
         orders = Order.where(admin_id: current_user.admin.id)
                       .includes(items: :additional_fields)
-                      .order(id: :desc)
         filter_orders(orders)
       end
 
@@ -84,9 +83,11 @@ module Api
           orders = orders.where(created_at: date_filter.all_day)
         end
 
-        orders = orders.where('created_at >= ?', 12.hours.ago) if params[:query] == 'today'
+        if params[:query] == 'today'
+          return orders = orders.where('created_at >= ?', 12.hours.ago).order(id: :asc)
+        end
 
-        orders
+        orders.order(id: :desc)
       end
 
       def paginate_orders(orders)
