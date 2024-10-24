@@ -132,7 +132,7 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
 
   const handleRemoveCard = async () => {
     try {
-      const response = deleteObject('/api/v1/loyalty_cards', loyaltyCard.id, setLoyaltyCard, 'loyalty_card');
+      const response = deleteObject('/api/v1/loyalty_cards', loyaltyCard.id);
 
       console.log(response)
       if (response) {

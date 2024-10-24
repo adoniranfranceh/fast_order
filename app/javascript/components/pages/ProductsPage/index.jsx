@@ -6,6 +6,7 @@ import 'moment/locale/pt-br';
 import styled from "styled-components";
 import theme from "../../theme/index.js";
 import categoriesData from '../../../data/categories.json';
+import formatPrice from '../../services/formatPrice.js';
 
 const ProductsPage = () => {
   const { id } = useParams();
@@ -13,7 +14,7 @@ const ProductsPage = () => {
 
   const category = categoriesData.find(cat => cat.id === Number(id));
 
-  const url = `/api/v1/products?category=${category.name}&`
+  const url = `/api/v1/products?category=${category.name}&paginate=true&`
 
   const handleNewProduct = () => {
     navigate('/produto/novo')
@@ -22,7 +23,7 @@ const ProductsPage = () => {
   const renderProduct = (product) => [
     <span key="id">{product.id}</span>,
     <span key="name">{product.name}</span>,
-    <span key="email">{product.base_price}</span>,
+    <span key="base_price">R$ {formatPrice(product.base_price)}</span>,
   ];
 
   const StyledButtonContainer = styled.div`
@@ -39,9 +40,8 @@ const ProductsPage = () => {
 
   return (
     <Box sx={{ p: 2 }}>
-      {category.name}
       <StyledButtonContainer>
-        <Button 
+        <Button
           variant="contained" 
           color="primary" 
           onClick={handleNewProduct} 
@@ -53,9 +53,9 @@ const ProductsPage = () => {
       <ObjectList
         url={url}
         renderItem={renderProduct}
-        detailName='perfil'
-        columns={['Id', 'Nome', 'Preço', '']}
-        listTitle='Produtos'
+        detailName='produto'
+        columns={['Id', 'Nome', 'Preço']}
+        listTitle={category.name}
         objectName='products'
       />
     </Box>

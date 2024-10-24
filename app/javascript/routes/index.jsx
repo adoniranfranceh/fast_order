@@ -15,6 +15,7 @@ import {
   ProductsPage,
   CategoryList,
   ProductForm,
+  ProductDetailsPage,
 } from '../components/index.js';
 
 import MyNavbar from '../components/Navbar';
@@ -58,6 +59,7 @@ const AppRoutes = () => {
             <Route path="/produtos" element={<CategoryList />} />
             <Route path="/categoria/:id" element={<ProductsPage />} />
             <Route path="/produto/novo" element={<ProductForm />} />
+            <Route path="/produto/:id" element={<ProductDetailsPage />} />
 
             {currentUser?.role === 'admin' && (
               <>

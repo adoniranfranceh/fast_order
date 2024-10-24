@@ -48,6 +48,7 @@ const ObjectList = ({
       setLoading(true);
       setError(null);
       try {
+        url += url.includes('?') ? `&page=${page + 1}` : `?page=${page + 1}`;
         const response = await fetch(`${url}?page=${page + 1}&per_page=${rowsPerPage}&search_query=${searchQuery}&date_filter=${dateFilter}`);
         if (!response.ok) {
           throw new Error('Erro ao carregar dados');

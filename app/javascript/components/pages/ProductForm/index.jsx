@@ -9,8 +9,10 @@ import {
   Title,
   FieldContainer,
   Label,
+  StyledTextArea,
 } from './style';
 import createObject from '../../services/createObject';
+import updateObject from '../../services/updateObject';
 
 const ProductForm = ({ onSubmit, productData }) => {
   const [name, setName] = useState('');
@@ -42,9 +44,16 @@ const ProductForm = ({ onSubmit, productData }) => {
       extra_additional_price: parseFloat(extraAdditionalPrice),
       category: selectedcategory,
     };
-    navigate('/produtos')
+
     try {
-      await createObject('/api/v1/products', product);
+      if (productData) {
+        await updateObject(`/api/v1/products/${productData.id}`, product);
+        navigate(`/produto/${productData.id}`);
+        console.log(productData.id)
+      } else {
+        await createObject('/api/v1/products', product);
+        return navigate('/produtos');
+      }
     } catch (error) {
       console.error('Erro:', error);
     }
@@ -64,39 +73,6 @@ const ProductForm = ({ onSubmit, productData }) => {
           />
         </FieldContainer>
         <FieldContainer>
-          <Label>Descrição do produto</Label>
-          <StyledInput
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </FieldContainer>
-        <FieldContainer>
-          <Label>Preço base</Label>
-          <StyledInput
-            type="number"
-            value={basePrice}
-            onChange={(e) => setBasePrice(e.target.value)}
-            required
-          />
-        </FieldContainer>
-        <FieldContainer>
-          <Label>Quantidade máxima de adicionais</Label>
-          <StyledInput
-            type="number"
-            value={maxAdditionalQuantity}
-            onChange={(e) => setMaxAdditionalQuantity(e.target.value)}
-          />
-        </FieldContainer>
-        <FieldContainer>
-          <Label>Preço por adicional extra</Label>
-          <StyledInput
-            type="number"
-            value={extraAdditionalPrice}
-            onChange={(e) => setExtraAdditionalPrice(e.target.value)}
-          />
-        </FieldContainer>
-        <FieldContainer>
           <Label>Categoria</Label>
           <StyledSelect
             value={selectedcategory}
@@ -110,6 +86,32 @@ const ProductForm = ({ onSubmit, productData }) => {
               </option>
             ))}
           </StyledSelect>
+        </FieldContainer>
+        <FieldContainer>
+          <Label>Preço</Label>
+          <StyledInput
+            type="number"
+            value={basePrice}
+            onChange={(e) => setBasePrice(e.target.value)}
+            required
+          />
+        </FieldContainer>
+        <FieldContainer>
+          <Label>Quantidade máxima de adicionais grátis</Label>
+          <StyledInput
+            type="number"
+            value={maxAdditionalQuantity}
+            onChange={(e) => setMaxAdditionalQuantity(e.target.value)}
+          />
+        </FieldContainer>
+        <FieldContainer>
+          <Label>Descrição do produto</Label>
+          <StyledTextArea
+            type="textarea"
+            rows="4"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </FieldContainer>
         <StyledButton type="submit">
           {productData ? 'Salvar Alterações' : 'Adicionar Produto'}

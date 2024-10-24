@@ -1,6 +1,8 @@
 module Api
   module V1
     class ProductsController < ApplicationController
+      before_action :set_product, only: %w[show destroy update]
+
       def index
         page = (params[:page] || 1).to_i
         per_page = (params[:per_page] || 5).to_i
@@ -17,10 +19,21 @@ module Api
           products = products.order(:name).paginate(page:, per_page:)
         end
 
+        searchable_attributes = %w[name id base_price description]
+
+        if params[:search_query].present?
+          search_query = params[:search_query].to_s.downcase.strip.gsub(',', '.')
+          products = Product.filter_by_attributes(search_query, searchable_attributes)
+        end
+
         render json: {
           products: products.as_json(except: %i[created_at updated_at]),
           total_count: products.count
         }
+      end
+
+      def show
+        render json: @product
       end
 
       def create
@@ -33,7 +46,27 @@ module Api
         end
       end
 
+      def update
+        if @product.update(product_params)
+          render json: @product
+        else
+          render json: @product.errors, status: :unprocessable_entity
+        end
+      end
+
+      def destroy
+        if @product.destroy!
+          render json: @product
+        else
+          render json: @product.errors
+        end
+      end
+
       private
+
+      def set_product
+        @product = Product.find params[:id]
+      end
 
       def product_params
         permitted_params = params.require(:product).permit(

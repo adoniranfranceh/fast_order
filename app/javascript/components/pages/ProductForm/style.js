@@ -43,6 +43,13 @@ export const StyledInput = styled.input`
   }
 `;
 
+export const StyledTextArea = styled(StyledInput).attrs({
+  as: 'textarea',
+})`
+  resize: none;
+  height: auto;
+`;
+
 export const StyledSelect = styled.select`
   width: 100%;
   padding: 10px;
