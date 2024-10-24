@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { AdditionalFields } from '../index.js';
 import fetchProducts from '../services/fetchProducts.js';
+import theme from '../theme/index.js';
 
 const ItemList = ({ items = [], setItems, errors }) => {
   const [products, setProducts] = useState([]);
@@ -30,7 +31,8 @@ const ItemList = ({ items = [], setItems, errors }) => {
           ...item,
           name: selectedProduct.name,
           price: selectedProduct.base_price,
-          max_additional_quantity: selectedProduct.max_additional_quantity
+          max_additional_quantity: selectedProduct.max_additional_quantity,
+          additional_fields: []
         } : item
       );
       setItems(updatedItems);
@@ -48,7 +50,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
   };
 
   const handleAddItem = () => {
-    const newItem = { id: Date.now(), name: '', price: '', additional_fields: [] };
+    const newItem = { id: '', name: '', price: '', additional_fields: [] };
     setItems([...items, newItem]);
   };
 
@@ -61,8 +63,12 @@ const ItemList = ({ items = [], setItems, errors }) => {
     <Box>
       {items.map((item, index) => (
         <Box key={item.id || index} mb={2} p={2} border={1} borderRadius={2} style={{ paddingRight: '0px' }}>
-          <Box display="flex" alignItems="center" mb={2}>
+          <Typography variant="caption" style={{color: theme.colors.primaryHover}}>
+            {item.name}
+          </Typography>
+          <Box display="flex" alignItems="center">
             <Autocomplete
+              freeSolo
               options={products.map((product) => product.name)}
               value={item.name || ''}
               onChange={(e, newValue) => {
@@ -82,8 +88,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
                   fullWidth
                   sx={{
                     flex: 2,
-                    mr: { xs: 7, sm: 25 },
-                    mb: { xs: 2, sm: 0 },
+                    mr: { xs: 7, sm: 25 }
                   }}
                 />
               )}
@@ -107,14 +112,19 @@ const ItemList = ({ items = [], setItems, errors }) => {
               fullWidth
               sx={{
                 ml: 2,
-                width: { xs: '30%', sm: '24%' },
-                mb: { xs: 2, sm: 0 }
+                width: { xs: '30%', sm: '24%' }
               }}
             />
             <IconButton onClick={() => handleRemoveItem(index)} color="error" sx={{ ml: 2, margin: '0', height: '40px' }}>
               <RemoveIcon />
             </IconButton>
           </Box>
+          <div style={{display: 'flex', margin: '2px'}}>
+              <Typography variant="caption" style={{color: theme.colors.primaryHover}}>
+                Adicionais: {item.additional_fields?.map((add) => 
+                  `${add.additional}`).join(', ')}
+              </Typography>
+          </div>
           <AdditionalFields
             additionalFields={item.additional_fields}
             onChange={(updatedFields) => handleItemChange(index, 'additional_fields', updatedFields)}

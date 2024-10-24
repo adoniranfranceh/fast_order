@@ -91,7 +91,6 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
       order: {
         user_id: orderData.user_id ? orderData.user_id : currentUser.id,
         customer: orderData.customer,
-        status: orderData.status,
         delivery_type: orderData.delivery_type,
         table_info: orderData.table_info,
         pick_up_time: orderData.pick_up_time,

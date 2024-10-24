@@ -62,7 +62,7 @@ const OrdersPage = () => {
   const getDeliveryInfo = (order) => {
     switch (order.delivery_type) {
       case 'local':
-        return order.table_info;
+        return `Mesa: ${order.table_info}`;
       case 'delivery':
         return order.address;
       case 'pickup':

@@ -45,6 +45,7 @@ const AdditionalFields = ({ additionalFields = [], onChange, maxAdditionals = 2 
       {visibleAdditionals.map((field, index) => (
         <Box key={field.id || index} display="flex" alignItems="center" mb={1}>
           <Autocomplete
+            freeSolo
             options={products}
             getOptionLabel={(option) => option.name || ''}
             value={products.find((product) => product.name === field.additional) || null}

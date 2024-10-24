@@ -83,7 +83,7 @@ const OrderDetails = () => {
 
   const handleItemStatusChange = useCallback(async (itemId, newStatus) => {
     const updatedItems = order.items.map((item) => item.id === itemId ? { ...item, status: newStatus } : item);
-    await putStatus('/api/v1/orders', id, { items_attributes: [{ id: itemId, status: newStatus }] }, setOrder, 'order');
+    await putStatus('/api/v1/orders', id, { items_attributes: [{ id: itemId, status: newStatus }] }, false);
     setOrder((prev) => ({ ...prev, items: updatedItems }));
     setItemStatuses((prev) => ({ ...prev, [itemId]: newStatus }));
     calculateRemainingTotal(updatedItems);
@@ -106,7 +106,7 @@ const OrderDetails = () => {
 
   const handlePayAll = useCallback(async () => {
     const updatedItems = order.items.map((item) => ({ ...item, status: 'paid' }));
-    await putStatus('/api/v1/orders', id, { items_attributes: updatedItems.map(({ id }) => ({ id, status: 'paid' })) }, setOrder, 'order');
+    await putStatus('/api/v1/orders', id, { items_attributes: updatedItems.map(({ id }) => ({ id, status: 'paid' })) }, false);
     setOrder((prev) => ({ ...prev, items: updatedItems }));
     setItemStatuses((prev) => updatedItems.reduce((acc, { id }) => ({ ...acc, [id]: 'paid' }), prev));
     calculateRemainingTotal(updatedItems);
