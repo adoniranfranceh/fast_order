@@ -2,18 +2,22 @@
 require 'net/http'
 require 'json'
 require 'active_support/testing/time_helpers'
+require_relative 'create_order'
 include ActiveSupport::Testing::TimeHelpers
+include CreateOrder
 
 def fetch_user_info_from_api
   url = URI("https://randomuser.me/api/")
   response = Net::HTTP.get(url)
   user_data = JSON.parse(response)["results"].first
-
   {
     'email' => user_data['email'],
     'image_path' => user_data['picture']['large'],
     'name' => "#{user_data['name']['first']} #{user_data['name']['last']}"
   }
+rescue StandardError => e
+  puts "Erro ao buscar usuário: #{e.message}"
+  raise
 end
 
 def create_user_with_profile(role, admin = nil)
@@ -22,8 +26,8 @@ def create_user_with_profile(role, admin = nil)
   photo_url = user_info['image_path']
   full_name = user_info['name']
 
-  user = FactoryBot.create(:user, email: email, role: role, admin: admin)
-  profile = FactoryBot.build(:profile, user: user, full_name: full_name)
+  user = FactoryBot.create(:user, email:, role:, admin:)
+  profile = FactoryBot.build(:profile, user:, full_name:)
 
   attach_profile_photo(profile, photo_url)
 
@@ -37,7 +41,7 @@ def attach_profile_photo(profile, photo_url)
   profile.photo.attach(io: image, filename: File.basename(photo_url), content_type: 'image/jpeg')
 end
 
-def create_users_with_travel(admin, count, role)
+def create_users_with_travel(admin:, count:, role:)
   count.times do |i|
     created_at_time = i.months.ago.beginning_of_month + rand(0..30).days + rand(0..23).hours + rand(0..59).minutes
     travel_to(created_at_time) do
@@ -46,7 +50,7 @@ def create_users_with_travel(admin, count, role)
   end
 end
 
-def create_customers(admin, months_back, count)
+def create_customers(admin:, months_back:, count:)
   months_back.times do |i|
     count.times do
       FactoryBot.create(:customer,
@@ -56,21 +60,8 @@ def create_customers(admin, months_back, count)
   end
 end
 
-def create_orders(admin, start_date, end_date, daily_orders_range)
-  (start_date..end_date).each do |day|
-    orders_count = rand(daily_orders_range)
-
-    orders_count.times do
-      travel_to(day.to_time + rand(0..23).hours + rand(0..59).minutes) do
-        FactoryBot.create(:order,
-                          items_count: rand(1..8),
-                          items_status: :paid,
-                          additional_count: rand(1..5),
-                          time_stopped: Time.current + rand(5..50).minutes,
-                          user: admin.collaborators.sample)
-      end
-    end
-  end
+def create_orders(admin:, start_date:, end_date:, daily_orders_range:)
+  CreateOrders.create(admin:, start_date:, end_date:, daily_orders_range:)
 end
 
 def create_loyalty_cards(months_back)
@@ -86,24 +77,15 @@ end
 def create_stamps_for_loyalty_cards
   LoyaltyCard.find_each do |card|
     user = card.customer.user
-    FactoryBot.create_list(:stamp, rand(1..10), loyalty_card: card, user: user)
+    FactoryBot.create_list(:stamp, rand(1..5), loyalty_card: card, user: user)
   end
 end
 
 admin = FactoryBot.create(:user, email: 'admin@admin.com')
 
-create_users_with_travel(admin, 5, :collaborator)
+create_users_with_travel(admin:, count: 5, role: :collaborator)
+create_customers(admin:, months_back: 6, count: 5)
 
-create_customers(admin, 6, 10)
-
-create_orders(admin, 1.year.ago.to_date, Date.today, 5..20)
-
-create_orders(admin, Date.today - 1, Date.today, 30..50)
-
-create_loyalty_cards(6)
-create_stamps_for_loyalty_cards
-
-Product.delete_all
 
 file_path = Rails.root.join('db', 'products.json')
 products_data = JSON.parse(File.read(file_path))
@@ -119,3 +101,9 @@ products_data.each do |product|
     user_id: product['user_id']
   )
 end
+
+create_orders(admin:, start_date: 3.months.ago.to_date, end_date: Date.today, daily_orders_range: 5..10)
+create_orders(admin:,start_date: Date.today - 1.day,end_date: Date.today, daily_orders_range: 5..10)
+
+create_loyalty_cards(6)
+create_stamps_for_loyalty_cards
