@@ -102,8 +102,20 @@ products_data.each do |product|
   )
 end
 
-create_orders(admin:, start_date: 3.months.ago.to_date, end_date: Date.today, daily_orders_range: 5..10)
-create_orders(admin:,start_date: Date.today - 1.day,end_date: Date.today, daily_orders_range: 5..10)
+admin = User.find_by email: 'admin@admin.com'
+CreateOrder.call(
+  admin: admin,
+  start_date: 3.months.ago.to_date,
+  end_date: Date.today,
+  daily_orders_range: 5..10
+)
+
+CreateOrder.call(
+  admin: admin,
+  start_date: Date.yesterday,
+  end_date: Date.today,
+  daily_orders_range: 5..10
+  )
 
 create_loyalty_cards(6)
 create_stamps_for_loyalty_cards

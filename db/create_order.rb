@@ -1,17 +1,26 @@
 module CreateOrder
-  def self.create(admin:, start_date:, end_date:, daily_orders_range:)
-    products = Product.all
-    additional_category = "Adicional"
-
+  def self.call(admin:, start_date:, end_date:, daily_orders_range:)
     orders = []
     items = []
     additionals = []
+    products = Product.all
+    additional_category = "Adicional"
 
-    (start_date..end_date).each do |day|
-      orders_count = rand(daily_orders_range)
+    (start_date..end_date).each do |date|
+      daily_orders_range.to_a.sample.times do
+        order = {
+          user_id: admin.collaborators.sample.id,
+          admin_id: admin.id,
+          status: %w[doing delivered paid canceled].sample,
+          delivery_type: %w[local pickup delivery].sample,
+          table_info: "A#{rand(1..15)}",
+          pick_up_time: Faker::Time.forward(days: 23, period: :afternoon).to_s,
+          address: Faker::Address.full_address,
+          customer: Faker::Name.name,
+          created_at: date,
+          updated_at: date
+        }
 
-      orders_count.times do
-        order = build_order(admin, day)
         orders << order
 
         order_items = create_order_items(order, products, additional_category)
@@ -26,28 +35,21 @@ module CreateOrder
 
   private
 
-  def self.build_order(admin, day)
-    {
-      user_id: admin.collaborators.sample.id,
-      admin_id: admin.id,
-      status: random_status,
-      delivery_type: random_delivery_type,
-      table_info: "A#{rand(1..15)}",
-      pick_up_time: Faker::Time.forward(days: 23, period: :afternoon).to_s,
-      address: Faker::Address.full_address,
-      customer: Faker::Name.name,
-      created_at: generate_random_time(day),
-      updated_at: Time.current
-    }
-  end
-
   def self.create_order_items(order, products, additional_category)
     items = []
     additionals = []
 
     rand(1..5).times do
       product = products.sample
-      item = build_item(order, product)
+      item = {
+        order_id: order[:id],
+        name: product.name,
+        price: product.base_price,
+        status: %w[completed pending].sample,
+        created_at: Time.current,
+        updated_at: Time.current
+      }
+
       items << item
 
       item_additionals = create_additionals(item, products, additional_category)
@@ -55,17 +57,6 @@ module CreateOrder
     end
 
     { items: items, additionals: additionals }
-  end
-
-  def self.build_item(order, product)
-    {
-      order_id: order[:id],
-      name: product.name,
-      price: product.base_price,
-      status: random_item_status,
-      created_at: Time.current,
-      updated_at: Time.current
-    }
   end
 
   def self.create_additionals(item, products, additional_category)
@@ -87,22 +78,6 @@ module CreateOrder
     end
 
     additionals
-  end
-
-  def self.generate_random_time(day)
-    day.to_time + rand(0..23).hours + rand(0..59).minutes
-  end
-
-  def self.random_status
-    %i[doing delivered paid canceled].sample
-  end
-
-  def self.random_delivery_type
-    %i[local pickup delivery].sample
-  end
-
-  def self.random_item_status
-    %i[completed pending].sample
   end
 
   def self.insert_orders_and_associate_items(orders, items, additionals)
