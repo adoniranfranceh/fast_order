@@ -33,7 +33,6 @@ describe 'Vê pedidos' do
         created_at: yesterday
       )
 
-      login_as user
       get '/api/v1/orders', params: { date_filter: today.to_s }
 
       expect(response).to have_http_status(:success)
