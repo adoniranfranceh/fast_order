@@ -19,6 +19,6 @@ RSpec.describe 'PUT /api/v1/customers/:id', type: :request do
 
     expect(response).to have_http_status(:unprocessable_entity)
     json_response = JSON.parse(response.body)
-    expect(json_response['name']).to include('não pode ficar em branco')
+    expect(json_response).to eq ['Nome não pode ficar em branco']
   end
 end
