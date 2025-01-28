@@ -17,7 +17,7 @@ module Api
         if @loyalty_card.save
           render json: @loyalty_card, status: :created
         else
-          render @loyalty_card.errors, status: :unprocessable_entity
+          render @loyalty_card.errors.full_messages, status: :unprocessable_entity
         end
       end
 
@@ -28,7 +28,7 @@ module Api
         elsif @loyalty_card.update(loyalty_card_params)
           render json: @loyalty_card
         else
-          render json: @loyalty_card.errors, status: :unprocessable_entity
+          render json: @loyalty_card.errors.full_messages, status: :unprocessable_entity
         end
       end
 
@@ -37,7 +37,7 @@ module Api
         if @loyalty_card.destroy
           render json: @loyalty_card
         else
-          render json: @loyalty_card.errors, status: :unprocessable_entity
+          render json: @loyalty_card.errors.full_messages, status: :unprocessable_entity
         end
       end
 

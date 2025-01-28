@@ -6,8 +6,9 @@ module Api
       def index
         page = (params[:page] || 1).to_i
         per_page = (params[:per_page] || 5).to_i
+        admin_id = params[:admin_id]
 
-        customers = Customer.where(user_id: current_user.admin.id)
+        customers = Customer.where(user_id: admin_id)
                             .order(:name)
                             .paginate(page:, per_page:)
 
@@ -49,7 +50,7 @@ module Api
         if customer.save
           render json: { message: 'Cliente registrado com sucesso', customer: }, status: :created
         else
-          render json: customer.errors, status: :unprocessable_entity
+          render json: customer.errors.full_messages, status: :unprocessable_entity
         end
       end
 
@@ -57,7 +58,7 @@ module Api
         if @customer.update(customer_params)
           render json: @customer
         else
-          render json: @customer.errors, status: :unprocessable_entity
+          render json: @customer.errors.full_messages, status: :unprocessable_entity
         end
       end
 
@@ -65,7 +66,7 @@ module Api
         if @customer.destroy
           render json: @customer
         else
-          render json: @customer.errors
+          render json: @customer.errors.full_messages, status: :unprocessable_entity
         end
       end
 
@@ -76,7 +77,7 @@ module Api
       end
 
       def customer_params
-        permitted_params = params.require(:customer).permit(
+        params.require(:customer).permit(
           :name,
           :email,
           :birthdate,
@@ -85,7 +86,6 @@ module Api
           :favorite_order,
           :user_id
         )
-        permitted_params.merge(user_id: current_user.id)
       end
     end
   end

@@ -8,7 +8,7 @@ module Api
         if @stamp.save
           render json: @stamp, status: :created
         else
-          render json: @stamp.errors, status: :unprocessable_entity
+          render json: @stamp.errors.full_messages, status: :unprocessable_entity
         end
       end
 
@@ -17,7 +17,7 @@ module Api
         if stamp.update(stamp_params)
           render json: stamp, status: :created
         else
-          render json: stamp.errors, status: :unprocessable_entity
+          render json: stamp.errors.full_messages, status: :unprocessable_entity
         end
       end
 

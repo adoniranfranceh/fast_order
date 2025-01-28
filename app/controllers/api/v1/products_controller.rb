@@ -9,15 +9,11 @@ module Api
 
         products = current_user.admin.products
 
-        if params[:category].present?
-          products = products.where(category: params[:category])
-        else
-          products = products.where.not(category: 'Adicional')
-        end
-
-        if params[:paginate].present?
-          products = products.order(:name).paginate(page:, per_page:)
-        end
+        products = if params[:category].present?
+                     products.where(category: params[:category])
+                   else
+                     products.where.not(category: 'Adicional')
+                   end
 
         searchable_attributes = %w[name id base_price description]
 
@@ -25,6 +21,7 @@ module Api
           search_query = params[:search_query].to_s.downcase.strip.gsub(',', '.')
           products = Product.filter_by_attributes(search_query, searchable_attributes)
         end
+        products = products.order(:name).paginate(page:, per_page:) if params[:paginate].present?
 
         render json: {
           products: products.as_json(except: %i[created_at updated_at]),
@@ -42,7 +39,7 @@ module Api
         if product.save
           render json: { message: 'Cliente registrado com sucesso', product: }, status: :created
         else
-          render json: product.errors, status: :unprocessable_entity
+          render json: product.errors.full_messages, status: :unprocessable_entity
         end
       end
 
@@ -50,7 +47,7 @@ module Api
         if @product.update(product_params)
           render json: @product
         else
-          render json: @product.errors, status: :unprocessable_entity
+          render json: @product.errors.full_messages, status: :unprocessable_entity
         end
       end
 
@@ -58,7 +55,7 @@ module Api
         if @product.destroy!
           render json: @product
         else
-          render json: @product.errors
+          render json: @product.errors.full_messages
         end
       end
 
