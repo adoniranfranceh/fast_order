@@ -1,4 +1,4 @@
-FROM ruby:3.3.1 AS base
+FROM ruby:3.3.6 AS base
 
 ENV NODE_VERSION=22.4.1
 ENV YARN_VERSION=1.22.22
