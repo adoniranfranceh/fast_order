@@ -7,31 +7,30 @@ describe 'Vê pedidos' do
       today = Time.zone.today
       yesterday = Time.zone.yesterday
 
-      order_today = create(:order,
-        customer: 'Roger',
-        delivery_type: :local,
-        table_info: '3',
-        user: user,
-        status: 'paid',
-        total_price: 55.0,
-        items_attributes: [
-          { name: 'Item 1', price: 10.0, additional_fields: [{ additional: 'MEL', additional_value: 1.0 }] }
-        ],
-        created_at: today
-      )
+      create(:order,
+             customer: 'Roger',
+             delivery_type: :local,
+             table_info: '3',
+             user:,
+             status: 'paid',
+             total_price: 55.0,
+             items_attributes: [
+               { name: 'Item 1', price: 10.0,
+                 additional_fields: [{ additional: 'MEL', additional_value: 1.0 }] }
+             ],
+             created_at: today)
 
       create(:order,
-        customer: 'Ernesto',
-        delivery_type: :local,
-        table_info: '5',
-        user: user,
-        status: 'canceled',
-        total_price: 21.5,
-        items_attributes: [
-          { name: 'Item 2', price: 15.0 }
-        ],
-        created_at: yesterday
-      )
+             customer: 'Ernesto',
+             delivery_type: :local,
+             table_info: '5',
+             user:,
+             status: 'canceled',
+             total_price: 21.5,
+             items_attributes: [
+               { name: 'Item 2', price: 15.0 }
+             ],
+             created_at: yesterday)
 
       get '/api/v1/orders', params: { date_filter: today.to_s }
 

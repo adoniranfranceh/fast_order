@@ -127,6 +127,7 @@ RSpec.describe Order, type: :model do
         expect(order.reload.status).to eq 'paid'
       end
     end
+
     context 'método associate_admin' do
       it 'associa corretamente o admin ao pedido' do
         admin = create(:user, :admin)

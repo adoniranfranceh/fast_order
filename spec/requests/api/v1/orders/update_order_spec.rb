@@ -18,11 +18,11 @@ RSpec.describe 'Atualiza Pedido', type: :request do
         expect(response).to have_http_status(:ok)
 
         updated_order = Order.find(order.id)
-        expect(Order.count).to eq(1)
-        expect(AdditionalField.count).to eq(0)
-        expect(updated_order.customer).to eq('Customer')
-        expect(updated_order.items.count).to eq(1)
-        expect(updated_order.total_price).to eq(20)
+        expect(Order.count).to eq 1
+        expect(AdditionalField.count).to eq 0
+        expect(updated_order.customer).to eq 'Customer'
+        expect(updated_order.items.count).to eq 1
+        expect(updated_order.total_price).to eq 20
       end
 
       it 'atualiza `time_stopped` quando status muda de doing para delivered' do
@@ -37,11 +37,11 @@ RSpec.describe 'Atualiza Pedido', type: :request do
         expect(response).to have_http_status(:ok)
 
         updated_order = Order.find(order.id)
-        expect(Order.count).to eq(1)
-        expect(AdditionalField.count).to eq(0)
+        expect(Order.count).to eq 1
+        expect(AdditionalField.count).to eq 0
         expect(updated_order.time_stopped).to be_within(0.1).of(Time.zone.now)
-        expect(updated_order.items.count).to eq(1)
-        expect(updated_order.total_price).to eq(20)
+        expect(updated_order.items.count).to eq 1
+        expect(updated_order.total_price).to eq 20
       end
 
       it 'atualiza status do pedido' do
@@ -58,10 +58,10 @@ RSpec.describe 'Atualiza Pedido', type: :request do
         expect(response).to have_http_status(:ok)
 
         updated_order = Order.find(order.id)
-        expect(Order.count).to eq(1)
-        expect(AdditionalField.count).to eq(0)
-        expect(updated_order.items.count).to eq(1)
-        expect(updated_order.total_price).to eq(20)
+        expect(Order.count).to eq 1
+        expect(AdditionalField.count).to eq 0
+        expect(updated_order.items.count).to eq 1
+        expect(updated_order.total_price).to eq 20
       end
 
       it 'adiciona um novo adicional a um item existente' do
@@ -83,16 +83,16 @@ RSpec.describe 'Atualiza Pedido', type: :request do
         expect(response).to have_http_status(:ok)
 
         updated_order = Order.find(order.id)
-        expect(Order.count).to eq(1)
-        expect(AdditionalField.count).to eq(1)
-        expect(updated_order.items.count).to eq(1)
-        expect(updated_order.reload.total_price).to eq(40)
+        expect(Order.count).to eq 1
+        expect(AdditionalField.count).to eq 1
+        expect(updated_order.items.count).to eq 1
+        expect(updated_order.reload.total_price).to eq 40
 
         item = updated_order.items.first
-        expect(item.additional_fields.count).to eq(1)
+        expect(item.additional_fields.count).to eq 1
         additional_field = item.additional_fields.first
-        expect(additional_field.additional).to eq('Adicional 1')
-        expect(additional_field.additional_value).to eq(20)
+        expect(additional_field.additional).to eq 'Adicional 1'
+        expect(additional_field.additional_value).to eq 20
       end
 
       it 'adiciona um novo item ao pedido' do
@@ -112,16 +112,16 @@ RSpec.describe 'Atualiza Pedido', type: :request do
         expect(response).to have_http_status(:ok)
 
         updated_order = Order.find(order.id)
-        expect(Order.count).to eq(1)
-        expect(Item.count).to eq(2)
-        expect(AdditionalField.count).to eq(0)
-        expect(updated_order.items.count).to eq(2)
-        expect(updated_order.reload.total_price).to eq(30)
+        expect(Order.count).to eq 1
+        expect(Item.count).to eq 2
+        expect(AdditionalField.count).to eq 0
+        expect(updated_order.items.count).to eq 2
+        expect(updated_order.reload.total_price).to eq 30
 
         new_item = updated_order.items.last
-        expect(new_item.name).to eq('Item')
-        expect(new_item.price).to eq(10)
-        expect(new_item.additional_fields.count).to eq(0)
+        expect(new_item.name).to eq 'Item'
+        expect(new_item.price).to eq 10
+        expect(new_item.additional_fields.count).to eq 0
       end
     end
 
@@ -137,15 +137,15 @@ RSpec.describe 'Atualiza Pedido', type: :request do
 
         put("/api/v1/orders/#{order.id}", params:)
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status :unprocessable_entity
 
-        body = JSON.parse(response.body)
-        expect(body['items']).to include('não pode ficar em branco')
+        json_response = JSON.parse response.body
+        expect(json_response).to eq ['Itens não pode ficar em branco']
 
-        unchanged_order = Order.find(order.id)
-        expect(Order.count).to eq(1)
-        expect(unchanged_order.items.count).to eq(1)
-        expect(unchanged_order.reload.total_price).to eq(20)
+        unchanged_order = Order.find order.id
+        expect(Order.count).to eq 1
+        expect(unchanged_order.items.count).to eq 1
+        expect(unchanged_order.reload.total_price).to eq 20
       end
     end
   end
