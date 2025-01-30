@@ -20,7 +20,7 @@
 - Organização dos pedidos por status:
   - "Novos pedidos", "Entregue", "Pago", "Cancelado".
 - Atualizações em tempo real para todos os usuários conectados.
-### Gestão de Produtos
+### 3. Gestão de Produtos
 - Produtos categorizados para seleção rápida e eficiente.
 - Integração direta com o fluxo de pedidos.
 ### 4. Dashboard
