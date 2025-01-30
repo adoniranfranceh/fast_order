@@ -81,7 +81,7 @@ Para acessar o sistema:
 ## 🔍 Rodando os Testes
 Testes são implementados com RSpec. Para executar:
 ```
-docker-compose exec app rspec
+docker-compose exec app bundle exec rspec
 ```
 
 ## 🚀 Inspiração
