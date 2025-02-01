@@ -3,7 +3,7 @@ module Filterable
 
   class_methods do
     def filter_by_attributes(query, params)
-      query = query.downcase
+      query = query&.downcase
       joins_tables, conditions, values = process_params(query, params)
 
       query_result = apply_joins(joins_tables)
@@ -61,7 +61,7 @@ module Filterable
     def apply_joins(joins_tables)
       query_result = self
       joins_tables.uniq.each do |table|
-        query_result = query_result.joins(table)
+        query_result = query_result.left_joins(table) # Alterado para LEFT JOIN
       end
       query_result
     end
