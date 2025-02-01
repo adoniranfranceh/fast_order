@@ -62,6 +62,15 @@ RSpec.describe Filterable, type: :model do
 
         expect(result).to be_empty
       end
+
+      it 'loga um aviso quando o atributo não existe no modelo' do
+        allow(Rails.logger).to receive(:warn) # Monitora chamadas ao logger
+
+        result = Order.filter_by_attributes('Teste', ['invalid_column'])
+
+        expect(result).to be_empty
+        expect(Rails.logger).to have_received(:warn).with("Column invalid_column does not exist in the model Order")
+      end
     end
 
     context 'quando o atributo pertence a uma relação' do

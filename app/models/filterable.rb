@@ -61,7 +61,7 @@ module Filterable
     def apply_joins(joins_tables)
       query_result = self
       joins_tables.uniq.each do |table|
-        query_result = query_result.left_joins(table) # Alterado para LEFT JOIN
+        query_result = query_result.left_joins(table)
       end
       query_result
     end
