@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import consumer from '../services/cable';
@@ -15,10 +15,12 @@ import {
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { AuthContext } from '../../context/AuthContext';
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext)
 
   useEffect(() => {
     const subscription = consumer.subscriptions.create(
@@ -51,7 +53,7 @@ const OrderList = () => {
 
   const fetchOrders = () => {
     axios
-      .get('/api/v1/orders?query=today')
+      .get(`/api/v1/orders?query=today&admin_id=${currentUser.admin_id}`)
       .then((response) => {
         setOrders(response.data.orders);
       })
