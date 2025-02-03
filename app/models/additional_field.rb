@@ -1,7 +1,7 @@
 class AdditionalField < ApplicationRecord
   belongs_to :item
 
-  after_update :update_order_total
+  after_save :update_order_total
 
   private
 

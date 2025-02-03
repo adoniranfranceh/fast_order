@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_19_054246) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_26_004314) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -69,7 +69,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_19_054246) do
     t.bigint "order_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "price", precision: 10, scale: 2
+    t.decimal "price", precision: 10, scale: 2, default: "0.0"
     t.integer "status", default: 0
     t.index ["order_id"], name: "index_items_on_order_id"
   end
@@ -98,6 +98,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_19_054246) do
     t.datetime "time_started"
     t.datetime "time_stopped"
     t.string "code"
+    t.datetime "last_edited_at"
     t.index ["code"], name: "index_orders_on_code", unique: true
     t.index ["user_id"], name: "index_orders_on_user_id"
   end

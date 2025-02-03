@@ -4,7 +4,7 @@ class Item < ApplicationRecord
   enum status: { pendent: 0, paid: 5 }
   accepts_nested_attributes_for :additional_fields, allow_destroy: true
 
-  after_update :update_order_total, :check_order_status
+  after_save :update_order_total, :check_order_status
   validates :name, presence: true
 
   private
