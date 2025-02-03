@@ -17,6 +17,7 @@ module CreateOrder
           pick_up_time: Faker::Time.forward(days: 23, period: :afternoon).to_s,
           address: Faker::Address.full_address,
           customer: Faker::Name.name,
+          code: "#{SecureRandom.alphanumeric(6).upcase}-#{Time.now.to_i}",
           created_at: date,
           updated_at: date
         }
