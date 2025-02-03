@@ -1,13 +1,25 @@
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const createObject = async (url, payload) => {
   try {
     const response = await axios.post(url, payload);
-    return response.data;
+    
+    response.data;
+    Swal.fire({
+      icon: 'success',
+      title: 'Sucesso!',
+      text: 'Criado com sucesso.',
+      confirmButtonText: 'OK'
+    });
   } catch (error) {
-    console.error('Erro ao criar pedido:', error);
-    alert('Erro:', error);
-    return { error: 'Erro ao criar o pedido.' };
+    console.log('Erro ao criar:', error.response.data);
+    return Swal.fire({
+      icon: 'error',
+      title: 'Erro!',
+      text: `${error.response?.data}`,
+      confirmButtonText: 'OK'
+    });
   }
 };
 

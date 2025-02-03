@@ -16,7 +16,7 @@ const updateObject = async (url, payload) => {
     return Swal.fire({
       icon: 'error',
       title: 'Erro!',
-      text: `Erro: ${error.response?.data?.base}`,
+      text: `${error.response?.data?.base}`,
       confirmButtonText: 'OK'
     });
   }
