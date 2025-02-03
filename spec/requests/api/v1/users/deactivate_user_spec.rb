@@ -35,7 +35,7 @@ RSpec.describe 'Users', type: :request do
       put deactivate_api_v1_user_path(user), params: { admin_password:, admin_id: admin.id }
 
       expect(response).to have_http_status :unprocessable_entity
-      expect(JSON.parse(response.body)['error']).to eq 'Não foi possível desativar o usuário'
+      expect(JSON.parse(response.body)['error']).to eq 'Não foi possível atualizar o status do usuário'
     end
 
     it 'retorna erro ao tentar desativar o usuário de outro admin' do

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Users', type: :request do
   describe 'PUT /api/v1/users/:id/activate' do
-    it 'desativa o usuário com sucesso com senha admin correta' do
+    it 'ativa o usuário com sucesso com senha admin correta' do
       admin_password = 'admin_password'
       admin = create :user, role: :admin, password: admin_password, password_confirmation: admin_password
       user = create :user, admin:, role: :collaborator, status: :inactive
@@ -10,7 +10,7 @@ RSpec.describe 'Users', type: :request do
       put activate_api_v1_user_path user, params: { admin_password:, admin_id: admin.id }
 
       expect(response).to have_http_status :ok
-      expect(JSON.parse(response.body)['message']).to eq 'Usuário desativado com sucesso'
+      expect(JSON.parse(response.body)['message']).to eq 'Usuário ativado com sucesso'
       expect(user.reload.status).to eq 'active'
     end
 
@@ -36,7 +36,7 @@ RSpec.describe 'Users', type: :request do
       put activate_api_v1_user_path user, params: { admin_password:, admin_id: admin.id }
 
       expect(response).to have_http_status :unprocessable_entity
-      expect(JSON.parse(response.body)['error']).to eq 'Não foi possível desativar o usuário'
+      expect(JSON.parse(response.body)['error']).to eq 'Não foi possível atualizar o status do usuário'
       expect(user.reload.status).to eq 'inactive'
     end
 

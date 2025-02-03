@@ -1,21 +1,11 @@
-# app/controllers/api/v1/users_controller.rb
 module Api
   module V1
     class UsersController < ApplicationController
       before_action :set_user, only: %i[show update activate deactivate destroy upload_profile_image]
 
       def index
-        page = (params[:page] || 1).to_i
-        per_page = (params[:per_page] || 5).to_i
-
-        collaborators = User.where(admin_id: current_user.admin.id)
-                            .order(:email)
-                            .paginate(page:, per_page:)
-
-        search_query = params[:search_query]&.downcase
-        searchable_attributes = %w[profile.full_name id email]
-
-        collaborators = collaborators.filter_by_attributes(search_query, searchable_attributes) if search_query.present?
+        collaborators = fetch_collaborators
+        collaborators = filter_collaborators(collaborators) if params[:search_query].present?
 
         render json: {
           users: collaborators.as_json(include: { profile: { only: %i[full_name] } }),
@@ -24,25 +14,11 @@ module Api
       end
 
       def show
-        total_orders = @user.orders.where(created_at: 1.year.ago..Time.current).count
-        monthly_orders = @user.orders.where(created_at: Time.current.beginning_of_month..Time.current.end_of_month).count
-
-        render json: @user.as_json(
-          include: {
-            profile: {
-              only: %i[full_name],
-              methods: [:photo_url]
-            },
-            admin_id: @user.admin.id
-          }
-        ).merge(
-          total_orders:,
-          monthly_orders:
-        )
+        render json: user_with_orders(@user)
       end
 
       def create
-        user = current_user.collaborators.build(user_params)
+        user = User.find(params[:admin_id]).collaborators.build(user_params)
 
         if user.save
           render json: { message: 'Colaborador registrado com sucesso', user: }, status: :created
@@ -60,33 +36,18 @@ module Api
       end
 
       def upload_profile_image
-        return unless params[:user][:profile_attributes][:photo]
+        return unless params.dig(:user, :profile_attributes, :photo)
 
         @user.profile.photo.attach(params[:user][:profile_attributes][:photo])
+        render json: { message: 'Foto de perfil atualizada com sucesso' }, status: :ok
       end
 
       def deactivate
-        if verify_admin_password(@user)
-          if @user.update(status: 'inactive')
-            render json: { message: 'Usuário desativado com sucesso' }, status: :ok
-          else
-            render json: { error: 'Não foi possível desativar o usuário' }, status: :unprocessable_entity
-          end
-        else
-          render json: { error: 'Senha inválida' }, status: :unauthorized
-        end
+        update_user_status('inactive', 'Usuário desativado com sucesso')
       end
 
       def activate
-        if verify_admin_password(@user)
-          if @user.update(status: 'active')
-            render json: { message: 'Usuário desativado com sucesso' }, status: :ok
-          else
-            render json: { error: 'Não foi possível desativar o usuário' }, status: :unprocessable_entity
-          end
-        else
-          render json: { error: 'Senha inválida' }, status: :unauthorized
-        end
+        update_user_status('active', 'Usuário ativado com sucesso')
       end
 
       def destroy
@@ -100,9 +61,23 @@ module Api
 
       private
 
+      def fetch_collaborators
+        User.where(admin_id: params[:admin_id])
+            .order(:email)
+            .paginate(page: params[:page] || 1, per_page: params[:per_page] || 5)
+      end
+
+      def filter_collaborators(collaborators)
+        collaborators.filter_by_attributes(params[:search_query], %w[profile.full_name id email])
+      end
+
       def set_user
-        @user = User.find_by(id: params[:id])
+        @user = User.find_by(id: params[:id], admin_id: params[:admin_id])
         render json: { error: 'Usuário não encontrado' }, status: :not_found unless @user
+      end
+
+      def user_params
+        params.require(:user).permit(:email, :password, :password_confirmation, profile_attributes: %i[full_name])
       end
 
       def verify_admin_password(user)
@@ -110,12 +85,32 @@ module Api
         admin&.valid_password?(params[:admin_password])
       end
 
-      def user_params
-        params.require(:user).permit(
-          :email,
-          :password,
-          :password_confirmation,
-          profile_attributes: %i[full_name]
+      def update_user_status(status, success_message)
+        if verify_admin_password(@user)
+          if @user.update(status: status)
+            render json: { message: success_message }, status: :ok
+          else
+            render json: { error: 'Não foi possível atualizar o status do usuário' }, status: :unprocessable_entity
+          end
+        else
+          render json: { error: 'Senha inválida' }, status: :unauthorized
+        end
+      end
+
+      def user_with_orders(user)
+        total_orders = user.orders.where(created_at: 1.year.ago..Time.current).count
+        monthly_orders = user.orders.where(created_at: Time.current.beginning_of_month..Time.current.end_of_month).count
+
+        user.as_json(
+          include: {
+            profile: {
+              only: %i[full_name],
+              methods: [:photo_url]
+            }
+          }
+        ).merge(
+          total_orders: total_orders,
+          monthly_orders: monthly_orders
         )
       end
     end
