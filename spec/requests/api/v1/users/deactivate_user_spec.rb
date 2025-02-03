@@ -19,7 +19,7 @@ RSpec.describe 'Users', type: :request do
       admin = create(:user, role: :admin, password: admin_password, password_confirmation: admin_password)
       user = create(:user, admin:, role: :collaborator)
 
-      put deactivate_api_v1_user_path(user), params: { admin_password: 'wrong_password', admin_id: admin.id  }
+      put deactivate_api_v1_user_path(user), params: { admin_password: 'wrong_password', admin_id: admin.id }
 
       expect(response).to have_http_status :unauthorized
       expect(JSON.parse(response.body)['error']).to eq 'Senha inválida'
