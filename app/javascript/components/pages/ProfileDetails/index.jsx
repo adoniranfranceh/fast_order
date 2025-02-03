@@ -47,7 +47,7 @@ const ProfileDetails = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`/api/v1/users/${id}`);
+        const response = await axios.get(`/api/v1/users/${id}?admin_id=${currentUser.admin_id}`);
         setUser(response.data);
         setProfile(response.data.profile);
         setTotalOrders(response.data.total_orders);
