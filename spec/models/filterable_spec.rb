@@ -69,7 +69,7 @@ RSpec.describe Filterable, type: :model do
         result = Order.filter_by_attributes('Teste', ['invalid_column'])
 
         expect(result).to be_empty
-        expect(Rails.logger).to have_received(:warn).with("Column invalid_column does not exist in the model Order")
+        expect(Rails.logger).to have_received(:warn).with('Column invalid_column does not exist in the model Order')
       end
     end
 

@@ -152,9 +152,9 @@ RSpec.describe Api::V1::DashboardController, type: :request do
       expect(json_response['new_employees'].values.sum).to eq(3)
     end
 
-    it 'retorna a contagem de novos cartões de fidelidade por mês corretamente' do
+    it 'retorna a contagem cartões de fidelidade usados por mês corretamente' do
       travel_to Time.current do
-        create(:loyalty_card, customer: create(:customer, user: @admin))
+        create(:loyalty_card, customer: create(:customer, user: @admin), status: :used)
       end
 
       get api_v1_dashboard_path
