@@ -14,7 +14,7 @@ FactoryBot.define do
       items_price { 10 }
       create_items { true }
       items_status { :paid }
-      additional_count { rand(0..5) }
+      additional_count { rand(1..5) }
       additional_price { 0 }
     end
 
