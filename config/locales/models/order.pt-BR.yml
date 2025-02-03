@@ -10,6 +10,7 @@ pt-BR:
         table_info: Info da mesa
         address: Endereço
         pick_up_time: Hora de retirada
+        items: Itens
         status:
           doing: Aguardando
           delivered: Entregue
