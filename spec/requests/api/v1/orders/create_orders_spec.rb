@@ -35,6 +35,7 @@ describe 'Cria pedido' do
       expect(order.items.count).to eq 2
       expect(order.items.first.name).to eq 'Item 1'
       expect(order.items.second.name).to eq 'Item 2'
+      expect(order.last_edited_at).to eq nil
 
       item1 = order.items.first
       item2 = order.items.second

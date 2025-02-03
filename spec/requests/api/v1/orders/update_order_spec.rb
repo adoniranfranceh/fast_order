@@ -23,6 +23,7 @@ RSpec.describe 'Atualiza Pedido', type: :request do
         expect(updated_order.customer).to eq 'Customer'
         expect(updated_order.items.count).to eq 1
         expect(updated_order.total_price).to eq 20
+        expect(updated_order.last_edited_at).to be_within(0.1).of(Time.zone.now)
       end
 
       it 'atualiza `time_stopped` quando status muda de doing para delivered' do
