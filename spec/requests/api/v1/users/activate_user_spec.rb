@@ -31,7 +31,7 @@ RSpec.describe 'Users', type: :request do
       admin = create :user, role: :admin, password: admin_password, password_confirmation: admin_password
       user = create :user, admin:, role: :collaborator, status: :inactive
 
-      allow_any_instance_of(User).to receive(:update).and_return(false)
+      allow_any_instance_of(User).to receive(:update).and_return false
 
       put activate_api_v1_user_path user, params: { admin_password:, admin_id: admin.id }
 
