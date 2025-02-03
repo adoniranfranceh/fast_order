@@ -1,32 +1,16 @@
 module Api
   module V1
     class OrdersController < ApplicationController
+      before_action :set_order, only: %w[show update print_invoice]
+
       def index
-        orders = fetch_orders
-        orders = paginate_orders(orders) if params[:query] != 'today'
+        orders = Order.filtered_orders(params)
+        orders = paginate_orders(orders)
         render json: format_response(orders)
       end
 
       def show
-        order = Order.includes(items: :additional_fields).find(params[:id])
-        render json: order.as_json(include: {
-                                     user: {
-                                       only: [:email],
-                                       include: {
-                                         profile: {
-                                           only: [:full_name],
-                                           methods: [:photo_url]
-                                         }
-                                       }
-                                     },
-                                     items: {
-                                       include: {
-                                         additional_fields: { only: %i[id additional additional_value] }
-                                       },
-                                       only: %i[id name price status]
-                                     }
-                                   }, only: %i[id customer status delivery_type code
-                                               table_info address pick_up_time user_id total_price])
+        render json: format_order_response(@order)
       end
 
       def create
@@ -35,13 +19,54 @@ module Api
         if order.save
           render json: order, status: :created
         else
-          render json: order.errors, status: :unprocessable_entity
+          render json: order.errors.full_messages, status: :unprocessable_entity
         end
       end
 
       def update
-        order = Order.find(params[:id])
-        new_status = params[:status] || 'delivered'
+        update_order_status(@order) if params.dig(:order, :status).present?
+
+        if @order.update(order_params)
+          @order.update(last_edited_at: Time.zone.now)
+          render json: @order
+        else
+          render json: @order.errors.full_messages, status: :unprocessable_entity
+        end
+      end
+
+      def print_invoice
+        OrderReceiptService.new(@order).generate
+      end
+
+      private
+
+      def set_order
+        @order = Order.find(params[:id])
+      end
+
+      def paginate_orders(orders)
+        page = (params[:page] || 1).to_i
+        per_page = [(params[:per_page] || 5).to_i, 50].min
+        orders.paginate(page:, per_page:)
+      end
+
+      def format_response(orders)
+        {
+          orders: OrderSerializer.new(orders).as_json,
+          total_count: total_count(orders)
+        }
+      end
+
+      def format_order_response(order)
+        OrderSerializer.new(order).as_json
+      end
+
+      def total_count(orders)
+        params[:query] == 'today' ? orders.count : orders.total_entries
+      end
+
+      def update_order_status(order)
+        new_status = params[:order][:status]
         current_time = Time.zone.now
 
         if order.status == 'doing' && new_status != 'doing'
@@ -49,84 +74,6 @@ module Api
         else
           order.update(status: new_status)
         end
-
-        if order.update(order_params)
-          render json: order
-        else
-
-          render json: order.errors, status: :unprocessable_entity
-        end
-      end
-
-      def print_invoice
-        order = Order.find(params[:id])
-        pdf = InvoicePdfService.new(order).generate_pdf
-        send_data pdf, filename: "invoice_#{order.code}.pdf", type: 'application/pdf', disposition: 'inline'
-      end
-
-      private
-
-      def fetch_orders
-        orders = Order.where(admin_id: current_user.admin.id)
-                      .includes(items: :additional_fields)
-        filter_orders(orders)
-      end
-
-      def filter_orders(orders)
-        search_query = params[:search_query]
-        searchable_attributes = %w[customer code status delivery_type total_price table_info address pick_up_time]
-
-        orders = orders.filter_by_attributes(search_query.downcase, searchable_attributes) if search_query.present?
-
-        if params[:date_filter].present?
-          date_filter = Date.parse(params[:date_filter])
-          orders = orders.where(created_at: date_filter.all_day)
-        end
-
-        if params[:query] == 'today'
-          return orders = orders.where('created_at >= ?', 12.hours.ago).order(id: :asc)
-        end
-
-        orders.order(id: :desc)
-      end
-
-      def paginate_orders(orders)
-        page = (params[:page] || 1).to_i
-        per_page = (params[:per_page] || 5).to_i
-
-        orders.paginate(page:, per_page:)
-      end
-
-      def format_response(orders)
-        total_count = orders.count
-        total_count = orders.total_entries if params[:query] != 'today'
-        {
-          orders: orders.as_json(
-            include: order_includes,
-            only: order_only_attributes
-          ),
-          total_count:
-        }
-      end
-
-      def order_includes
-        {
-          user: {
-            include: {
-              profile: { only: [:full_name], methods: [:photo_url] }
-            }, only: [:email]
-          },
-          items: {
-            include: {
-              additional_fields: { only: %i[id additional additional_value] }
-            }, only: %i[id name price status]
-          }
-        }
-      end
-
-      def order_only_attributes
-        %i[id code customer status delivery_type total_price table_info address pick_up_time user_id time_started elapsed_time
-           time_stopped]
       end
 
       def order_params
@@ -137,15 +84,7 @@ module Api
       end
 
       def order_attributes
-        %i[
-          customer
-          status
-          delivery_type
-          table_info
-          address
-          pick_up_time
-          user_id
-        ]
+        %i[customer status delivery_type table_info address pick_up_time user_id]
       end
 
       def item_attributes
