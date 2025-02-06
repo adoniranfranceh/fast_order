@@ -2,15 +2,17 @@ require 'rails_helper'
 
 RSpec.describe OrderReceiptService, type: :service do
   let(:printer) { instance_double(Escpos::Printer) }
-  let(:order) { instance_double(Order,
-                                id: 1,
-                                code: '1234',
-                                customer: 'Cliente Teste',
-                                delivery_type: 'pickup',
-                                created_at: Time.now,
-                                total_price: 50.0,
-                                last_edited_at: nil,
-                                items: []) }
+  let(:order) do
+    instance_double(Order,
+                    id: 1,
+                    code: '1234',
+                    customer: 'Cliente Teste',
+                    delivery_type: 'pickup',
+                    created_at: Time.zone.now,
+                    total_price: 50.0,
+                    last_edited_at: nil,
+                    items: [])
+  end
   let(:service) { described_class.new(order) }
 
   before do
@@ -60,7 +62,11 @@ RSpec.describe OrderReceiptService, type: :service do
   end
 
   describe '#additional_fields_changed?' do
-    let(:item) { double('Item', additional_fields: [double('AdditionalField', previous_changes: { updated_at: ['2023-01-01', '2023-01-02'] })]) }
+    let(:item) do
+      double('Item',
+             additional_fields: [double('AdditionalField',
+                                        previous_changes: { updated_at: %w[2023-01-01 2023-01-02] })])
+    end
 
     before do
       allow(order).to receive(:items).and_return([item])
@@ -72,7 +78,7 @@ RSpec.describe OrderReceiptService, type: :service do
   end
 
   describe '#items_changed?' do
-    let(:item) { double('Item', previous_changes: { updated_at: ['2023-01-01', '2023-01-02'] }) }
+    let(:item) { double('Item', previous_changes: { updated_at: %w[2023-01-01 2023-01-02] }) }
 
     before do
       allow(order).to receive(:items).and_return([item])
@@ -85,7 +91,7 @@ RSpec.describe OrderReceiptService, type: :service do
 
   describe '#order_attributes_changed?' do
     before do
-      allow(order).to receive(:previous_changes).and_return('status' => ['pending', 'completed'])
+      allow(order).to receive(:previous_changes).and_return('status' => %w[pending completed])
     end
 
     it 'verifica se os atributos do pedido mudaram' do
@@ -106,7 +112,7 @@ RSpec.describe OrderReceiptService, type: :service do
   end
 
   describe '#add_header' do
-    let(:order_with_edit) { instance_double(Order, last_edited_at: Time.now, code: '1234') }
+    let(:order_with_edit) { instance_double(Order, last_edited_at: Time.zone.now, code: '1234') }
     let(:order_without_edit) { instance_double(Order, last_edited_at: nil, code: '1234') }
 
     it 'imprime a data de edição quando o pedido foi editado' do
@@ -123,12 +129,15 @@ RSpec.describe OrderReceiptService, type: :service do
   end
 
   describe '#add_order_details' do
-    let(:order) { instance_double(Order, customer: 'Cliente Teste', delivery_type: 'pickup', content: 'Detalhes', created_at: Time.now) }
+    let(:order) do
+      instance_double(Order, customer: 'Cliente Teste', delivery_type: 'pickup', content: 'Detalhes',
+                             created_at: Time.zone.now)
+    end
 
     it 'imprime as informações do pedido corretamente' do
       service = described_class.new(order)
-      expect(service).to receive(:format_text).with("Cliente: Cliente Teste")
-      expect(service).to receive(:format_text).with("Tipo de Entrega: Para retirada Detalhes")
+      expect(service).to receive(:format_text).with('Cliente: Cliente Teste')
+      expect(service).to receive(:format_text).with('Tipo de Entrega: Para retirada Detalhes')
       expect(service).to receive(:format_text).with("Data: #{order.created_at.strftime('%d/%m/%Y %H:%M')}")
       service.send(:add_order_details)
     end
@@ -136,7 +145,9 @@ RSpec.describe OrderReceiptService, type: :service do
 
   describe '#add_items' do
     let(:order) { instance_double(Order, items: [item_with_additional]) }
-    let(:item_with_additional) { instance_double(Item, name: 'Item 1', price: 10.0, additional_fields: [additional_field]) }
+    let(:item_with_additional) do
+      instance_double(Item, name: 'Item 1', price: 10.0, additional_fields: [additional_field])
+    end
     let(:additional_field) { instance_double(AdditionalField, additional: 'Adicional 1', additional_value: 5.0) }
 
     it 'chama os métodos de detalhes do item e imprime os campos adicionais' do

@@ -1,6 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe Order, type: :model do
+  let!(:admin) { create(:user, role: :admin) }
+  let!(:user) { create(:user, role: :collaborator, admin_id: admin.id) }
+
+  let!(:order1) do
+    create(:order, admin_id: admin.id, customer: 'John Doe', code: 'ORDER123', created_at: 1.day.ago)
+  end
+  let!(:order2) do
+    create(:order, admin_id: admin.id, customer: 'Jane Smith', code: 'ORDER456', created_at: 2.days.ago)
+  end
+  let!(:order3) do
+    create(:order, admin_id: admin.id, customer: 'Alice Johnson', code: 'ORDER789', created_at: Time.current)
+  end
   context 'validações de delivery' do
     it 'é inválido sem delivery_type' do
       order = build(:order, delivery_type: nil)
@@ -54,7 +66,7 @@ RSpec.describe Order, type: :model do
     end
   end
 
-  context '.content' do
+  context '#content' do
     it 'tipo de entrega local' do
       user = create(:user)
       order = create(:order, user:, delivery_type: :local, table_info: 'M7')
@@ -77,7 +89,7 @@ RSpec.describe Order, type: :model do
     end
   end
 
-  context '.sum_total' do
+  context '#sum_total' do
     it 'ao criar pedido' do
       user = create(:user)
       order = create(:order, items_count: 3, items_price: 15, additional_count: 1, additional_price: 0.5, user:)
@@ -101,6 +113,70 @@ RSpec.describe Order, type: :model do
       order.reload
 
       expect(order.total_price).to eq 2 * 15 + 1 + 0.5
+    end
+  end
+
+  describe '#elapsed_time' do
+    let(:order) { Order.new }
+
+    context 'quando o tempo de início e o tempo de parada estão definidos' do
+      it 'retorna o tempo entre time_started e time_stopped' do
+        order.time_started = Time.zone.local(2025, 2, 3, 14, 0, 0)
+        order.time_stopped = Time.zone.local(2025, 2, 3, 15, 30, 0)
+
+        expect(order.elapsed_time).to eq 90 * 60
+      end
+    end
+
+    context 'quando o tempo de início ou o tempo de parada não estão definidos' do
+      it 'retorna 0 quando time_started é nil' do
+        order.time_started = nil
+        order.time_stopped = Time.current
+
+        expect(order.elapsed_time).to eq 0
+      end
+
+      it 'retorna 0 quando time_stopped é nil' do
+        order.time_started = Time.current
+        order.time_stopped = nil
+
+        expect(order.elapsed_time).to eq 0
+      end
+
+      it 'retorna 0 quando ambos são nil' do
+        order.time_started = nil
+        order.time_stopped = nil
+
+        expect(order.elapsed_time).to eq 0
+      end
+    end
+  end
+
+  describe '#generate_receipt' do
+    let(:order) { create(:order) }
+    let(:receipt_service) { instance_double(OrderReceiptService) }
+
+    before do
+      allow(OrderReceiptService).to receive(:new).with(order).and_return(receipt_service)
+      allow(receipt_service).to receive(:print_receipt)
+    end
+
+    it 'chama o método print_receipt do OrderReceiptService' do
+      order.generate_receipt
+      expect(receipt_service).to have_received :print_receipt
+    end
+  end
+
+  describe '#update_last_edited_at' do
+    let(:order) { create(:order) }
+
+    it 'atualiza o campo last_edited_at com o horário atual' do
+      current_time = Time.current
+      allow(Time).to receive(:current).and_return(current_time)
+
+      order.update_last_edited_at
+
+      expect(order.reload.last_edited_at).to be_within(0.1).of current_time
     end
   end
 
