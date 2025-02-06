@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import categoriesData from '../../../data/categories.json';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -13,6 +13,7 @@ import {
 } from './style';
 import createObject from '../../services/createObject';
 import updateObject from '../../services/updateObject';
+import { AuthContext } from '../../../context/AuthContext';
 
 const ProductForm = ({ onSubmit, productData }) => {
   const [name, setName] = useState('');
@@ -22,6 +23,7 @@ const ProductForm = ({ onSubmit, productData }) => {
   const [extraAdditionalPrice, setExtraAdditionalPrice] = useState('');
   const [selectedcategory, setSelectedcategory] = useState('');
   const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext)
 
   useEffect(() => {
     if (productData) {
@@ -43,6 +45,7 @@ const ProductForm = ({ onSubmit, productData }) => {
       max_additional_quantity: parseInt(maxAdditionalQuantity, 10),
       extra_additional_price: parseFloat(extraAdditionalPrice),
       category: selectedcategory,
+      user_id: currentUser.admin_id,
     };
 
     try {
