@@ -47,6 +47,6 @@ describe 'Cria cliente' do
     expect(response).to have_http_status :unprocessable_entity
     expect(Customer.count).to eq 0
     json_response = JSON.parse(response.body)
-    expect(json_response).to eq ['Nome não pode ficar em branco', 'Data de nascimento não pode ficar em branco']
+    expect(json_response['errors']).to eq ['Nome não pode ficar em branco', 'Data de nascimento não pode ficar em branco']
   end
 end

@@ -24,7 +24,7 @@ module Api
         if product.save
           render json: { message: 'Cliente registrado com sucesso', product: }, status: :created
         else
-          render json: product.errors.full_messages, status: :unprocessable_entity
+          render json: { errors: product.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -32,7 +32,7 @@ module Api
         if @product.update(product_params)
           render json: @product
         else
-          render json: @product.errors.full_messages, status: :unprocessable_entity
+          render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -40,7 +40,7 @@ module Api
         if @product.destroy
           render json: @product
         else
-          render json: @product.errors.full_messages, status: :unprocessable_entity
+          render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
         end
       end
 

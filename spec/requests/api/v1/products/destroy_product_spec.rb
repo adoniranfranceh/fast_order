@@ -11,6 +11,7 @@ RSpec.describe 'DELETE /api/v1/products/:id', type: :request do
       expect(response).to have_http_status :ok
       json_response = JSON.parse response.body
       expect(json_response['id']).to eq product.id
+      expect(Product.count).to eq 0
     end
   end
 
@@ -31,7 +32,7 @@ RSpec.describe 'DELETE /api/v1/products/:id', type: :request do
 
       expect(response).to have_http_status :unprocessable_entity
       json_response = JSON.parse response.body
-      expect(json_response).to eq ['Erro simulado']
+      expect(json_response['errors']).to eq ['Erro simulado']
     end
   end
 end

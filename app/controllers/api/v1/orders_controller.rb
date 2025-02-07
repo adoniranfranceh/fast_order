@@ -21,7 +21,7 @@ module Api
         if order.save
           render json: order, status: :created
         else
-          render json: order.errors.full_messages, status: :unprocessable_entity
+          render json: { errors: order.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -34,7 +34,7 @@ module Api
           @order.update_last_edited_at if should_generate_receipt?(@order)
           render json: @order
         else
-          render json: @order.errors.full_messages, status: :unprocessable_entity
+          render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
         end
       end
 

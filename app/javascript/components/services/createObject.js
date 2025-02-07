@@ -17,7 +17,7 @@ const createObject = async (url, payload) => {
     return Swal.fire({
       icon: 'error',
       title: 'Erro!',
-      text: `${error.response?.data}`,
+      text: `${error.response?.data?.errors}`,
       confirmButtonText: 'OK'
     });
   }

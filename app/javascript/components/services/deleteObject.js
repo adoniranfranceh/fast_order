@@ -25,12 +25,12 @@ const deleteObject = (endpoint, id) => {
           return true;
         })
         .catch((error) => {
-          console.log('Erro ao excluir o objeto:', error.response?.data?.base);
+          console.log('Erro ao excluir o objeto:', error.response?.data?.errors?.base);
 
           Swal.fire({
             icon: 'error',
             title: 'Erro!',
-            text: `Erro: ${error.response?.data?.base || 'Ocorreu um erro inesperado.'}`,
+            text: `Erro: ${error.response?.data?.errors?.base || 'Ocorreu um erro inesperado.'}`,
             confirmButtonText: 'OK'
           });
 

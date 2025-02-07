@@ -72,7 +72,7 @@ describe 'Cria pedido' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse response.body
-        expect(json_response).to eq ['Tipo de entrega não pode ficar em branco']
+        expect(json_response['errors']).to eq ['Tipo de entrega não pode ficar em branco']
 
         expect(Order.count).to eq 0
       end
@@ -101,7 +101,7 @@ describe 'Cria pedido' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse response.body
-        expect(json_response).to eq ['Info da mesa não pode ficar em branco. Entrega local']
+        expect(json_response['errors']).to eq ['Info da mesa não pode ficar em branco. Entrega local']
 
         expect(Order.count).to eq 0
       end
@@ -130,7 +130,7 @@ describe 'Cria pedido' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse response.body
-        expect(json_response).to eq ['Endereço não pode ficar em branco. Entrega delivery']
+        expect(json_response['errors']).to eq ['Endereço não pode ficar em branco. Entrega delivery']
 
         expect(Order.count).to eq 0
       end
@@ -159,7 +159,7 @@ describe 'Cria pedido' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse response.body
-        expect(json_response).to eq ['Hora de retirada não pode ficar em branco. Entrega para retirada']
+        expect(json_response['errors']).to eq ['Hora de retirada não pode ficar em branco. Entrega para retirada']
 
         expect(Order.count).to eq 0
       end
@@ -179,7 +179,7 @@ describe 'Cria pedido' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse response.body
-        expect(json_response).to eq ['Itens não pode ficar em branco']
+        expect(json_response['errors']).to eq ['Itens não pode ficar em branco']
         expect(Order.count).to eq 0
       end
     end

@@ -141,7 +141,7 @@ RSpec.describe 'Atualiza Pedido', type: :request do
         expect(response).to have_http_status :unprocessable_entity
 
         json_response = JSON.parse response.body
-        expect(json_response).to eq ['Itens não pode ficar em branco']
+        expect(json_response['errors']).to eq ['Itens não pode ficar em branco']
 
         unchanged_order = Order.find order.id
         expect(Order.count).to eq 1

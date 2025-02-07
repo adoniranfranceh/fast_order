@@ -31,7 +31,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       json_response = JSON.parse response.body
       expect(response).to have_http_status :unprocessable_entity
-      expect(json_response).to eq ['E-mail não pode ficar em branco']
+      expect(json_response['errors']).to eq ['E-mail não pode ficar em branco']
     end
   end
 end

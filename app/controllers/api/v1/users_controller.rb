@@ -23,7 +23,7 @@ module Api
         if user.save
           render json: { message: 'Colaborador registrado com sucesso', user: }, status: :created
         else
-          render json: user.errors.full_messages, status: :unprocessable_entity
+          render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -31,7 +31,7 @@ module Api
         if @user.update(user_params)
           render json: { message: 'Colaborador atualizado com sucesso', user: @user }, status: :ok
         else
-          render json: @user.errors.full_messages, status: :unprocessable_entity
+          render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
         end
       end
 

@@ -17,13 +17,13 @@ const putStatus = (endpoint, id, updateData, showNotification = true) => {
       return { PromiseResult: true }; 
     })
     .catch((error) => {
-      console.log('Erro ao atualizar o status:', error.response?.data?.base);
+      console.log('Erro ao atualizar o status:', error.response?.data?.errors?.base);
 
       if (showNotification) {
         Swal.fire({
           icon: 'error',
           title: 'Erro!',
-          text: `Erro: ${error.response?.data?.base}`,
+          text: `Erro: ${error.response?.data?.errors?.base}`,
           confirmButtonText: 'OK'
         });
       }
