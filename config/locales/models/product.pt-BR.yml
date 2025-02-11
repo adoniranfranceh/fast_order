@@ -1,0 +1,16 @@
+pt-BR:
+  activerecord:
+    models:
+      product: 
+        one: Produto
+        other: Produtos
+    attributes:
+      product:
+        name: Nome
+        description: Descrição
+        category: Categoria
+        base_price: Preço Base
+        max_additional_quantity: Quantidade Máxima de Adicionais
+        extra_additional_price: Preço Extra por Adicional
+        user_id: Usuário
+        user: Usuário  

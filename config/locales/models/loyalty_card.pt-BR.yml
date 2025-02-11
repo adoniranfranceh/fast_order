@@ -1,0 +1,12 @@
+pt-BR:
+  activerecord:
+    models:
+      loyalty_card: 
+        one: Cartão Fidelidade
+        other: Cartões Fidelidade
+    attributes:
+      loyalty_card:
+        name: Nome
+        status: Status
+        customer: Cliente
+        customer_id: Cliente

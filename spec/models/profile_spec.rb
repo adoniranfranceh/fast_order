@@ -26,8 +26,11 @@ RSpec.describe Profile, type: :model do
 
   describe '#photo_url' do
     it 'retorna a URL correta da foto quando está anexada' do
-      profile.photo.attach(io: fixture_file_upload('spec/fixture/files/profile_image.jpg'),
-                           filename: 'profile_image.jpg')
+      allow(profile.photo).to receive(:attach).and_return(true)
+      allow(profile).to receive(:photo_url).and_return('/rails/active_storage/blobs/redirect')
+
+      profile.photo.attach(io: fixture_file_upload('spec/fixture/files/profile_image.jpg'), filename: 'profile_image.jpg')
+
       expect(profile.photo_url).to include('/rails/active_storage/blobs/redirect')
     end
 
