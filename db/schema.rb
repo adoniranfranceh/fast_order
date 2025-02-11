@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_26_004314) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_07_190044) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -88,7 +88,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_26_004314) do
     t.integer "status", default: 1
     t.integer "delivery_type"
     t.string "table_info"
-    t.time "pick_up_time"
+    t.datetime "pick_up_time"
     t.text "address"
     t.string "customer"
     t.datetime "created_at", null: false

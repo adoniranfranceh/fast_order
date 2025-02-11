@@ -6,10 +6,10 @@ module Api
 
       def index
         products = filter_products(@admin.products)
-        paginated_products = paginate(products)
+        products = paginate(products) if params[:page]
 
         render json: {
-          products: paginated_products.as_json(except: %i[created_at updated_at]),
+          products: products.as_json(except: %i[created_at updated_at]),
           total_count: products.count
         }
       end
@@ -77,8 +77,8 @@ module Api
       end
 
       def paginate(products)
-        page = (params[:page] || 1).to_i
-        per_page = (params[:per_page] || 5).to_i
+        page = (params[:page]).to_i
+        per_page = (params[:per_page]).to_i
         products.order(:name).paginate(page:, per_page:)
       end
     end

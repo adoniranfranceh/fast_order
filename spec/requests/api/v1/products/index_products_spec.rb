@@ -13,7 +13,7 @@ RSpec.describe 'GET /api/v1/products', type: :request do
       expected_result = products.first
 
       expect(response).to have_http_status :ok
-      expect(json_response['products'].size).to eq 5
+      expect(json_response['products'].size).to eq 10
       expect(first_product['id']).to eq expected_result.id
       expect(first_product['name']).to eq expected_result.name
       expect(first_product['description']).to eq expected_result.description
