@@ -16,7 +16,7 @@ describe 'Admin vê pedidos' do
                             status: :delivered, customer: 'Roger'
 
     within("div[status-type='delivered']") do
-      expect(page).to have_text("Pedido ##{order2.code}", wait: 3)
+      expect(page).to have_text("Pedido ##{order2.code}", wait: 4)
       expect(page).to have_content 'Entrega - Rua: Cardoso, 100'
       expect(page).to have_content 'Roger'
       expect(page).to have_content "\nStatus: Entregue"
@@ -47,10 +47,12 @@ describe 'Admin vê pedidos' do
 
     expect(page).to have_content 'Novos Pedidos'
     within "div[status-type='doing']" do
+      expect(page).to have_content 'Novos Pedidos2'
       expect(page).to have_content 'Ernesto'
       expect(page).to have_content "\nMesa: 4"
       expect(page).to have_content "\nStatus: Aguardando..."
       expect(page).to have_button 'Ver Detalhes'
+
       expect(page).to have_content 'Horário de retirada: 19:30'
       expect(page).to have_content 'Carlos'
       expect(page).to have_content "\nStatus: Aguardando"
@@ -58,6 +60,7 @@ describe 'Admin vê pedidos' do
     end
 
     within("div[status-type='delivered']") do
+      expect(page).to have_content 'Entregues1'
       expect(page).to have_content 'Entrega - Rua: Cardoso, 100'
       expect(page).to have_content 'Roger'
       expect(page).to have_content "\nStatus: Entregue"
@@ -65,6 +68,7 @@ describe 'Admin vê pedidos' do
     end
 
     within("div[status-type='paid']") do
+      expect(page).to have_content 'Pagos1'
       expect(page).to have_content 'Mesa: 7'
       expect(page).to have_content 'Chris'
       expect(page).to have_content 'Status: Pago'
@@ -72,6 +76,7 @@ describe 'Admin vê pedidos' do
     end
 
     within("div[status-type='canceled']") do
+      expect(page).to have_content 'Cancelados1'
       expect(page).to have_content 'Mesa: 6'
       expect(page).to have_content 'Michael'
       expect(page).to have_content 'Status: Cancelado'
