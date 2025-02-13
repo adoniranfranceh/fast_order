@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { Card, Grid, Typography, Paper, TextField, Button, Box } from '@mui/material';
 import createObject from '../services/createObject';
 import updateObject from '../services/updateObject';
 import putStatus from '../services/putStatus';
 import deleteObject from '../services/deleteObject';
+import { AuthContext } from '../../context/AuthContext'
 
 const LoyaltyCardContainer = styled(Card)`
   padding: 16px;
@@ -102,6 +103,7 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [stamps, setStamps] = useState(loyaltyCard.stamps || []);
   const [currentLoyaltyCard, setLoyaltyCard] = useState(loyaltyCard);
+  const { currentUser } = useContext(AuthContext)
 
   const handleStampClick = (index) => {
     setSelectedStampIndex(index);
@@ -112,18 +114,23 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
     if (selectedStampIndex === null) return;
 
     try {
-      if (stamps[selectedStampIndex]) {
+      if (selectedStampIndex !== null && stamps[selectedStampIndex]) {
         const updatedStamp = await updateObject(
           `/api/v1/loyalty_cards/${loyaltyCard.id}/stamps/${stamps[selectedStampIndex].id}`,
           { item }
         );
-        setStamps(stamps.map((stamp, i) => (i === selectedStampIndex ? updatedStamp : stamp)));
+        setStamps((prevStamps) =>
+          prevStamps.map((stamp, index) => 
+            index === selectedStampIndex ? updatedStamp : stamp
+          )
+        )
       } else {
         const newStamp = await createObject(
-          `/api/v1/loyalty_cards/${loyaltyCard.id}/stamps`,
+          `/api/v1/loyalty_cards/${loyaltyCard.id}/stamps?admin_id=${currentUser.admin_id}`,
           { item }
         );
-        setStamps([...stamps, newStamp]);
+        console.log(newStamp)
+        setStamps((prevStamps) => [...prevStamps, newStamp])
       }
     } catch (error) {
       console.error('Erro:', error);
@@ -132,7 +139,7 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
 
   const handleRemoveCard = async () => {
     try {
-      const response = deleteObject('/api/v1/loyalty_cards', loyaltyCard.id);
+      const response = await deleteObject('/api/v1/loyalty_cards', loyaltyCard.id);
 
       console.log(response)
       if (response) {
@@ -154,8 +161,8 @@ const LoyaltyCard = ({ loyaltyCard, onRemove }) => {
     }
   };
 
-  const stampsWithItem = stamps.filter(stamp => stamp.item && stamp.item.trim() !== '');
-
+  const stampsWithItem = stamps.filter(stamp => stamp && stamp.item && stamp.item.trim() !== '');
+  
   return (
     <LoyaltyCardContainer>
       <Typography variant="h6" align="center" gutterBottom>
