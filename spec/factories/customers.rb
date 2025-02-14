@@ -1,4 +1,3 @@
-# spec/factories/customers.rb
 FactoryBot.define do
   factory :customer do
     name { Faker::Name.name }

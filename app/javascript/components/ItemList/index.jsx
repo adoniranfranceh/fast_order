@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, Button, IconButton, TextField, Typography, Autocomplete } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { AdditionalFields } from '../index.js';
 import fetchProducts from '../services/fetchProducts.js';
 import theme from '../theme/index.js';
+import { AuthContext } from '../../context/AuthContext/index.jsx';
 
 const ItemList = ({ items = [], setItems, errors }) => {
   const [products, setProducts] = useState([]);
+  const { currentUser } = useContext(AuthContext)
 
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const fetchedProducts = await fetchProducts();
+        const fetchedProducts = await fetchProducts(currentUser);
         setProducts(fetchedProducts.products);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
@@ -26,7 +28,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
     const selectedProduct = products.find((product) => product.name === productName);
 
     if (selectedProduct) {
-      const updatedItems = items.map((item, i) =>
+      const updatedItems = itemFiltered.map((item, i) =>
         i === index ? {
           ...item,
           name: selectedProduct.name,
@@ -40,7 +42,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
   };
 
   const handleItemChange = (index, field, value) => {
-    const updatedItems = items.map((item, i) => {
+    const updatedItems = itemFiltered.map((item, i) => {
       if (i === index) {
         return { ...item, [field]: value || item[field] };
       }
@@ -54,15 +56,19 @@ const ItemList = ({ items = [], setItems, errors }) => {
     setItems([...items, newItem]);
   };
 
+  const itemFiltered = items.filter(item => !item._destroy)
+
   const handleRemoveItem = (index) => {
-    const updatedItems = items.filter((_, i) => i !== index);
+    const updatedItems = items.map((item, i) =>
+      i === index ? { ...item, _destroy: true } : item
+    );  
     setItems(updatedItems);
   };
 
   return (
     <Box>
-      {items.map((item, index) => (
-        <Box key={item.id || index} mb={2} p={2} border={1} borderRadius={2} style={{ paddingRight: '0px' }}>
+      {itemFiltered.map((item, index) => (
+        <Box key={item.id || index} mb={2} p={2} border={1} borderRadius={2} style={{ paddingRight: '0px' }} index={index}>
           <Typography variant="caption" style={{color: theme.colors.primaryHover}}>
             {item.name}
           </Typography>
@@ -71,7 +77,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
               freeSolo
               options={products.map((product) => product.name)}
               value={item.name || ''}
-              onChange={(e, newValue) => {
+              onChange={(_, newValue) => {
                 if (newValue) {
                   handleProductSelection(index, newValue);
                 }
@@ -115,9 +121,11 @@ const ItemList = ({ items = [], setItems, errors }) => {
                 width: { xs: '30%', sm: '24%' }
               }}
             />
-            <IconButton onClick={() => handleRemoveItem(index)} color="error" sx={{ ml: 2, margin: '0', height: '40px' }}>
-              <RemoveIcon />
-            </IconButton>
+            {itemFiltered.length != 0 && (
+              <IconButton onClick={() => handleRemoveItem(index)} color="error" sx={{ ml: 2, margin: '0', height: '40px' }}>
+                <RemoveIcon />
+              </IconButton>
+            )}
           </Box>
           <div style={{display: 'flex', margin: '2px'}}>
               <Typography variant="caption" style={{color: theme.colors.primaryHover}}>

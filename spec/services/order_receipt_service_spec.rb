@@ -151,7 +151,7 @@ RSpec.describe OrderReceiptService, type: :service do
     let(:additional_field) { instance_double(AdditionalField, additional: 'Adicional 1', additional_value: 5.0) }
 
     it 'chama os métodos de detalhes do item e imprime os campos adicionais' do
-      service = described_class.new(order) # Apenas o order é passado
+      service = described_class.new(order)
       allow(service).to receive(:add_item_details).and_call_original
       allow(service).to receive(:add_item_total).and_call_original
       expect(service).to receive(:add_additional_fields).with(item_with_additional).once
