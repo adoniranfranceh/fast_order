@@ -109,6 +109,13 @@ RSpec.describe Filterable, type: :model do
         expect(result).not_to include(user2)
         expect(result.count).to eq 1
       end
+
+      context 'quando a relação é desconhecida' do
+        it 'levanta uma exceção com uma mensagem apropriada' do
+          expect { User.filter_by_attributes('some_query', ['invalid_relation.some_column']) }
+            .to raise_error(RuntimeError, 'Unknown relation: invalid_relation')
+        end
+      end
     end
   end
 end
