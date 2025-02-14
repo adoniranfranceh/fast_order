@@ -26,14 +26,25 @@ RSpec.describe 'GET /api/v1/products', type: :request do
     end
   end
 
+  context 'quando os produtos são paginados' do
+    it 'retorna os produtos corretamente com paginação' do
+      get '/api/v1/products', params: { admin_id: admin.id, page: 1, per_page: 5 }
+
+      json_response = JSON.parse response.body
+      expect(response).to have_http_status :ok
+      expect(json_response['products'].size).to eq 5
+      expect(json_response['total_count']).to eq 10
+    end
+  end
+
   context 'quando filtra por categoria' do
     let(:category_products) { create_list(:product, 3, category: 'Bebidas', user: admin) }
 
     it 'retorna apenas produtos da categoria especificada' do
       get '/api/v1/products', params: { category: 'Bebidas', admin_id: admin.id }
 
-      json_response = JSON.parse(response.body)
-      expect(response).to have_http_status(:ok)
+      json_response = JSON.parse response.body
+      expect(response).to have_http_status :ok
       expect(json_response['products'].all? { |p| p['category'] == 'Bebidas' }).to be_truthy
     end
   end
