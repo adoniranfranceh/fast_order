@@ -19,18 +19,22 @@ FactoryBot.define do
     end
 
     before(:create) do |order, evaluator|
-      if evaluator.create_items
-        evaluator.items_count.times do
-          item = build(:item, price: evaluator.items_price, status: evaluator.items_status)
-
-          order.items << item
-
-          evaluator.additional_count.times do
-            additional_field = build(:additional_field, additional_value: evaluator.additional_price, item:)
-            item.additional_fields << additional_field
-          end
-        end
-      end
+      create_items_for_order(order, evaluator) if evaluator.create_items
     end
+  end
+end
+
+def create_items_for_order(order, evaluator)
+  evaluator.items_count.times do
+    item = build(:item, price: evaluator.items_price, status: evaluator.items_status)
+    order.items << item
+    create_additional_fields_for_item(item, evaluator)
+  end
+end
+
+def create_additional_fields_for_item(item, evaluator)
+  evaluator.additional_count.times do
+    additional_field = build(:additional_field, additional_value: evaluator.additional_price, item:)
+    item.additional_fields << additional_field
   end
 end
