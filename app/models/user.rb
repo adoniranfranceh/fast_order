@@ -13,9 +13,9 @@ class User < ApplicationRecord
 
   has_many :customers, dependent: :destroy
   has_many :loyalty_cards, through: :customers
-  has_many :collaborators, class_name: 'User', foreign_key: 'admin_id', dependent: :destroy
+  has_many :collaborators, class_name: 'User', foreign_key: 'admin_id', dependent: :destroy, inverse_of: :admin
   has_many :orders, dependent: :destroy
-  has_many :products
+  has_many :products, dependent: :destroy
   has_one :profile, dependent: :destroy
   accepts_nested_attributes_for :profile, reject_if: proc { |attributes|
                                                        attributes['full_name'].blank?
@@ -29,7 +29,7 @@ class User < ApplicationRecord
   private
 
   def associate_admin_in_admin
-    update_column(:admin_id, id) if admin? && admin_id.nil?
+    update(admin_id: id) if admin? && admin_id.nil?
   end
 
   def admin_must_be_present_if_collaborator
