@@ -4,27 +4,10 @@ module Api
       before_action :set_customer, only: %i[show update destroy]
 
       def index
-        page = (params[:page] || 1).to_i
-        per_page = (params[:per_page] || 5).to_i
-        admin_id = params[:admin_id]
-
-        customers = Customer.where(user_id: admin_id)
-                            .order(:name)
-                            .paginate(page:, per_page:)
-
-        searchable_attributes = %w[name id email birthdate]
-
-        if params[:search_query].present?
-          customers = Customer.filter_by_attributes(params[:search_query].downcase, searchable_attributes)
-        end
-
-        if params[:date_filter].present?
-          date_filter = Date.parse(params[:date_filter])
-          customers = customers.where(birthdate: date_filter)
-        end
+        customers = filtered_customers
 
         render json: {
-          customers:,
+          customers: customers.paginate(page: page_param, per_page: per_page_param),
           total_count: customers.count
         }
       end
@@ -34,9 +17,7 @@ module Api
           include: {
             loyalty_cards: {
               include: {
-                stamps: {
-                  only: %i[id item date time]
-                }
+                stamps: { only: %i[id item date time] }
               },
               only: %i[id status]
             }
@@ -46,7 +27,6 @@ module Api
 
       def create
         customer = Customer.new(customer_params)
-
         if customer.save
           render json: { message: 'Cliente registrado com sucesso', customer: }, status: :created
         else
@@ -78,14 +58,38 @@ module Api
 
       def customer_params
         params.require(:customer).permit(
-          :name,
-          :email,
-          :birthdate,
-          :phone,
-          :description,
-          :favorite_order,
-          :user_id
+          :name, :email, :birthdate, :phone, :description, :favorite_order, :user_id
         )
+      end
+
+      def page_param
+        (params[:page] || 1).to_i
+      end
+
+      def per_page_param
+        (params[:per_page] || 5).to_i
+      end
+
+      def filtered_customers
+        customers = Customer.where(user_id: params[:admin_id]).order(:name)
+        customers = apply_search_query(customers)
+        filter_by_birthdate(customers)
+      end
+
+      def apply_search_query(customers)
+        return customers if params[:search_query].blank?
+
+        Customer.filter_by_attributes(params[:search_query].downcase, searchable_attributes)
+      end
+
+      def searchable_attributes
+        %w[name id email birthdate]
+      end
+
+      def filter_by_birthdate(customers)
+        return customers if params[:date_filter].blank?
+
+        customers.where(birthdate: Date.parse(params[:date_filter]))
       end
     end
   end

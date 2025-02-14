@@ -31,7 +31,7 @@ RSpec.describe 'POST /api/v1/products', type: :request do
       expect(response).to have_http_status :unprocessable_entity
       json_response = JSON.parse response.body
       expect(json_response['errors']).to eq ['Usuário é obrigatório(a)', 'Nome não pode ficar em branco',
-                                   'Preço Base não pode ficar em branco', 'Preço Base não é um número']
+                                             'Preço Base não pode ficar em branco', 'Preço Base não é um número']
     end
   end
 end
