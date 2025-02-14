@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, Dialog, DialogContent, DialogActions } from '@mui/material';
 import updateObject from '../services/updateObject';
 import createObject from '../services/createObject';
+import { AuthContext } from '../../context/AuthContext';
 
 const CollaboratorForm = ({ open, onClose, onSubmit, collaboratorData }) => {
+  const { currentUser } = useContext(AuthContext);
   const [collaborator, setCollaborator] = useState({
     email: '',
     password: ''
@@ -30,7 +32,7 @@ const CollaboratorForm = ({ open, onClose, onSubmit, collaboratorData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(collaborator)
+    onClose()
     
     const dataToSend = {
       user: {
@@ -39,17 +41,17 @@ const CollaboratorForm = ({ open, onClose, onSubmit, collaboratorData }) => {
       }
     };
   
+    console.log(collaboratorData)
     try {
       const result = collaboratorData 
-        ? await updateObject(`/api/v1/users/${collaborator.id}`, dataToSend) 
-        : await createObject('/api/v1/users', dataToSend);
+        ? await updateObject(`/api/v1/users/${collaborator.id}?admin_id=${currentUser.admin_id}`, dataToSend) 
+        : await createObject(`/api/v1/users?admin_id=${currentUser.admin_id}`, dataToSend);
   
       if (result.error) {
         throw new Error(result.error);
       }
   
       onSubmit(result);
-      onClose();
     } catch (error) {
       console.error('Erro:', error);
     }
@@ -76,15 +78,18 @@ const CollaboratorForm = ({ open, onClose, onSubmit, collaboratorData }) => {
           <TextField
             label="Email"
             name="email"
-            value={collaborator.email}
+            value={collaborator.email || ''}
             onChange={handleChange}
             type="email"
             fullWidth
+            sx={{
+              marginBottom: '10px'
+            }}
           />
           <TextField
             label="Senha"
             name="password"
-            value={collaborator.password}
+            value={collaborator.password || ''}
             onChange={handleChange}
             type="password"
             fullWidth

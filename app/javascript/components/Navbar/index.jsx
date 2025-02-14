@@ -84,7 +84,7 @@ const MyNavbar = () => {
           sx={{ flexGrow: 1 }}
           onClick={() => navigate('/')}
         >
-          Ponto do Açaí
+          FastOrder
         </Typography>
         
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '1rem' }}>

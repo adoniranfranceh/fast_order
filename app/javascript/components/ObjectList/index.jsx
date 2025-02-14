@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Box,
   Table,
@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
+import { AuthContext } from '../../context/AuthContext';
 
 const ObjectList = ({ 
   url,
@@ -35,13 +36,14 @@ const ObjectList = ({
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState();
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
   const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext)
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -49,7 +51,7 @@ const ObjectList = ({
       setError(null);
       try {
         url += url.includes('?') ? `&page=${page + 1}` : `?page=${page + 1}`;
-        const response = await fetch(`${url}?page=${page + 1}&per_page=${rowsPerPage}&search_query=${searchQuery}&date_filter=${dateFilter}`);
+        const response = await fetch(`${url}&per_page=${rowsPerPage}&search_query=${searchQuery}&date_filter=${dateFilter}&admin_id=${currentUser.admin_id}`);
         if (!response.ok) {
           throw new Error('Erro ao carregar dados');
         }
@@ -178,7 +180,7 @@ const ObjectList = ({
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={columns.length + (onEdit ? 1 : 0)} align="center">
+                      <TableCell align="center">
                         <Typography variant="body2">Nenhum item encontrado.</Typography>
                       </TableCell>
                     </TableRow>

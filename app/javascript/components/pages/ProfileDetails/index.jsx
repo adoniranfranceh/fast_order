@@ -112,7 +112,7 @@ const ProfileDetails = () => {
 
     if (password) {
       try {
-        await axios.put(`/api/v1/users/${id}/deactivate`, { admin_password: password });
+        await axios.put(`/api/v1/users/${id}/deactivate?admin_password=${password}&admin_id=${currentUser.admin_id}`);
         setUser((prevUser) => ({ ...prevUser, status: 'inactive' }));
         Swal.fire('Desativado!', 'O colaborador foi desativado com sucesso.', 'success');
       } catch (error) {
@@ -126,7 +126,7 @@ const ProfileDetails = () => {
 
     if (password) {
       try {
-        await axios.put(`/api/v1/users/${id}/activate`, { admin_password: password });
+        await axios.put(`/api/v1/users/${id}/activate?admin_password=${password}&admin_id=${currentUser.admin_id}`);
         setUser((prevUser) => ({ ...prevUser, status: 'active' }));
         Swal.fire('Ativado!', 'O colaborador foi ativado com sucesso.', 'success');
       } catch (error) {
@@ -140,7 +140,7 @@ const ProfileDetails = () => {
 
     if (password) {
       try {
-        await axios.delete(`/api/v1/users/${id}?admin_password=${password}`);
+        await axios.delete(`/api/v1/users/${id}?admin_password=${password}&admin_id=${currentUser.admin_id}`);
         Swal.fire('Excluído!', 'O colaborador foi excluído com sucesso.', 'success');
         navigate('/colaboradores');
       } catch (error) {
@@ -160,7 +160,7 @@ const ProfileDetails = () => {
       formData.append('user[profile_attributes][photo]', file);
 
       try {
-        await axios.patch(`/api/v1/users/${id}/upload_profile_image`, formData, {
+        await axios.patch(`/api/v1/users/${id}/upload_profile_image?admin_id=${currentUser.admin_id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

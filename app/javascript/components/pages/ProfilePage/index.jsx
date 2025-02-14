@@ -33,7 +33,7 @@ const ProfilePage = () => {
     formData.append('user[profile_attributes][full_name]', profile.full_name);
 
     try {
-      await axios.put(`/api/v1/users/${currentUser.id}`, formData, {
+      await axios.put(`/api/v1/users/${currentUser.id}?admin_id=${currentUser.admin_id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

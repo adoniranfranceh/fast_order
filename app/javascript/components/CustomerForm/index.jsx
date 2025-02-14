@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, Dialog, DialogContent, DialogActions } from '@mui/material';
 import updateObject from '../services/updateObject';
 import createObject from '../services/createObject';
+import { AuthContext } from '../../context/AuthContext';
 
 const CustomerForm = ({ open, onClose, onSubmit, customerData }) => {
+  const { currentUser } = useContext(AuthContext);
   const [customer, setCustomer] = useState({
     name: '',
     email: '',
@@ -24,6 +26,7 @@ const CustomerForm = ({ open, onClose, onSubmit, customerData }) => {
         birthdate: '',
         description: '',
         favorite_order: '',
+        user_id: currentUser.id
       });
     }
   }, [customerData]);
@@ -38,6 +41,7 @@ const CustomerForm = ({ open, onClose, onSubmit, customerData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    onClose();
     const { id, created_at, updated_at, ...dataToSend } = customer;
     try {
       const result = customerData 
@@ -49,7 +53,6 @@ const CustomerForm = ({ open, onClose, onSubmit, customerData }) => {
       }
   
       onSubmit(result);
-      onClose();
     } catch (error) {
       console.error('Erro:', error);
     }

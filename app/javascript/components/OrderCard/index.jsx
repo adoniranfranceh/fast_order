@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaHourglassHalf, FaTruck, FaCheck, FaBan, FaClock } from 'react-icons/fa';
+import { FaHourglassHalf, FaTruck, FaCheck, FaBan, FaClock, FaRedoAlt } from 'react-icons/fa';
 import moment from 'moment';
 import { useDrag } from 'react-dnd';
 import {
@@ -17,6 +17,7 @@ import {
 import OrderModal from '../OrderModal';
 import EditIcon from '@mui/icons-material/Edit';
 import PrintIcon from '@mui/icons-material/Print';
+import axios from 'axios';
 
 import { Avatar, IconButton, Tooltip } from '@mui/material';
 import useOrderTimer from '../../hooks/useOrderTimer';
@@ -65,6 +66,15 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
     navigate(`/perfil/${userId}`);
   };
 
+  const handlePrintInvoice = async () => {
+    try {
+      const response = await axios.get(`/api/v1/orders/${order.id}/print_invoice`);
+      console.log('Nota impressa com sucesso:', response.data);
+    } catch (error) {
+      console.error('Erro ao imprimir a nota:', error);
+    }
+  };
+
   return (
     <OrderCardContainer
       ref={drag}
@@ -72,7 +82,11 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
     >
       <OrderHeader>
         <strong>Pedido #{order.code}</strong>
-        <IconButton color="primary" onClick={openModal}>
+        <IconButton 
+          color="primary"
+          onClick={openModal}
+          data-cy="edit-order"
+        >
           <EditIcon />
         </IconButton>
       </OrderHeader>
@@ -80,7 +94,9 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
         <CustomerName>{order.customer}</CustomerName>
         <OrderDetails>
           {order.delivery_type === 'local' && <p>Mesa: {order.table_info}</p>}
-          {order.delivery_type === 'pickup' && <p>Horário de retirada: {moment.utc(order.pick_up_time).format('HH:mm')}</p>}
+          {order.delivery_type === 'pickup' && (
+            <p>Horário de retirada: {moment(order.pick_up_time).local().format('HH:mm')}</p>
+          )}
           {order.delivery_type === 'delivery' && <p>Entrega - {order.address}</p>}
         </OrderDetails>
       </OrderInfo>
@@ -107,7 +123,7 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
           </TimeText>
         </TimeIconWrapper>
         <Tooltip title="Imprimir Nota" arrow>
-          <IconButton onClick={() => window.open(`api/v1/orders/${order.id}/print_invoice`, '_blank')}>
+          <IconButton onClick={handlePrintInvoice}>
             <PrintIcon />
           </IconButton>
         </Tooltip>
@@ -121,6 +137,15 @@ const OrderCard = ({ order, onStatusChange, onClick }) => {
               onStatusChange(order.id, 'doing');
             }}
             title="Em andamento"
+          />
+        )}
+        {order.status !== 'doing' && (
+          <FaRedoAlt
+            onClick={(e) => {
+              e.stopPropagation();
+              onStatusChange(order.id, 'doing');
+            }}
+            title="Marcar como Entregue"
           />
         )}
         {order.status !== 'delivered' && (

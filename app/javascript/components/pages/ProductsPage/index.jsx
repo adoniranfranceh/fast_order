@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ObjectList, CollaboratorForm, Button } from '../../index.js';
+import { ObjectList, Button } from '../../index.js';
 import { Box } from '@mui/material';
 import 'moment/locale/pt-br';
 import styled from "styled-components";
 import theme from "../../theme/index.js";
 import categoriesData from '../../../data/categories.json';
 import formatPrice from '../../services/formatPrice.js';
+import { AuthContext } from '../../../context/AuthContext';
 
 const ProductsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate()
-
   const category = categoriesData.find(cat => cat.id === Number(id));
+  const { currentUser } = useContext(AuthContext)
 
-  const url = `/api/v1/products?category=${category.name}&paginate=true&`
+  const url = `/api/v1/products?category=${category.name}&admin_id=${currentUser.admin_id}`
 
   const handleNewProduct = () => {
     navigate('/produto/novo')

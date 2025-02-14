@@ -32,7 +32,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
   }, [initialOrderData]);
 
   const calculateTotalPrice = () => {
-    return orderData.items.reduce((total, item) => {
+    return orderData.items.filter(item => !item._destroy).reduce((total, item) => {
       const itemTotal = parseFloat(item.price) || 0;
       const additionalTotal = item.additional_fields.reduce((acc, field) => acc + (parseFloat(field.additional_value) || 0), 0);
       return total + itemTotal + additionalTotal;
@@ -95,16 +95,22 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
         table_info: orderData.table_info,
         pick_up_time: orderData.pick_up_time,
         address: orderData.address,
-        items_attributes: orderData.items.map(item => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          additional_fields_attributes: item.additional_fields.map(field => ({
-            id: field.id, 
-            additional: field.additional,
-            additional_value: field.additional_value || 0,
+        items_attributes: orderData.items
+          .filter(item => item.name && item.price)
+          .map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            _destroy: item._destroy || false,
+            additional_fields_attributes: item.additional_fields
+              .filter(field => field.additional)
+              .map(field => ({
+                id: field.id, 
+                additional: field.additional,
+                additional_value: field.additional_value || 0,
+                _destroy: field._destroy || false,
+              }))
           }))
-        }))
       }
     };
   
@@ -213,7 +219,9 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
         items={orderData.items}
         setItems={(items) => {
           setOrderData(prev => ({ ...prev, items }));
-          localStorage.setItem('unsavedOrder', JSON.stringify({ ...orderData, items }));
+          if (!initialOrderData) {
+            localStorage.setItem('unsavedOrder', JSON.stringify({ ...orderData, items }));
+          }        
         }}
         errors={errors.items}
       />
@@ -222,7 +230,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
         Preço Total: R$ {formatPrice(calculateTotalPrice())}
       </Typography>
 
-      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+      <Button data-cy="save-button" type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
         {initialOrderData ? 'Salvar' : 'Criar Pedido'}
       </Button>
 
