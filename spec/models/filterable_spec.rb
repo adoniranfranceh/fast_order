@@ -43,8 +43,8 @@ RSpec.describe Filterable, type: :model do
         order = create(:order, customer: 'Junior')
         create :order
 
-        params = %i[id code customer status delivery_type total_price table_info address pick_up_time user_id time_started
-                    time_stopped]
+        params = %i[id code customer status delivery_type total_price table_info address pick_up_time user_id
+                    time_started time_stopped]
 
         result = Order.filter_by_attributes('Junior', params)
 
@@ -55,8 +55,8 @@ RSpec.describe Filterable, type: :model do
       it 'não encontra pedido quando o texto não corresponde a nenhum atributo' do
         create(:order, customer: 'AnotherCustomer')
 
-        params = %i[id code customer status delivery_type total_price table_info address pick_up_time user_id time_started
-                    time_stopped]
+        params = %i[id code customer status delivery_type total_price table_info address pick_up_time user_id
+                    time_started time_stopped]
 
         result = Order.filter_by_attributes('NonExistingCustomer', params)
 

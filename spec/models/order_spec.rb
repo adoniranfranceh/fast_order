@@ -221,7 +221,10 @@ RSpec.describe Order, type: :model do
         order.update time_stopped: 2.hours.ago
         order.update status: :doing
 
-        expect(order.errors[:base]).to include 'Status não pode ser alterado para "Novos Pedidos" 1 hora depois de entregue'
+        expect(order.errors[:base]).to include(
+          'Status não pode ser alterado para "Novos Pedidos" ' \
+          '1 hora depois de entregue'
+        )
       end
     end
   end
