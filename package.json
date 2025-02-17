@@ -3,7 +3,9 @@
   "private": true,
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
-    "watch": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --watch"
+    "watch": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --watch",
+    "test": "cypress run",
+    "lint:fix": "eslint 'app/javascript/components/**/*.{js,jsx}' --fix"
   },
   "dependencies": {
     "@emotion/react": "^11.13.0",
@@ -32,6 +34,10 @@
     "sweetalert2": "^11.14.0"
   },
   "devDependencies": {
-    "cypress": "^14.0.3"
+    "cypress": "^14.0.3",
+    "eslint": "^9.20.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.1.0"
   }
 }
