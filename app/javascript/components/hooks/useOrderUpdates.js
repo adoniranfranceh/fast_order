@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { createConsumer } from '@rails/actioncable';
 
-const cable = createConsumer('ws://localhost:3000/cable');
+const cable = createConsumer('ws://localhost/cable');
 
 export const useOrderUpdates = (setOrders) => {
   useEffect(() => {
