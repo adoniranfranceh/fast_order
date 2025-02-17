@@ -226,7 +226,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
         errors={errors.items}
       />
 
-      <Typography variant="h6" gutterBottom>
+      <Typography data-cy="total-price" variant="h6" gutterBottom>
         Preço Total: R$ {formatPrice(calculateTotalPrice())}
       </Typography>
 

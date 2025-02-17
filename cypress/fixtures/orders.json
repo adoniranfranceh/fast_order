@@ -1,0 +1,41 @@
+{
+  "orders": [
+    {
+      "id": 695,
+      "user_id": 1,
+      "status": "doing",
+      "delivery_type": "local",
+      "table_info": "4",
+      "pick_up_time": null,
+      "address": "",
+      "customer": "",
+      "total_price": "52.0",
+      "time_started": "2025-02-11T13:43:42.564-03:00",
+      "time_stopped": "2025-02-11T13:47:29.442-03:00",
+      "code": "II53BL-1739292222",
+      "user": {
+        "email": "admin@admin.com",
+        "profile": {
+          "full_name": "Adoniran França",
+          "photo_url": null
+        }
+      },
+      "items": [
+        {
+          "id": 2029,
+          "name": "Açaí 700ml no copo",
+          "price": "22.0",
+          "status": "paid",
+          "additional_fields": []
+        },
+        {
+          "id": 2030,
+          "name": "Açaí Barca M",
+          "price": "30.0",
+          "status": "paid",
+          "additional_fields": []
+        }
+      ]
+    }
+  ]
+}

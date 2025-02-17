@@ -1,0 +1,355 @@
+{
+  "products": [
+    {
+      "id": 12,
+      "name": "CHOCOBOL",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 13,
+      "name": "COCO RALADO",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 14,
+      "name": "CONFETES (M&M)",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 15,
+      "name": "FARINHA DE AMENDOIM",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 16,
+      "name": "FARINHA LACTEA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 17,
+      "name": "GRANOLA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 18,
+      "name": "JUJUBA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 19,
+      "name": "LEITE CONDENSADO",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 20,
+      "name": "LEITE EM PÓ",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 21,
+      "name": "MEL",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 22,
+      "name": "OVO MALTINE",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 23,
+      "name": "PAÇOCA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 24,
+      "name": "ABACAXI",
+      "description": "Mistura de frutas frescas",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 25,
+      "name": "BANANA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 26,
+      "name": "KIWI",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 27,
+      "name": "MANGA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 28,
+      "name": "MORANGO",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 29,
+      "name": "UVA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 30,
+      "name": "BISCOITO WAFFER",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "4.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 31,
+      "name": "CASTANHA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "4.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 32,
+      "name": "CEREJA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "4.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 33,
+      "name": "NUTELLA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 38,
+      "name": "Cobertura de AÇAÍ",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "1.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 39,
+      "name": "Cobertura de CARAMELO",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "1.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 40,
+      "name": "Cobertura de CHOCOLATE",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "1.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 41,
+      "name": "Cobertura de MORANGO",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "1.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 71,
+      "name": "Frango",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 72,
+      "name": "Carne Moída",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 73,
+      "name": "Presunto",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 74,
+      "name": "Bacon",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 75,
+      "name": "Calabresa",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 76,
+      "name": "Mussarela",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 77,
+      "name": "Batata Palha",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 78,
+      "name": "Catupiry",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 105,
+      "name": "Suco com Leite",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "1.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    }
+  ],
+  "total_count": 35
+}

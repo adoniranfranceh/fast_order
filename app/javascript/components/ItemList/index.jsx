@@ -128,7 +128,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
             )}
           </Box>
           <div style={{display: 'flex', margin: '2px'}}>
-              <Typography variant="caption" style={{color: theme.colors.primaryHover}}>
+              <Typography data-cy="additionals-list" variant="caption" style={{color: theme.colors.primaryHover}}>
                 Adicionais: {item.additional_fields?.map((add) => 
                   `${add.additional}`).join(', ')}
               </Typography>

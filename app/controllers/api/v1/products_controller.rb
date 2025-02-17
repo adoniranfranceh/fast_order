@@ -77,8 +77,8 @@ module Api
       end
 
       def paginate(products)
-        page = (params[:page]).to_i
-        per_page = (params[:per_page]).to_i
+        page = params[:page].to_i
+        per_page = params[:per_page].to_i
         products.order(:name).paginate(page:, per_page:)
       end
     end

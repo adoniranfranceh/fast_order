@@ -70,7 +70,7 @@ const AdditionalFields = ({ additionalFields = [], onChange, maxAdditionals = 2 
             }}
           />
           <TextField
-            data-cy="value-input"
+            data-cy="additional-value-input"
             label="Valor"
             type="number"
             value={field.additional_value}
