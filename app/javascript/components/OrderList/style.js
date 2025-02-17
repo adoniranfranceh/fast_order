@@ -33,7 +33,7 @@ export const Section = styled.div`
 `;
 
 export const SectionTitle = styled.h2`
-  color: ${({ $status }) => theme.colors.text};
+  color: ${theme.colors.text};
   font-weight: 700;
   font-size: 16px;
   font-size: 24px;

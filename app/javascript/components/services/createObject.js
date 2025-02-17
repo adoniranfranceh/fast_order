@@ -13,7 +13,6 @@ const createObject = async (url, payload) => {
     });
     return response.data;
   } catch (error) {
-    console.log('Erro ao criar:', error.response.data);
     await Swal.fire({
       icon: 'error',
       title: 'Erro!',

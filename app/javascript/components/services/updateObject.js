@@ -13,7 +13,6 @@ const updateObject = async (url, payload) => {
     });
     return response.data
   } catch (error) {
-    console.log('Erro ao atualizar pedido:', error);
     await Swal.fire({
       icon: 'error',
       title: 'Erro!',

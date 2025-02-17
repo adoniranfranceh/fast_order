@@ -25,8 +25,6 @@ const deleteObject = (endpoint, id) => {
           return true;
         })
         .catch((error) => {
-          console.log('Erro ao excluir o objeto:', error.response?.data?.errors?.base);
-
           Swal.fire({
             icon: 'error',
             title: 'Erro!',

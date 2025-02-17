@@ -18,8 +18,8 @@ export const StyledButton = styled.button`
   }
 
   &:disabled {
-    background-color: ${props => theme.colors.disabled};
-    color: ${props => theme.colors.disabledText};
+    background-color: ${theme.colors.disabled};
+    color: ${theme.colors.disabledText};
     cursor: not-allowed;
   }
 `;

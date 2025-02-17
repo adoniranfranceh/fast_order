@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 const putStatus = (endpoint, id, updateData, showNotification = true) => {
   return axios
     .put(`${endpoint}/${id}`, updateData)
-    .then((response) => {
+    .then(() => {
       if (showNotification) {
         Swal.fire({
           icon: 'success',
@@ -17,8 +17,6 @@ const putStatus = (endpoint, id, updateData, showNotification = true) => {
       return { PromiseResult: true }; 
     })
     .catch((error) => {
-      console.log('Erro ao atualizar o status:', error.response?.data?.errors?.base);
-
       if (showNotification) {
         Swal.fire({
           icon: 'error',
