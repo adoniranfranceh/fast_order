@@ -50,18 +50,18 @@ Ajuste as variáveis no arquivo .env conforme necessário.
 ### 3. Construção dos containers Docker (caso seja a primeira vez):
 
 ```
-docker-compose --build
+make setup
 ```
 ### 4. Suba os containers Docker:
 
 ```
-docker-compose up -d
+make start
 ```
 ### 5. Configure o banco de dados:
 Durante a primeira execução, será necessário configurar o banco de dados e popular com dados iniciais:
 
 ```
-docker-compose exec app rails db:seed
+make setup-db
 ```
 ### 6. Acesse a aplicação em http://localhost.
 
@@ -77,12 +77,44 @@ Para acessar o sistema:
   - Clique em **Novo Colaborador** para adicionar um novo usuário preechendo o form.
 ##### 2. Login com um colaborador existente:
   - Caso já tenha um colaborador cadastrado, basta usar o email de um colaborador existente e a senha `123456` para fazer o login diretamente como colaborador
-
+  - 
+#### Importante:
+Certifique-se de que os containers estejam levantados antes de rodar qualquer um dos comandos abaixo, para garantir que a aplicação esteja funcionando corretamente no ambiente de contêiner.
 ## 🔍 Rodando os Testes
-Testes são implementados com RSpec. Para executar:
+
+#### 1. Testes implementados com RSpec
+Para executar os testes implementados com RSpec, utilize o comando:
 ```
-docker-compose exec app bundle exec rspec
+make test-rspec
 ```
+Esse comando executará os testes no seu ambiente configurado.
+
+
+#### 2. Testes implementados com Cypress
+
+Para executar os testes de end-to-end (e2e) com Cypress, utilize o comando:
+```
+make test-cy
+```
+Esse comando irá rodar os testes configurados no Cypress, geralmente para testar fluxos completos do usuário em sua aplicação.
+
+
+## Rodando fix
+#### 1. Com Rubocop
+Para executar os testes implementados com RSpec, utilize o comando:
+```
+rubocop -A
+```
+Esse comando executará os testes no ambiente configurado.
+
+
+#### 2. Com Lint
+Para rodar o Cypress e aplicar automaticamente as correções de estilo no código, utilize:
+
+```
+make fix
+```
+Esse comando irá rodar os testes configurados no Cypress, para testar fluxos do usuário na aplicação.
 
 ## 🚀 Inspiração
 A interface foi inspirada no modelo **Kanban**, utilizando cards para cada pedido. Isso ajuda a organizar e priorizar os pedidos de forma visual, permitindo aos colaboradores e administradores visualizar claramente o status de cada um, facilitando o gerenciamento e aumentando a eficiência no fluxo de trabalho.
