@@ -28,7 +28,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
     const selectedProduct = products.find((product) => product.name === productName);
 
     if (selectedProduct) {
-      const updatedItems = itemFiltered.map((item, i) =>
+      const updatedItems = items.map((item, i) =>
         i === index ? {
           ...item,
           name: selectedProduct.name,
@@ -42,7 +42,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
   };
 
   const handleItemChange = (index, field, value) => {
-    const updatedItems = itemFiltered.map((item, i) => {
+    const updatedItems = items.map((item, i) => {
       if (i === index) {
         return { ...item, [field]: value || item[field] };
       }
@@ -56,25 +56,32 @@ const ItemList = ({ items = [], setItems, errors }) => {
     setItems([...items, newItem]);
   };
 
-  const itemFiltered = items.filter(item => !item._destroy)
-
   const handleRemoveItem = (index) => {
     const updatedItems = items.map((item, i) =>
       i === index ? { ...item, _destroy: true } : item
-    );  
-    setItems(updatedItems);
+    );
+    setItems(updatedItems.filter(item => !item._destroy));
   };
 
   return (
-    <Box>
-      {itemFiltered.map((item, index) => (
-        <Box key={item.id || index} mb={2} p={2} border={1} borderRadius={2} style={{ paddingRight: '0px' }} index={index}>
+    <Box data-cy="item-list">
+      {items.map((item, index) => (
+        <Box 
+          key={item.id || index}
+          mb={2} p={2}
+          border={1}
+          borderRadius={2}
+          style={{ paddingRight: '0px' }}
+          index={index}
+          data-cy="item-form"
+        >
           <Typography variant="caption" style={{color: theme.colors.primaryHover}}>
             {item.name}
           </Typography>
           <Box display="flex" alignItems="center">
             <Autocomplete
               freeSolo
+              data-cy="item-input"
               options={products.map((product) => product.name)}
               value={item.name || ''}
               onChange={(_, newValue) => {
@@ -111,6 +118,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
               }}
             />
             <TextField
+              data-cy="item-value-input"
               label="Preço"
               type="number"
               value={item.price}
@@ -121,11 +129,9 @@ const ItemList = ({ items = [], setItems, errors }) => {
                 width: { xs: '30%', sm: '24%' }
               }}
             />
-            {itemFiltered.length != 0 && (
-              <IconButton onClick={() => handleRemoveItem(index)} color="error" sx={{ ml: 2, margin: '0', height: '40px' }}>
-                <RemoveIcon />
-              </IconButton>
-            )}
+            <IconButton data-cy="remove-item" onClick={() => handleRemoveItem(index)} color="error" sx={{ ml: 2, margin: '0', height: '40px' }}>
+              <RemoveIcon />
+            </IconButton>
           </Box>
           <div style={{display: 'flex', margin: '2px'}}>
               <Typography data-cy="additionals-list" variant="caption" style={{color: theme.colors.primaryHover}}>
@@ -141,7 +147,7 @@ const ItemList = ({ items = [], setItems, errors }) => {
         </Box>
       ))}
       {errors && <Typography color="error">{errors}</Typography>}
-      <Button onClick={handleAddItem} startIcon={<AddIcon />}>
+      <Button data-cy="add-item-button" onClick={handleAddItem} startIcon={<AddIcon />}>
         Adicionar Item
       </Button>
     </Box>

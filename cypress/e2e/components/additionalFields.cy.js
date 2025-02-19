@@ -62,4 +62,28 @@ describe("AdditionalFields Component", () => {
     cy.get("[data-cy=total-price]").should("contain.text", "Preço Total: R$ 52,00");
     cy.get("[data-cy=additionals-list]").should("contain.text", "Adicionais: ");
   });
+
+  it("Deve excluir campo correto", () => {
+    const numClicks = 2;
+
+    Cypress._.times(numClicks, () => {
+      cy.get("button").contains("+ Adicional").should("be.visible").click();
+    });
+
+    cy.get("[data-cy=additional-input]").first().click();
+    cy.get(".MuiAutocomplete-popper li")
+      .should("be.visible")
+      .contains("CHOCOBOL")
+      .click();
+
+    cy.get("[data-cy=additional-form]").should("have.length", numClicks);
+
+    cy.get("button[data-cy=remove-additional]").first().click();
+    cy.get("[data-cy=additional-input]").should("have.value", "");
+
+    cy.get("[data-cy=additional-input]").should("have.length", 1);
+    cy.get("[data-cy=additional-value-input]").should("have.length", 1);
+    cy.get("[data-cy=total-price]").should("contain.text", "Preço Total: R$ 52,00");
+    cy.get("[data-cy=additionals-list]").should("contain.text", "Adicionais: ");
+  });
 });

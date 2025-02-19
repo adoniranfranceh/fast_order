@@ -6,7 +6,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import fetchProducts from '../services/fetchProducts.js';
 import { AuthContext } from '../../context/AuthContext/index.jsx';
 
-const AdditionalFields = ({ additionalFields = [], onChange, maxAdditionals = 2 }) => {
+const AdditionalFields = ({ additionalFields, onChange, maxAdditionals }) => {
   const [products, setProducts] = useState([]);
   const { currentUser } = useContext(AuthContext)
 
@@ -35,15 +35,15 @@ const AdditionalFields = ({ additionalFields = [], onChange, maxAdditionals = 2 
   };
 
   const handleRemoveField = (index) => {
-    const updatedFields = additionalFields.filter((_, i) => i !== index);
-    onChange(updatedFields);
+    const updatedFields = additionalFields.map((field, i) =>
+      i === index ? { ...field, _destroy: true } : field
+    );
+    onChange(updatedFields.filter(field => !field._destroy));
   };
-
-  const visibleAdditionals = additionalFields.filter(additional => !additional._destroy);
 
   return (
     <Box data-cy="additional-list">
-      {visibleAdditionals.map((field, index) => (
+      {additionalFields.map((field, index) => (
         <Box key={field.id || index} display="flex" alignItems="center" mb={1} data-cy="additional-form">
           <Autocomplete
             freeSolo
@@ -51,7 +51,8 @@ const AdditionalFields = ({ additionalFields = [], onChange, maxAdditionals = 2 
             options={products}
             getOptionLabel={(option) => option.name || ''}
             value={products.find((product) => product.name === field.additional) || null}
-            onChange={(event, newValue) => {
+            onChange={(_, newValue) => {
+              handleFieldChange(index, 'id', newValue?.id || '');
               handleFieldChange(index, 'additional', newValue?.name || '');
 
               if (newValue && additionalFields.length > maxAdditionals) {

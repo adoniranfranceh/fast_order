@@ -1,0 +1,1135 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Açaí 300ml no COPO",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "10.0",
+      "max_additional_quantity": 3,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 2,
+      "name": "Açaí 500ml no COPO",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "15.0",
+      "max_additional_quantity": 4,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 3,
+      "name": "Açaí 700ml no copo",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "22.0",
+      "max_additional_quantity": 5,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 4,
+      "name": "Açaí 700ml TRUFADO no copo",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "25.0",
+      "max_additional_quantity": 5,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 5,
+      "name": "Açaí 250ml na tigela",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "10.0",
+      "max_additional_quantity": 3,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 6,
+      "name": "Açaí 300ml na tigela",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "12.0",
+      "max_additional_quantity": 3,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 7,
+      "name": "Açaí 350ml na tigela",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "14.0",
+      "max_additional_quantity": 3,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 8,
+      "name": "Açaí 500ml na tigela",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "16.0",
+      "max_additional_quantity": 4,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 10,
+      "name": "Açaí Barca M",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "30.0",
+      "max_additional_quantity": 5,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 11,
+      "name": "Açaí Barca G",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "42.0",
+      "max_additional_quantity": 5,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 12,
+      "name": "CHOCOBOL",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 13,
+      "name": "COCO RALADO",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 14,
+      "name": "CONFETES (M&M)",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 15,
+      "name": "FARINHA DE AMENDOIM",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 16,
+      "name": "FARINHA LACTEA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 17,
+      "name": "GRANOLA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 18,
+      "name": "JUJUBA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 19,
+      "name": "LEITE CONDENSADO",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 20,
+      "name": "LEITE EM PÓ",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 21,
+      "name": "MEL",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 22,
+      "name": "OVO MALTINE",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 23,
+      "name": "PAÇOCA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 24,
+      "name": "ABACAXI",
+      "description": "Mistura de frutas frescas",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 25,
+      "name": "BANANA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 26,
+      "name": "KIWI",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 27,
+      "name": "MANGA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 28,
+      "name": "MORANGO",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 29,
+      "name": "UVA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 30,
+      "name": "BISCOITO WAFFER",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "4.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 31,
+      "name": "CASTANHA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "4.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 32,
+      "name": "CEREJA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "4.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 33,
+      "name": "NUTELLA",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 34,
+      "name": "Guaraná do Amazonas 300ML",
+      "description": "",
+      "category": "Guaraná",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 35,
+      "name": "Guaraná do Amazonas 500ML",
+      "description": "",
+      "category": "Guaraná",
+      "base_price": "10.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 36,
+      "name": "Guaraçaí 300ML",
+      "description": "",
+      "category": "Guaraná",
+      "base_price": "10.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 37,
+      "name": "Guaraçaí 500ML",
+      "description": "",
+      "category": "Guaraná",
+      "base_price": "12.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 38,
+      "name": "Cobertura de AÇAÍ",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "1.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 39,
+      "name": "Cobertura de CARAMELO",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "1.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 40,
+      "name": "Cobertura de CHOCOLATE",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "1.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 41,
+      "name": "Cobertura de MORANGO",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "1.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 42,
+      "name": "Creme de Cupuaçu 250ml",
+      "description": "",
+      "category": "Creme",
+      "base_price": "10.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 43,
+      "name": "Creme de Cupuaçu 300ml",
+      "description": "",
+      "category": "Creme",
+      "base_price": "12.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 44,
+      "name": "Creme de Cupuaçu 350ml",
+      "description": "",
+      "category": "Creme",
+      "base_price": "14.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 45,
+      "name": "Creme de Cupuaçu 500ml",
+      "description": "",
+      "category": "Creme",
+      "base_price": "16.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 46,
+      "name": "Creme de Cupuaçu 1000ml",
+      "description": "",
+      "category": "Creme",
+      "base_price": "32.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 47,
+      "name": "Creme de Ninho 250ml",
+      "description": "",
+      "category": "Creme",
+      "base_price": "10.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 48,
+      "name": "Creme de Ninho 300ml",
+      "description": "",
+      "category": "Creme",
+      "base_price": "12.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 49,
+      "name": "Creme de Ninho 350ml",
+      "description": "",
+      "category": "Creme",
+      "base_price": "14.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 50,
+      "name": "Creme de Ninho 500ml",
+      "description": "",
+      "category": "Creme",
+      "base_price": "16.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 51,
+      "name": "Creme de Ninho 1000ml",
+      "description": "",
+      "category": "Creme",
+      "base_price": "32.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 52,
+      "name": "Pastel - Presunto",
+      "description": "Presunto e Mussarela",
+      "category": "Pastel",
+      "base_price": "7.5",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 53,
+      "name": "Pastel - Presunto com Catupiry",
+      "description": "Presunto, Mussarela e Catupiry",
+      "category": "Pastel",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 54,
+      "name": "Pastel - Pizza",
+      "description": "Presunto, Mussarela, Tomate, Azeitona e Orégano",
+      "category": "Pastel",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 55,
+      "name": "Pastel - Big Presunto",
+      "description": "Presunto, Mussarela, Azeitona e Orégano",
+      "category": "Pastel",
+      "base_price": "8.5",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 56,
+      "name": "Pastel - Big Presunto com Catupiry",
+      "description": "Presunto, Mussarela, Milho, Calabresa e Orégano",
+      "category": "Pastel",
+      "base_price": "9.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 57,
+      "name": "Pastel - Portuguesa",
+      "description": "Presunto, Mussarela, Calabresa, Azeitona e Orégano",
+      "category": "Pastel",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 58,
+      "name": "Pastel - Frango",
+      "description": "Frango",
+      "category": "Pastel",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 59,
+      "name": "Pastel - Frango com Queijo",
+      "description": "Frango e Mussarela",
+      "category": "Pastel",
+      "base_price": "7.5",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 60,
+      "name": "Pastel - Frango com Catupiry",
+      "description": "Frango, Mussarela e Catupiry",
+      "category": "Pastel",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 61,
+      "name": "Pastel - Big Frango com Catupiry",
+      "description": "Frango, Mussarela, Catupiry, Milho e Calabresa",
+      "category": "Pastel",
+      "base_price": "9.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 62,
+      "name": "Pastel - Paulista 1",
+      "description": "Frango, Mussarela, Catupiry, Calabresa, Azeitona, Cebola e Orégano",
+      "category": "Pastel",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 63,
+      "name": "Pastel - Paulista 2",
+      "description": "Frango, Mussarela, Catupiry, Presunto, Tomate e Orégano",
+      "category": "Pastel",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 64,
+      "name": "Pastel - Frango Americano",
+      "description": "Frango, Bacon, Mussarela, Batata Palha e Catupiry",
+      "category": "Pastel",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 65,
+      "name": "Pastel - Carne",
+      "description": "Carne",
+      "category": "Pastel",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 66,
+      "name": "Pastel - Tradicional",
+      "description": "Carne Moída, Tomate, Cebola e Azeitona",
+      "category": "Pastel",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 67,
+      "name": "Pastel - Big Fome",
+      "description": "Carne Moída, Milho, Calabresa e Mussarela",
+      "category": "Pastel",
+      "base_price": "8.5",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 68,
+      "name": "Pastel - Big Fome com Catupiry",
+      "description": "Carne Moída, Milho, Azeitona, Calabresa e Catupiry",
+      "category": "Pastel",
+      "base_price": "9.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 69,
+      "name": "Pastel - Misto",
+      "description": "Frango, Carne, Mussarela e Presunto",
+      "category": "Pastel",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 70,
+      "name": "Pastel - A Moda da Casa",
+      "description": "Frango, Presunto, Bacon, Mussarela, Azeitona, Batata Palha, Tomate, Catupiry e Orégano",
+      "category": "Pastel",
+      "base_price": "10.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 71,
+      "name": "Frango",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 72,
+      "name": "Carne Moída",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 73,
+      "name": "Presunto",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 74,
+      "name": "Bacon",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 75,
+      "name": "Calabresa",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 76,
+      "name": "Mussarela",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 77,
+      "name": "Batata Palha",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 78,
+      "name": "Catupiry",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "2.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 79,
+      "name": "Suco de Abacaxi 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 80,
+      "name": "Suco de Abacaxi 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 81,
+      "name": "Suco de Açaí 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "6.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 82,
+      "name": "Suco de Açaí 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 83,
+      "name": "Suco de Acerola 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 84,
+      "name": "Suco de Acerola 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 85,
+      "name": "Suco de Cajá 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 86,
+      "name": "Suco de Cajá 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 87,
+      "name": "Suco de Caju 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 88,
+      "name": "Suco de Caju 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 89,
+      "name": "Suco de Cupuaçu 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 90,
+      "name": "Suco de Cupuaçu 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 91,
+      "name": "Suco de Goiaba 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 92,
+      "name": "Suco de Goiaba 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 93,
+      "name": "Suco de Graviola 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 94,
+      "name": "Suco de Graviola 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 95,
+      "name": "Suco de Manga 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 96,
+      "name": "Suco de Manga 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 97,
+      "name": "Suco de Maracujá 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "6.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 98,
+      "name": "Suco de Maracujá 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "8.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 99,
+      "name": "Suco de Morango 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 100,
+      "name": "Suco de Morango 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 101,
+      "name": "Suco de Tamarindo 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 102,
+      "name": "Suco de Tamarindo 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 103,
+      "name": "Suco de Umbu 300ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 104,
+      "name": "Suco de Umbu 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "7.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 105,
+      "name": "Suco com Leite",
+      "description": "",
+      "category": "Adicional",
+      "base_price": "1.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 106,
+      "name": "Refrigerante - Lata",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "5.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 107,
+      "name": "Refrigerante - 1L",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "9.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 108,
+      "name": "Refrigerante - 1,5L",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "10.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 109,
+      "name": "Refrigerante - 2L",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "12.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 110,
+      "name": "Água com Gás 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "3.5",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 111,
+      "name": "Água sem Gás 500ml",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "3.0",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 112,
+      "name": "Água sem Gás 1,5L",
+      "description": "",
+      "category": "Bebida",
+      "base_price": "6.5",
+      "max_additional_quantity": null,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 9,
+      "name": "Açaí 1000ml na tigela",
+      "description": "",
+      "category": "Açaí",
+      "base_price": "32.0",
+      "max_additional_quantity": 5,
+      "extra_additional_price": null,
+      "user_id": 1
+    },
+    {
+      "id": 113,
+      "name": "Teste",
+      "description": "",
+      "category": "Pastel",
+      "base_price": "200.0",
+      "max_additional_quantity": 1,
+      "extra_additional_price": null,
+      "user_id": 1
+    }
+  ],
+  "total_count": 113
+}
