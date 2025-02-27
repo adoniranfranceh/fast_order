@@ -19,6 +19,7 @@ const OrderModal = ({ open, onClose, onOrderSuccess, order }) => {
       <DialogTitle>
         {order ? 'Editar Pedido' : 'Novo Pedido'}
         <IconButton
+        data-cy="close-modal-button"
           edge="end"
           color="inherit"
           onClick={onClose}
