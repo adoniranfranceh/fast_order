@@ -131,6 +131,11 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
     }
   };
 
+  const cancelOrder = (() => {
+    onClose()
+    localStorage.removeItem('unsavedOrder');
+  })
+
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ p: 2 }}>
       <Typography variant="h6" gutterBottom>
@@ -144,6 +149,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
       )}
 
       <TextField
+        data-cy="customer-field"
         label="Cliente"
         value={orderData.customer}
         onChange={(e) => handleInputChange('customer', e.target.value)}
@@ -155,6 +161,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
 
       <Select
         value={orderData.delivery_type}
+        data-cy="delivery-type-field"
         onChange={(e) => handleInputChange('delivery_type', e.target.value)}
         fullWidth
         error={!!errors.delivery_type}
@@ -174,6 +181,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
 
       {orderData.delivery_type === 'local' && (
         <TextField
+          data-cy="field-local"
           label="Info da Mesa"
           value={orderData.table_info}
           onChange={(e) => handleInputChange('table_info', e.target.value)}
@@ -186,6 +194,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
 
       {orderData.delivery_type === 'pickup' && (
         <TextField
+          data-cy="field-pickup"
           label="Hora de retirada"
           type="time"
           value={orderData.pick_up_time}
@@ -205,6 +214,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
 
       {orderData.delivery_type === 'delivery' && (
         <TextField
+          data-cy="field-address"
           label="Endereço"
           value={orderData.address}
           onChange={(e) => handleInputChange('address', e.target.value)}
@@ -234,7 +244,7 @@ const OrderForm = ({ onClose, onOrderSuccess, initialOrderData }) => {
         {initialOrderData ? 'Salvar' : 'Criar Pedido'}
       </Button>
 
-      <Button onClick={onClose} color="secondary" sx={{ mt: 2, ml: 2 }}>
+      <Button onClick={cancelOrder} color="secondary" sx={{ mt: 2, ml: 2 }}>
         Cancelar
       </Button>
     </Box>
